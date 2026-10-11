@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="dark">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Landing Scroll Narrative</title>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  /* Wireframe: greyscale so we judge structure, order and content. No lines, no boxes in boxes. */
+  :root { --page:#121110; --ink:#e8e4de; --mid:#9a948c; --soft:#6f6a63; --img:#3a3632; --scr:#1c1a18; --chip:#2b2825; --note:#c9a06b; --lvl:#8fb3c4; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--page); color:var(--ink); font:16px/1.55 Jost, system-ui, sans-serif; }
+  .intro { max-width:1400px; margin:0 auto; padding:40px 32px 6px; }
+  .intro h1 { font-weight:400; font-size:36px; margin:0 0 6px; }
+  .intro p { color:var(--mid); max-width:900px; margin:0 0 8px; }
+  .levels { display:flex; gap:26px; flex-wrap:wrap; margin:18px 0 0; font-size:15px; }
+  .levels b { color:var(--lvl); font-weight:500; }
+  .options { max-width:1400px; margin:0 auto; padding:28px 32px 60px; display:flex; gap:44px; flex-wrap:wrap; align-items:flex-start; }
+  .opt { flex:0 0 390px; }
+  .opt h2 { font-weight:400; font-size:24px; margin:0; }
+  .opt .idea { color:var(--mid); font-size:15px; margin:2px 0 16px; min-height:70px; }
+  .phone { position:relative; width:390px; background:var(--scr); border-radius:44px; padding:0 0 100px; box-shadow:0 20px 50px rgba(0,0,0,.5); overflow:hidden; }
+  .fold { position:absolute; left:0; right:0; top:844px; border-top:2px dashed #e07a5f; z-index:5; }
+  .fold::after { content:'end of first screen'; position:absolute; right:14px; top:4px; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#e07a5f; }
+  .status { display:flex; justify-content:space-between; padding:16px 30px 0; font-size:14px; font-weight:500; }
+  .scr { padding:18px 20px 0; }
+  .lv { font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--lvl); margin:46px 0 2px; }
+  .lv:first-child { margin-top:6px; }
+  .q { font-size:28px; font-weight:300; line-height:1.15; margin:2px 0 12px; }
+  .h { font-size:21px; font-weight:400; margin:4px 0 2px; }
+  .sub { font-size:14px; color:var(--mid); margin:0 0 14px; }
+  .words { display:flex; flex-wrap:wrap; gap:6px 18px; font-size:19px; font-weight:300; }
+  .words span.on { font-weight:400; border-bottom:2px solid var(--ink); }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; }
+  .chip { background:var(--chip); border-radius:20px; padding:6px 14px; font-size:15px; }
+  .chip.on { background:var(--ink); color:var(--scr); }
+  .ing { display:flex; gap:12px; overflow:hidden; margin-right:-20px; }
+  .ing div { flex:0 0 92px; text-align:center; font-size:14px; }
+  .ing img { width:92px; height:92px; border-radius:50%; object-fit:cover; filter:grayscale(1); background:var(--img); display:block; margin-bottom:6px; }
+  .ing small { display:block; color:var(--mid); font-size:12px; }
+  img.ph { display:block; width:100%; object-fit:cover; filter:grayscale(1) contrast(.9); background:var(--img); border-radius:12px; }
+  .rail { display:flex; gap:14px; overflow:hidden; margin-right:-20px; }
+  .rail .c { flex:0 0 60%; position:relative; }
+  .t { font-size:18px; line-height:1.25; margin-top:8px; }
+  .meta { font-size:14px; color:var(--mid); }
+  .mark { position:absolute; top:10px; left:10px; background:rgba(28,26,24,.85); border-radius:14px; padding:2px 10px 2px 8px; font-size:12.5px; display:flex; gap:6px; align-items:center; }
+  .mark svg { width:13px; height:13px; }
+  .list .row { display:flex; gap:14px; align-items:center; margin:0 0 16px; }
+  .list .row img { width:72px; height:72px; flex:none; border-radius:10px; }
+  .why { font-size:13px; color:var(--note); }
+  .bar { position:absolute; left:0; right:0; bottom:0; padding:14px 20px 26px; background:linear-gradient(transparent, var(--scr) 28%); display:flex; gap:10px; z-index:6; }
+  .search { flex:1; background:var(--chip); border-radius:26px; padding:13px 18px; color:var(--mid); font-size:15px; }
+  .icon { width:48px; height:48px; border-radius:50%; background:var(--chip); display:grid; place-items:center; font-size:13px; color:var(--mid); }
+  .ann { margin-top:22px; font-size:14.5px; }
+  .ann h3 { font-weight:500; font-size:15px; margin:16px 0 4px; }
+  .ann ol { padding-left:20px; margin:6px 0 0; } .ann li { margin:0 0 7px; }
+  .map { max-width:1400px; margin:0 auto 60px; padding:0 32px; }
+  .map h2 { font-weight:400; font-size:24px; margin:0 0 10px; }
+  .map table { border-collapse:collapse; font-size:15px; width:100%; max-width:1100px; }
+  .map td, .map th { text-align:left; padding:9px 22px 9px 0; vertical-align:top; }
+  .map th { font-weight:500; color:var(--mid); font-size:12px; letter-spacing:.1em; text-transform:uppercase; }
+  .map td:first-child { color:var(--lvl); font-weight:500; white-space:nowrap; }
+  @media (max-width:460px) { .opt { flex-basis:100%; } .phone { width:100%; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <symbol id="heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" fill="currentColor"/></symbol>
+  <symbol id="listic" viewBox="0 0 24 24"><path d="M6 4h12v16l-6-4-6 4z" fill="currentColor"/></symbol>
+</defs></svg>
+
+<div class="intro">
+  <h1>Landing page · the scroll as a narrative</h1>
+  <p>The top answers what you're most likely to want: <b>what do we feel like</b> and <b>what have we got</b>, with something from our favourites. Each scroll goes a level deeper. Your list and favourites are <b>marked on every card</b> and <b>rise to the top</b> when you filter.</p>
+  <p>Two options for the top (mood first or ingredients first), plus the <b>filtered state</b> showing how marked favourites rank. Greyscale; Sunday evening, so the cupboard leads.</p>
+  <div class="levels">
+    <div><b>Level 1 · Decide</b> feel like · what's in · our picks</div>
+    <div><b>Level 2 · Browse</b> by speed · use what's fresh</div>
+    <div><b>Level 3 · Together</b> our list and reactions</div>
+    <div><b>Level 4 · Deeper</b> rediscover saves · cupboard · library</div>
+  </div>
+</div>
+
+<div class="options">
+
+  <!-- OPTION 1: MOOD FIRST -->
+  <div class="opt">
+    <h2>1 · Feel first</h2>
+    <p class="idea">Starts with how you want it to taste: one tap on a mood. Ingredients come next as a second, optional tap. Our picks sit right below.</p>
+    <div class="phone">
+      <div class="fold"></div>
+      <div class="status"><span>18:42</span><span>●●● ▮</span></div>
+      <div class="scr">
+        <div class="lv">Level 1 · Decide</div>
+        <div class="meta">Sunday evening · for both of us</div>
+        <div class="q">What do you feel like?</div>
+        <div class="words"><span>Comforting</span><span>Light</span><span>Fresh &amp; green</span><span>Spicy</span><span>Warming</span><span>Something special</span><span>A quick fix</span></div>
+
+        <div class="h" style="margin-top:28px">What's in?</div>
+        <div class="sub">From Tuesday's box · use these first</div>
+        <div class="ing">
+          <div><img src="../../media/C6_FrdiyZjh/hero.jpg" alt="">Cod<small>use soon</small></div>
+          <div><img src="../../media/Cyf04RxIO8c/hero.jpg" alt="">Spinach<small>use soon</small></div>
+          <div><img src="../../media/C4kZDKtBbQO/hero.jpg" alt="">Tofu<small>a few days</small></div>
+          <div><img src="../../media/DHdyddgRAs4/hero.jpg" alt="">Broccolini<small>a few days</small></div>
+        </div>
+
+        <div class="h" style="margin-top:28px">From our picks</div>
+        <div class="sub">On our list and favourites</div>
+        <div class="rail">
+          <div class="c"><img class="ph" src="../../media/C6_FrdiyZjh/hero.jpg" style="height:220px" alt=""><span class="mark"><svg><use href="#listic"/></svg>Our list · Mary</span><div class="t">Japanese mirin baked cod</div><div class="meta">Uses the cod · 22 min + marinating</div></div>
+          <div class="c"><img class="ph" src="../../media/C8j51_HKkxG/hero.jpg" style="height:220px" alt=""><span class="mark"><svg><use href="#heart"/></svg>Both of you</span><div class="t">Creamy tomato and basil beans</div><div class="meta">Cupboard · 30 min</div></div>
+        </div>
+
+        <div class="lv">Level 2 · Browse</div>
+        <div class="h">Quick tonight</div>
+        <div class="sub">Under 30 minutes</div>
+        <div class="rail">
+          <div class="c"><img class="ph" src="../../media/DPB6Q6SjBh5/hero.jpg" style="height:170px" alt=""><div class="t">Cod with mustard sauce in paper boats</div><div class="meta">Uses the cod</div></div>
+          <div class="c"><img class="ph" src="../../media/C8j51_HKkxG/hero.jpg" style="height:170px" alt=""><span class="mark"><svg><use href="#heart"/></svg>Both</span><div class="t">Creamy tomato and basil beans</div><div class="meta">30 min</div></div>
+        </div>
+        <div class="h" style="margin-top:26px">Use what's fresh</div>
+        <div class="sub">Three ways with the cod, before it turns</div>
+        <div class="meta">Mirin baked · paper boats · …</div>
+
+        <div class="lv">Level 3 · Together</div>
+        <div class="h">Our list</div>
+        <div class="sub">3 lined up · agreed ones first</div>
+        <div class="list">
+          <div class="row"><img class="ph" src="../../media/C6_FrdiyZjh/hero.jpg" alt=""><div><div class="t" style="margin:0">Japanese mirin baked cod</div><div class="meta">Mary ♥ · Craig ♥</div></div></div>
+          <div class="row"><img class="ph" src="../../media/C8kODErKIKh/hero.jpg" alt=""><div><div class="t" style="margin:0">Scarpaccia with pepper and onion</div><div class="meta">Craig ♥ · Mary hasn't looked</div></div></div>
+        </div>
+
+        <div class="lv">Level 4 · Deeper</div>
+        <div class="h">Rediscovered from your saves</div>
+        <div class="sub">Three you saved but never opened</div>
+        <div class="h" style="margin-top:20px">From the cupboard</div>
+        <div class="h" style="margin-top:20px">Everything · library and filters</div>
+        <div class="sub">Sides, baking, breakfast, needs checking</div>
+      </div>
+      <div class="bar"><div class="search">Search, or what's in the fridge</div><div class="icon">list</div></div>
+    </div>
+    <div class="ann">
+      <h3>Why this order</h3>
+      <ol>
+        <li><b>Mood words, not pills:</b> a line of plain words to tap. Fine type, no boxes.</li>
+        <li><b>What's in</b> shows the box's perishables as round photos, with how soon to use them.</li>
+        <li><b>Our picks</b> are marked on the card (list or ♥), so you see what you've already agreed on.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- OPTION 2: INGREDIENTS FIRST -->
+  <div class="opt">
+    <h2>2 · Ingredients first</h2>
+    <p class="idea">Starts from what's in the house. The Tuesday box leads with large photos; tapping one or two ingredients shapes everything below. Mood is a second, lighter row.</p>
+    <div class="phone">
+      <div class="fold"></div>
+      <div class="status"><span>18:42</span><span>●●● ▮</span></div>
+      <div class="scr">
+        <div class="lv">Level 1 · Decide</div>
+        <div class="meta">Sunday evening · for both of us</div>
+        <div class="q">What have we got?</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div><img class="ph" src="../../media/C6_FrdiyZjh/hero.jpg" style="height:150px" alt=""><div class="t" style="font-size:17px">Cod</div><div class="meta">Use by tomorrow · 3 recipes</div></div>
+          <div><img class="ph" src="../../media/Cyf04RxIO8c/hero.jpg" style="height:150px" alt=""><div class="t" style="font-size:17px">Spinach</div><div class="meta">Use soon · 4 recipes</div></div>
+          <div><img class="ph" src="../../media/C4kZDKtBbQO/hero.jpg" style="height:150px" alt=""><div class="t" style="font-size:17px">Tofu</div><div class="meta">A few days · 6 recipes</div></div>
+          <div><img class="ph" src="../../media/CwiWc2KId6o/hero.jpg" style="height:150px" alt=""><div class="t" style="font-size:17px">The cupboard</div><div class="meta">Pasta, beans, tins · 40 recipes</div></div>
+        </div>
+        <div class="h" style="margin-top:24px">Feel like</div>
+        <div class="words" style="font-size:17px"><span>Comforting</span><span>Light</span><span>Spicy</span><span>Warming</span><span>Special</span></div>
+
+        <div class="h" style="margin-top:28px">From our picks</div>
+        <div class="rail">
+          <div class="c"><img class="ph" src="../../media/C6_FrdiyZjh/hero.jpg" style="height:190px" alt=""><span class="mark"><svg><use href="#listic"/></svg>Our list</span><div class="t">Japanese mirin baked cod</div><div class="meta">Uses the cod</div></div>
+          <div class="c"><img class="ph" src="../../media/C8j51_HKkxG/hero.jpg" style="height:190px" alt=""><span class="mark"><svg><use href="#heart"/></svg>Both</span><div class="t">Creamy tomato and basil beans</div></div>
+        </div>
+
+        <div class="lv">Level 2 · Browse</div>
+        <div class="h">Quick tonight · About an hour · Weekend</div>
+        <div class="sub">Speed bands, as before</div>
+        <div class="lv">Level 3 · Together</div>
+        <div class="h">Our list, agreed first</div>
+        <div class="lv">Level 4 · Deeper</div>
+        <div class="h">Rediscovered · cupboard · library</div>
+      </div>
+      <div class="bar"><div class="search">Search, or what's in the fridge</div><div class="icon">list</div></div>
+    </div>
+    <div class="ann">
+      <h3>Why this order</h3>
+      <ol>
+        <li><b>The box is the hero</b>: the clearest expression of your Tuesday rhythm. Late in the week, "The cupboard" tile takes over.</li>
+        <li><b>Each tile says how soon</b> ("use by tomorrow") <b>and how many recipes</b> it unlocks.</li>
+        <li>Needs to know what's in: from the Abel &amp; Cole email, or one tap on Tuesday ("the box came").</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- FILTERED STATE -->
+  <div class="opt">
+    <h2>After tapping: cod + comforting</h2>
+    <p class="idea">How filtering works in either option. Results are ranked: <b>our list first, then favourites, then the best ingredient match</b>, each with a reason. Clear the filters with one tap.</p>
+    <div class="phone">
+      <div class="status"><span>18:43</span><span>●●● ▮</span></div>
+      <div class="scr">
+        <div class="meta">‹ Back</div>
+        <div class="q" style="margin-top:8px">Cod, comforting</div>
+        <div class="chips" style="margin-bottom:22px"><span class="chip on">Cod ×</span><span class="chip on">Comforting ×</span><span class="chip">+ spinach</span><span class="chip">+ quick</span></div>
+        <div class="list">
+          <div class="row"><img class="ph" src="../../media/C6_FrdiyZjh/hero.jpg" style="width:110px;height:110px" alt=""><div><div class="why"><svg style="width:12px;height:12px;vertical-align:-1px"><use href="#listic"/></svg> On our list · Mary added it</div><div class="t" style="margin:2px 0">Japanese mirin baked cod</div><div class="meta">22 min + marinating · have 9 of 11</div></div></div>
+          <div class="row"><img class="ph" src="../../media/DPB6Q6SjBh5/hero.jpg" style="width:110px;height:110px" alt=""><div><div class="why"><svg style="width:12px;height:12px;vertical-align:-1px"><use href="#heart"/></svg> Craig's favourite</div><div class="t" style="margin:2px 0">Cod with mustard sauce in paper boats</div><div class="meta">Time to check · have 5 of 7</div></div></div>
+          <div class="row"><img class="ph" src="../../media/DHdyddgRAs4/hero.jpg" style="width:110px;height:110px" alt=""><div><div class="why" style="color:var(--mid)">Uses cod instead of tinned fish</div><div class="t" style="margin:2px 0">Broccolini beans with tinned fish</div><div class="meta">1 hr 30 · have 9 of 12</div></div></div>
+        </div>
+        <div class="sub" style="margin-top:24px">3 of 9 · nothing else uses cod yet</div>
+      </div>
+      <div class="bar"><div class="search">Cod, comforting</div><div class="icon">×</div></div>
+    </div>
+    <div class="ann">
+      <h3>The ranking rule</h3>
+      <ol>
+        <li><b>On our list</b> (agreed by both, then either)</li>
+        <li><b>Favourites</b> (♥ by both, then either)</li>
+        <li><b>Best match</b>: most ingredients in, perishables used first</li>
+      </ol>
+      <p>Every result carries a <b>reason line</b> in the accent colour, so the ranking never feels random. Swaps count too ("uses cod instead of tinned fish").</p>
+    </div>
+  </div>
+</div>
+
+<div class="map">
+  <h2>The scroll narrative: what lives at each depth</h2>
+  <table>
+    <tr><th>Level</th><th>Job</th><th>Components</th><th>Test question</th></tr>
+    <tr><td>1 · Decide</td><td>What shall we cook now?</td><td>Feel like (moods) · What's in (box perishables) · From our picks</td><td>Which leads better: mood or ingredients?</td></tr>
+    <tr><td>2 · Browse</td><td>Show us options</td><td>Speed bands (quick · an hour · weekend) · Use what's fresh ("3 ways with the cod")</td><td>Do speed bands earn their place under mood and ingredients?</td></tr>
+    <tr><td>3 · Together</td><td>Agree and plan</td><td>Our list with both reactions · agreed first · who added what</td><td>Is the list better here or at level 1?</td></tr>
+    <tr><td>4 · Deeper</td><td>Explore and maintain</td><td>Rediscovered saves · From the cupboard · Library and filters (sides, baking, breakfast) · Needs checking</td><td>Does anyone scroll this far, and what do they look for?</td></tr>
+    <tr><td>Always</td><td>Find, or resume</td><td>Bottom search ("or what's in the fridge") · Resume cooking when timers run · list button</td><td>—</td></tr>
+  </table>
+</div>
+</body>
+</html>

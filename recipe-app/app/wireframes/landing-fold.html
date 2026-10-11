@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="dark">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>First Screen Variations</title>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  /* First screen only (390 x 844). 2–3 features each; the bottom search bar is constant and not counted. Greyscale, no lines, no boxes in boxes. */
+  :root { --page:#121110; --ink:#e8e4de; --mid:#9a948c; --soft:#6f6a63; --img:#3a3632; --scr:#1c1a18; --chip:#2b2825; --note:#c9a06b; --lvl:#8fb3c4; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--page); color:var(--ink); font:16px/1.55 Jost, system-ui, sans-serif; }
+  .intro { max-width:1400px; margin:0 auto; padding:40px 32px 0; }
+  .intro h1 { font-weight:400; font-size:36px; margin:0 0 6px; }
+  .intro p { color:var(--mid); max-width:900px; margin:0 0 8px; }
+  .grid { max-width:1400px; margin:0 auto; padding:28px 32px 40px; display:flex; flex-wrap:wrap; gap:44px 40px; }
+  .opt { flex:0 0 390px; }
+  .opt h2 { font-weight:400; font-size:22px; margin:0; }
+  .feat { font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:var(--lvl); margin:2px 0 14px; }
+  .phone { position:relative; width:390px; height:844px; background:var(--scr); border-radius:44px; box-shadow:0 20px 50px rgba(0,0,0,.5); overflow:hidden; }
+  .status { display:flex; justify-content:space-between; padding:16px 30px 0; font-size:14px; font-weight:500; position:relative; z-index:2; }
+  .scr { padding:16px 20px 0; }
+  .meta { font-size:14px; color:var(--mid); }
+  .q { font-size:30px; font-weight:300; line-height:1.15; margin:2px 0 14px; }
+  .h { font-size:20px; font-weight:400; margin:0 0 2px; }
+  .sub { font-size:14px; color:var(--mid); margin:0 0 12px; }
+  .words { display:flex; flex-wrap:wrap; gap:6px 18px; font-size:20px; font-weight:300; }
+  .words.sm { font-size:17px; gap:4px 16px; }
+  img.ph { display:block; width:100%; object-fit:cover; filter:grayscale(1) contrast(.9); background:var(--img); border-radius:12px; }
+  .rail { display:flex; gap:14px; overflow:hidden; margin-right:-20px; }
+  .rail .c { flex:0 0 62%; position:relative; }
+  .t { font-size:18px; line-height:1.25; margin-top:8px; }
+  .ing { display:flex; gap:12px; overflow:hidden; margin-right:-20px; }
+  .ing div { flex:0 0 84px; text-align:center; font-size:14px; }
+  .ing img { width:84px; height:84px; border-radius:50%; object-fit:cover; filter:grayscale(1); background:var(--img); display:block; margin-bottom:5px; }
+  .ing small { display:block; color:var(--mid); font-size:12px; }
+  .mark { position:absolute; top:10px; left:10px; background:rgba(28,26,24,.85); border-radius:14px; padding:2px 10px 2px 8px; font-size:12.5px; display:flex; gap:6px; align-items:center; color:var(--ink); }
+  .mark svg { width:13px; height:13px; }
+  .bar { position:absolute; left:0; right:0; bottom:0; padding:14px 20px 26px; background:linear-gradient(transparent, var(--scr) 30%); display:flex; gap:10px; z-index:6; }
+  .search { flex:1; background:var(--chip); border-radius:26px; padding:13px 18px; color:var(--mid); font-size:15px; }
+  .icon { width:48px; height:48px; border-radius:50%; background:var(--chip); display:grid; place-items:center; font-size:13px; color:var(--mid); }
+  .why { font-size:13px; color:var(--note); }
+  .row { display:flex; gap:14px; align-items:center; margin:0 0 14px; }
+  .row img { width:70px; height:70px; flex:none; border-radius:10px; }
+  .full { position:absolute; inset:0 0 auto 0; height:520px; }
+  .full img { width:100%; height:100%; object-fit:cover; filter:grayscale(1) contrast(.9); display:block; }
+  .full::after { content:''; position:absolute; inset:40% 0 0 0; background:linear-gradient(transparent, rgba(0,0,0,.7)); }
+  .over { position:absolute; left:20px; right:20px; bottom:22px; color:#fff; z-index:1; }
+  .over .meta { color:#e6e2dc; }
+  .blank { color:var(--ink); border-bottom:1.5px solid var(--ink); font-weight:400; }
+  .ann { margin-top:16px; font-size:14.5px; }
+  .ann p { margin:0 0 6px; }
+  .ann b { font-weight:500; }
+  .tests { color:var(--lvl); }
+  .cmp { max-width:1400px; margin:0 auto 60px; padding:0 32px; }
+  .cmp h2 { font-weight:400; font-size:24px; margin:0 0 10px; }
+  .cmp table { border-collapse:collapse; font-size:15px; width:100%; max-width:1200px; }
+  .cmp td, .cmp th { text-align:left; padding:9px 22px 9px 0; vertical-align:top; }
+  .cmp th { font-weight:500; color:var(--mid); font-size:12px; letter-spacing:.1em; text-transform:uppercase; }
+  .cmp td:first-child { font-weight:500; white-space:nowrap; }
+  @media (max-width:460px) { .opt { flex-basis:100%; } .phone { width:100%; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <symbol id="heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" fill="currentColor"/></symbol>
+  <symbol id="listic" viewBox="0 0 24 24"><path d="M6 4h12v16l-6-4-6 4z" fill="currentColor"/></symbol>
+</defs></svg>
+
+<div class="intro">
+  <h1>The first screen · six variations</h1>
+  <p>Only what's visible on opening, at 390 × 844. Each one uses <b>two or three features at most</b>, drawn from: <b>what we feel like</b> · <b>what's in</b> · <b>our picks / list</b> · <b>one suggestion for tonight</b>. The bottom search bar is in every one and isn't counted. Sunday evening; for both of us.</p>
+  <p>Look for the one you'd reach for at 6pm with the fridge open. Under each frame: what it's testing.</p>
+</div>
+
+<div class="grid">
+
+  <!-- V1 -->
+  <div class="opt">
+    <h2>1 · Feel, then our picks</h2>
+    <div class="feat">Feel like · Our picks</div>
+    <div class="phone">
+      <div class="status"><span>18:42</span><span>●●● ▮</span></div>
+      <div class="scr">
+        <div class="meta">Sunday evening · for both of us</div>
+        <div class="q">What do you feel like?</div>
+        <div class="words"><span>Comforting</span><span>Light</span><span>Fresh &amp; green</span><span>Spicy</span><span>Warming</span><span>Something special</span><span>A quick fix</span></div>
+        <div class="h" style="margin-top:34px">From our picks</div>
+        <div class="sub">On our list, and favourites</div>
+        <div class="rail">
+          <div class="c"><img class="ph" src="../../media/C6_FrdiyZjh/hero.jpg" style="height:260px" alt=""><span class="mark"><svg><use href="#listic"/></svg>Our list · Mary</span><div class="t">Japanese mirin baked cod</div><div class="meta">22 min + marinating</div></div>
+          <div class="c"><img class="ph" src="../../media/C8j51_HKkxG/hero.jpg" style="height:260px" alt=""><span class="mark"><svg><use href="#heart"/></svg>Both of you</span><div class="t">Creamy tomato and basil beans</div><div class="meta">30 min</div></div>
+        </div>
+      </div>
+      <div class="bar"><div class="search">Search, or what's in the fridge</div><div class="icon">list</div></div>
+    </div>
+    <div class="ann"><p class="tests"><b>Tests:</b> is mood the right first question?</p><p>A calm, typographic top; the photos come from things you've already chosen.</p></div>
+  </div>
+
+  <!-- V2 -->
+  <div class="opt">
+    <h2>2 · What's in, then our picks</h2>
+    <div class="feat">What's in · Our picks</div>
+    <div class="phone">
+      <div class="status"><span>18:42</span><span>●●● ▮</span></div>
+      <div class="scr">
+        <div class="meta">Sunday evening · for both of us</div>
+        <div class="q">What have we got?</div>
+        <div class="ing">
+          <div><img src="../../media/C6_FrdiyZjh/hero.jpg" alt="">Cod<small>use by tomorrow</small></div>
+          <div><img src="../../media/Cyf04RxIO8c/hero.jpg" alt="">Spinach<small>use soon</small></div>
+          <div><img src="../../media/C4kZDKtBbQO/hero.jpg" alt="">Tofu<small>a few days</small></div>
+          <div><img src="../../media/CwiWc2KId6o/hero.jpg" alt="">Cupboard<small>pasta, beans</small></div>
+        </div>
+        <div class="h" style="margin-top:34px">From our picks</div>
+        <div class="sub">On our list, and favourites</div>
+        <div class="rail">
+          <div class="c"><img class="ph" src="../../media/C6_FrdiyZjh/hero.jpg" style="height:250px" alt=""><span class="mark"><svg><use href="#listic"/></svg>Our list · Mary</span><div class="t">Japanese mirin baked cod</div><div class="meta">Uses the cod</div></div>
+          <div class="c"><img class="ph" src="../../media/C8j51_HKkxG/hero.jpg" style="height:250px" alt=""><span class="mark"><svg><use href="#heart"/></svg>Both of you</span><div class="t">Creamy tomato and basil beans</div><div class="meta">From the cupboard</div></div>
+        </div>
+      </div>
+      <div class="bar"><div class="search">Search, or what's in the fridge</div><div class="icon">list</div></div>
+    </div>
+    <div class="ann"><p class="tests"><b>Tests:</b> is the fridge the right first question?</p><p>Follows the Tuesday rhythm; the picks say which ingredient they use.</p></div>
+  </div>
+
+  <!-- V3 -->
+  <div class="opt">
+    <h2>3 · Feel and what's in, together</h2>
+    <div class="feat">Feel like · What's in · Best match</div>
+    <div class="phone">
+      <div class="status"><span>18:42</span><span>●●● ▮</span></div>
+      <div class="scr">
+        <div class="meta">Sunday evening · for both of us</div>
+        <div class="q" style="font-size:26px">Feel like</div>
+        <div class="words sm"><span class="blank">Comforting</span><span>Light</span><span>Spicy</span><span>Warming</span><span>Special</span><span>Quick</span></div>
+        <div class="q" style="font-size:26px;margin-top:24px">With</div>
+        <div class="ing">
+          <div><img src="../../media/C6_FrdiyZjh/hero.jpg" alt="" style="outline:2px solid var(--ink);outline-offset:3px">Cod</div>
+          <div><img src="../../media/Cyf04RxIO8c/hero.jpg" alt="">Spinach</div>
+          <div><img src="../../media/C4kZDKtBbQO/hero.jpg" alt="">Tofu</div>
+          <div><img src="../../media/CwiWc2KId6o/hero.jpg" alt="">Cupboard</div>
+        </div>
+        <div class="h" style="margin-top:26px">Best match</div>
+        <div class="row" style="margin-top:8px"><img class="ph" src="../../media/C6_FrdiyZjh/hero.jpg" style="width:96px;height:96px" alt=""><div><div class="why"><svg style="width:12px;height:12px;vertical-align:-1px"><use href="#listic"/></svg> On our list</div><div class="t" style="margin:2px 0">Japanese mirin baked cod</div><div class="meta">Comforting · uses the cod</div></div></div>
+        <div class="row"><img class="ph" src="../../media/DPB6Q6SjBh5/hero.jpg" style="width:96px;height:96px" alt=""><div><div class="why"><svg style="width:12px;height:12px;vertical-align:-1px"><use href="#heart"/></svg> Craig's favourite</div><div class="t" style="margin:2px 0">Cod with mustard sauce in paper boats</div></div></div>
+      </div>
+      <div class="bar"><div class="search">Search, or what's in the fridge</div><div class="icon">list</div></div>
+    </div>
+    <div class="ann"><p class="tests"><b>Tests:</b> do two light taps (mood + ingredient) beat one?</p><p>Results update live under the questions, with our list ranked first.</p></div>
+  </div>
+
+  <!-- V4 -->
+  <div class="opt">
+    <h2>4 · One suggestion, then two ways in</h2>
+    <div class="feat">Tonight · Feel like / What's in</div>
+    <div class="phone">
+      <div class="full">
+        <img src="../../media/C6_FrdiyZjh/hero.jpg" alt="">
+        <div style="position:absolute;top:16px;left:30px;right:30px;display:flex;justify-content:space-between;color:#fff;font-size:14px;font-weight:500;z-index:1"><span>18:42</span><span>●●● ▮</span></div>
+        <div class="over">
+          <div class="meta" style="font-size:13px;letter-spacing:.1em;text-transform:uppercase">Tonight, we'd suggest</div>
+          <div style="font-size:32px;font-weight:300;line-height:1.12;margin:6px 0 6px">Japanese mirin baked cod</div>
+          <div class="meta">On our list · uses the cod before it turns · 22 min + marinating</div>
+        </div>
+      </div>
+      <div class="scr" style="position:absolute;top:520px;left:0;right:0">
+        <div class="h" style="margin-top:6px">Or, what do you feel like?</div>
+        <div class="words sm" style="margin-top:6px"><span>Comforting</span><span>Light</span><span>Spicy</span><span>Warming</span><span>Special</span></div>
+        <div class="h" style="margin-top:20px">Or start from</div>
+        <div class="words sm" style="margin-top:4px"><span>Cod</span><span>Spinach</span><span>Tofu</span><span>The cupboard</span></div>
+      </div>
+      <div class="bar"><div class="search">Search, or what's in the fridge</div><div class="icon">list</div></div>
+    </div>
+    <div class="ann"><p class="tests"><b>Tests:</b> do you want the app to choose first?</p><p>A full-screen photo (or muted video) of one confident pick, with a reason. If it's wrong, two quiet ways to steer.</p></div>
+  </div>
+
+  <!-- V5 -->
+  <div class="opt">
+    <h2>5 · Our list leads</h2>
+    <div class="feat">Our list · What's in</div>
+    <div class="phone">
+      <div class="status"><span>18:42</span><span>●●● ▮</span></div>
+      <div class="scr">
+        <div class="meta">Sunday evening · for both of us</div>
+        <div class="q">Lined up</div>
+        <img class="ph" src="../../media/C6_FrdiyZjh/hero.jpg" style="height:250px" alt="">
+        <div class="t" style="font-size:22px;font-weight:300">Japanese mirin baked cod</div>
+        <div class="meta">Mary and Craig ♥ · uses the cod</div>
+        <div class="row" style="margin-top:14px"><img class="ph" src="../../media/C8kODErKIKh/hero.jpg" style="width:60px;height:60px" alt=""><div><div class="t" style="margin:0;font-size:16px">Scarpaccia with pepper and onion</div><div class="meta">Craig ♥</div></div></div>
+        <div class="h" style="margin-top:16px">Not that? Start from what's in</div>
+        <div class="words sm" style="margin-top:4px"><span>Cod</span><span>Spinach</span><span>Tofu</span><span>The cupboard</span></div>
+      </div>
+      <div class="bar"><div class="search">Search, or what's in the fridge</div><div class="icon">list</div></div>
+    </div>
+    <div class="ann"><p class="tests"><b>Tests:</b> will you build a list, and trust it?</p><p>Agreed picks first; ingredients are the fallback.</p></div>
+  </div>
+
+  <!-- V6 -->
+  <div class="opt">
+    <h2>6 · A sentence you can change</h2>
+    <div class="feat">Feel + what's in + who, as one line · Results</div>
+    <div class="phone">
+      <div class="status"><span>18:42</span><span>●●● ▮</span></div>
+      <div class="scr">
+        <div class="meta">Sunday evening</div>
+        <div style="font-size:31px;font-weight:300;line-height:1.3;margin:6px 0 24px">Something <span class="blank">comforting</span> with <span class="blank">the cod</span>, for <span class="blank">both of us</span>, in <span class="blank">under an hour</span>.</div>
+        <div class="rail">
+          <div class="c"><img class="ph" src="../../media/C6_FrdiyZjh/hero.jpg" style="height:270px" alt=""><span class="mark"><svg><use href="#listic"/></svg>Our list</span><div class="t">Japanese mirin baked cod</div><div class="meta">22 min + marinating</div></div>
+          <div class="c"><img class="ph" src="../../media/DPB6Q6SjBh5/hero.jpg" style="height:270px" alt=""><span class="mark"><svg><use href="#heart"/></svg>Craig</span><div class="t">Cod with mustard sauce in paper boats</div><div class="meta">Time to check</div></div>
+        </div>
+      </div>
+      <div class="bar"><div class="search">Search, or what's in the fridge</div><div class="icon">list</div></div>
+    </div>
+    <div class="ann"><p class="tests"><b>Tests:</b> does one editable sentence feel quicker than separate controls?</p><p>Each underlined word is tappable (mood, ingredient, who, time). The app fills in sensible defaults for the day (Sunday → cupboard, Tuesday → fresh).</p></div>
+  </div>
+</div>
+
+<div class="cmp">
+  <h2>What each one is testing</h2>
+  <table>
+    <tr><th>Variation</th><th>Leads with</th><th>Taps to a dish</th><th>Strong when</th><th>Weak when</th></tr>
+    <tr><td>1 · Feel, then picks</td><td>Mood</td><td>1–2</td><td>You know the feeling, not the dish</td><td>You're driven by the fridge</td></tr>
+    <tr><td>2 · What's in, then picks</td><td>Ingredients</td><td>1–2</td><td>Tuesday to Thursday, the box is full</td><td>Nothing is pressing to use</td></tr>
+    <tr><td>3 · Both, together</td><td>Mood + ingredient</td><td>2</td><td>You want a tailored answer</td><td>You just want to be told</td></tr>
+    <tr><td>4 · One suggestion</td><td>The app's pick</td><td>0–1</td><td>Tired evenings: "just tell us"</td><td>The pick misses, and steering feels like a step back</td></tr>
+    <tr><td>5 · Our list leads</td><td>What we agreed</td><td>0–1</td><td>You keep the list going</td><td>The list is empty or stale</td></tr>
+    <tr><td>6 · A sentence</td><td>Smart defaults you can edit</td><td>0–2</td><td>Defaults are usually right</td><td>Editing words feels fiddly</td></tr>
+  </table>
+</div>
+</body>
+</html>

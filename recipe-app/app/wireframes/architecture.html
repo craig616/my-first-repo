@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="dark">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>App Architecture</title>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  /* Architecture overview in the dark wireframe style. Greyscale with one muted accent per concept. */
+  :root { --page:#121110; --scr:#1c1a18; --raise:#24211e; --ink:#e8e4de; --mid:#9a948c; --soft:#6f6a63; --chip:#2b2825;
+          --a-ui:#8fb3c4; --a-data:#c9a06b; --a-rank:#e6c46a; --a-pipe:#9fbf9a; --a-tech:#c4a0b8; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--page); color:var(--ink); font:16px/1.55 Jost, system-ui, sans-serif; }
+  .wrap { max-width:1320px; margin:0 auto; padding:44px 32px 80px; }
+  h1 { font-weight:300; font-size:44px; margin:0 0 4px; letter-spacing:-.01em; }
+  .lede { color:var(--mid); max-width:820px; font-size:17px; margin:0; }
+  nav { position:sticky; top:0; z-index:5; background:var(--page); display:flex; gap:22px; flex-wrap:wrap; padding:16px 0; margin:24px 0 8px; font-size:15px; }
+  nav a { color:var(--mid); text-decoration:none; } nav a:hover { color:var(--ink); }
+  section { padding:44px 0 8px; }
+  .num { font-size:13px; letter-spacing:.14em; text-transform:uppercase; }
+  h2 { font-weight:300; font-size:32px; margin:2px 0 6px; }
+  .sub { color:var(--mid); margin:0 0 26px; max-width:820px; }
+  .small { font-size:13px; color:var(--mid); }
+  .tag { display:inline-block; font-size:12px; padding:2px 10px; border-radius:12px; background:var(--chip); color:var(--mid); margin:0 6px 6px 0; }
+
+  /* 1 · screens */
+  .flow { display:flex; gap:18px; align-items:flex-start; overflow-x:auto; padding-bottom:10px; }
+  .scrn { flex:0 0 200px; }
+  .ph { width:200px; height:420px; border-radius:26px; background:var(--scr); position:relative; overflow:hidden; padding:16px 14px; box-shadow:0 14px 30px rgba(0,0,0,.45); }
+  .ph .l { height:7px; border-radius:4px; background:var(--chip); margin:0 0 7px; }
+  .ph img { width:100%; object-fit:cover; filter:grayscale(1) contrast(.9) brightness(.9); border-radius:8px; display:block; }
+  .ph .bar { position:absolute; left:12px; right:12px; bottom:14px; height:28px; border-radius:14px; background:var(--chip); }
+  .ph .t { font-size:11px; color:var(--ink); margin:6px 0 2px; } .ph .m { font-size:9.5px; color:var(--mid); }
+  .scrn h3 { font-weight:400; font-size:17px; margin:12px 0 2px; color:var(--a-ui); }
+  .scrn p { font-size:13.5px; color:var(--mid); margin:0; }
+  .arrow { flex:0 0 26px; align-self:center; color:var(--soft); font-size:22px; text-align:center; margin-top:-60px; }
+  .always { margin-top:22px; display:flex; gap:28px; flex-wrap:wrap; font-size:14.5px; }
+  .always b { font-weight:500; color:var(--a-ui); }
+
+  /* 2 · data */
+  .ents { display:grid; grid-template-columns:repeat(auto-fill, minmax(290px, 1fr)); gap:18px; }
+  .ent { background:var(--scr); border-radius:16px; padding:18px 20px; }
+  .ent h3 { font-weight:400; font-size:19px; margin:0 0 6px; color:var(--a-data); }
+  .ent ul { list-style:none; padding:0; margin:0; font-size:14px; color:var(--ink); }
+  .ent li { margin:0 0 3px; }
+  .ent li span { color:var(--mid); }
+  .ent .rel { margin-top:10px; font-size:12.5px; color:var(--soft); }
+  .ent.big { grid-row:span 2; }
+
+  /* 3 · ranking */
+  .gate { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:24px; }
+  .gate div { background:var(--scr); border-radius:14px; padding:14px 18px; flex:1 1 260px; }
+  .gate b { font-weight:400; color:var(--a-rank); display:block; font-size:17px; }
+  .ladder { display:flex; gap:0; flex-wrap:wrap; align-items:stretch; }
+  .step { flex:1 1 150px; padding:16px 16px 16px 0; position:relative; }
+  .step .n { font-size:40px; font-weight:300; color:var(--a-rank); line-height:1; }
+  .step b { display:block; font-weight:400; font-size:17px; margin:6px 0 2px; }
+  .step p { margin:0; font-size:13.5px; color:var(--mid); }
+  .step .why { margin-top:8px; font-size:12.5px; color:var(--a-rank); opacity:.85; }
+  .learn { margin-top:22px; display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:18px; font-size:14.5px; }
+  .learn b { font-weight:500; }
+
+  /* 4 · pipeline */
+  .pipe { display:flex; flex-direction:column; gap:10px; }
+  .stage { display:grid; grid-template-columns:220px 1fr 220px; gap:24px; align-items:start; background:var(--scr); border-radius:14px; padding:16px 20px; }
+  .stage .who { font-size:12.5px; color:var(--a-pipe); letter-spacing:.06em; text-transform:uppercase; }
+  .stage h3 { font-weight:400; font-size:18px; margin:2px 0 0; }
+  .stage p { margin:0; font-size:14px; color:var(--mid); }
+  .stage .out { font-size:13px; color:var(--ink); }
+  .down { text-align:center; color:var(--soft); font-size:18px; line-height:1; }
+  .future { opacity:.6; }
+
+  /* 5 · tech */
+  .tech { display:grid; grid-template-columns:1fr 60px 1fr; gap:0; align-items:stretch; }
+  .col h3 { font-weight:300; font-size:24px; margin:0 0 12px; }
+  .col.now h3 { color:var(--mid); } .col.target h3 { color:var(--a-tech); }
+  .tr { padding:12px 0 14px; }
+  .tr .k { font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--soft); }
+  .tr .v { font-size:15.5px; }
+  .mid { display:flex; flex-direction:column; justify-content:space-around; align-items:center; color:var(--soft); font-size:20px; padding-top:46px; }
+  .stack { margin-top:30px; display:flex; flex-direction:column; gap:8px; max-width:900px; }
+  .layer { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  .layer .lab { flex:0 0 150px; font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--soft); }
+  .layer .pill { background:var(--scr); border-radius:12px; padding:10px 16px; font-size:14.5px; }
+  .layer .pill.later { color:var(--soft); }
+
+  /* 6 · status */
+  .stats { display:grid; grid-template-columns:repeat(auto-fill, minmax(190px,1fr)); gap:18px; margin-bottom:26px; }
+  .stat .v { font-size:44px; font-weight:300; line-height:1.05; }
+  .stat .k { font-size:14px; color:var(--mid); }
+  .bar2 { height:6px; background:var(--chip); border-radius:3px; margin-top:8px; overflow:hidden; }
+  .bar2 i { display:block; height:100%; background:var(--a-pipe); }
+  .road { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:18px; }
+  .road div { padding:0 0 0 0; }
+  .road b { display:block; font-weight:400; font-size:17px; margin-bottom:4px; }
+  .road .st { font-size:12px; letter-spacing:.1em; text-transform:uppercase; }
+  .done { color:var(--a-pipe); } .now { color:var(--a-rank); } .next { color:var(--soft); }
+  .road ul { margin:6px 0 0; padding-left:18px; font-size:14px; color:var(--mid); } .road li { margin:0 0 4px; }
+  @media (max-width:820px) { .stage { grid-template-columns:1fr; } .tech { grid-template-columns:1fr; } .mid { display:none; } .layer .lab { flex-basis:100%; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="small">Craig and Mary's recipe app · 4 October 2026</div>
+  <h1>App architecture</h1>
+  <p class="lede">Everything decided so far, in one place: the screens, the data, how suggestions are chosen, how recipes get in, and how it runs at home.</p>
+  <nav><a href="#screens">1 · Screens</a><a href="#data">2 · Data</a><a href="#ranking">3 · Suggestions</a><a href="#pipeline">4 · Getting recipes in</a><a href="#tech">5 · How it runs</a><a href="#status">6 · Where we are</a></nav>
+
+  <!-- 1 SCREENS -->
+  <section id="screens">
+    <div class="num" style="color:var(--a-ui)">1 · Screens and journey</div>
+    <h2>From "what shall we have?" to "next time, less sugar"</h2>
+    <p class="sub">Four main screens, from atmosphere to focus. The landing page is option 3. The filter sheet <i>is</i> the library.</p>
+    <div class="flow">
+      <div class="scrn">
+        <div class="ph">
+          <div class="l" style="width:60%"></div>
+          <div class="m" style="margin:8px 0 4px">Feel like</div>
+          <div class="l" style="width:90%"></div><div class="l" style="width:70%"></div>
+          <div class="m" style="margin:8px 0 4px">With</div>
+          <div style="display:flex;gap:6px;margin-bottom:10px"><img src="../../media/C6_FrdiyZjh/hero.jpg" style="width:32px;height:32px;border-radius:50%"><img src="../../media/Cyf04RxIO8c/hero.jpg" style="width:32px;height:32px;border-radius:50%"><img src="../../media/C4kZDKtBbQO/hero.jpg" style="width:32px;height:32px;border-radius:50%"><img src="../../media/DHdyddgRAs4/hero.jpg" style="width:32px;height:32px;border-radius:50%"></div>
+          <div class="m">Best match</div>
+          <div style="display:flex;gap:8px;margin:6px 0"><img src="../../media/C6_FrdiyZjh/hero.jpg" style="width:38px;height:38px"><div><div class="t" style="margin:0">Mirin baked cod</div><div class="m">On our list</div></div></div>
+          <div style="display:flex;gap:8px;margin:6px 0"><img src="../../media/DPB6Q6SjBh5/hero.jpg" style="width:38px;height:38px"><div><div class="t" style="margin:0">Cod in paper boats</div><div class="m">Craig's favourite</div></div></div>
+          <div class="bar"></div>
+        </div>
+        <h3>Landing</h3><p>Feel like · With · Best match. Then In season · Quick · Our list · Something different. Search and filters at the bottom.</p>
+      </div>
+      <div class="arrow">→</div>
+      <div class="scrn">
+        <div class="ph" style="padding:0">
+          <img src="../../media/C6_FrdiyZjh/hero.jpg" style="height:220px;border-radius:0">
+          <div style="padding:10px 14px"><div class="t" style="font-size:13px">Japanese mirin baked cod</div><div class="m">Lisa · 22 min + marinating</div>
+          <div class="l" style="width:80%;margin-top:12px"></div><div class="l" style="width:70%"></div><div class="l" style="width:85%"></div><div class="l" style="width:60%"></div></div>
+          <div class="bar" style="background:var(--ink);opacity:.85"></div>
+        </div>
+        <h3>Recipe</h3><p>Full-screen image or video. Ingredients (have / to buy), the method with ⏱ and ▶, needs checking, the log, the source.</p>
+      </div>
+      <div class="arrow">→</div>
+      <div class="scrn">
+        <div class="ph" style="background:#161412">
+          <div class="m" style="margin-bottom:10px">Step 5 of 7</div>
+          <div style="font-size:15px;font-weight:300;line-height:1.35">Set the cod on the tray and bake for 15 minutes…</div>
+          <div class="m" style="margin-top:16px;opacity:.5">Step 6 · grill 5–7 min</div>
+          <div style="position:absolute;left:14px;right:14px;bottom:70px;display:flex;justify-content:space-between;font-size:22px;font-weight:300"><span>11:42</span><span style="color:var(--mid)">3:05</span></div>
+          <div class="bar" style="height:40px"></div>
+        </div>
+        <h3>Cook mode</h3><p>Focused steps, current one bright. Timers, this step's ingredients, "Then". The screen stays on.</p>
+      </div>
+      <div class="arrow">→</div>
+      <div class="scrn">
+        <div class="ph">
+          <div class="m">Finished</div>
+          <div style="font-size:13px;font-weight:300;line-height:1.6;margin-top:10px">On <span style="color:var(--a-rank)">Tuesday</span>, <span style="color:var(--a-pipe)">Mary</span> made the <span style="color:var(--a-data)">mirin cod</span>. It was <span style="color:var(--a-ui)">lovely</span>, but it <span style="color:var(--a-ui)">was a bit sweet</span>. Next time, <span style="color:var(--a-rank)">halve the sugar</span>.</div>
+          <div class="m" style="margin-top:14px">✓ Make this our v2</div>
+          <div class="bar" style="background:var(--ink);opacity:.85"></div>
+        </div>
+        <h3>Cook log story</h3><p>Fill in the blanks. Writes the log, creates the next version, puts it back on our list.</p>
+      </div>
+    </div>
+    <div class="always">
+      <div><b>Always</b> Resume cooking while timers run</div>
+      <div><b>Bottom bar</b> Search ("or what's in the fridge") · Filters</div>
+      <div><b>Filters = the library</b> Who's eating · Time · Meal (incl. sides, baking) · Show · Diet · Cooking · Cuisine · Order by</div>
+      <div><b>Later</b> Intake (box, photos) · Kitchen screen · Calendar</div>
+    </div>
+  </section>
+
+  <!-- 2 DATA -->
+  <section id="data">
+    <div class="num" style="color:var(--a-data)">2 · Data</div>
+    <h2>What the app knows</h2>
+    <p class="sub">The recipe is the centre. Your household settings, the pantry and the season shape what's shown. Your cooking writes back as logs and versions.</p>
+    <div class="ents">
+      <div class="ent big"><h3>Recipe</h3><ul>
+        <li>id · title · <span>sources (Instagram, website)</span></li>
+        <li>creator · <span>media (video, hero, transcript)</span></li>
+        <li>servings · prep / cook / total time</li>
+        <li><b style="font-weight:500">course</b> <span>main · lunch · side · baking…</span></li>
+        <li><b style="font-weight:500">mood</b> <span>comforting · light · spicy…</span></li>
+        <li><b style="font-weight:500">larder</b> <span>fresh · cupboard · mixed</span> · perishables</li>
+        <li><b style="font-weight:500">seasons</b> · served · heft · method</li>
+        <li>cuisine · diet · contains meat · allergens · equipment</li>
+        <li>status <span>ok · needs checking</span> · current version</li>
+        <li>ingredient lines <span>name · grams/ml · prep · group</span></li>
+        <li>steps <span>text · ⏱ timer · ▶ video moment · uses</span></li></ul>
+        <div class="rel">→ has many versions, cook logs, list entries</div></div>
+      <div class="ent"><h3>Household</h3><ul><li>Craig · Mary</li><li><span>diet</span> pescatarian together · Craig meat alone</li><li><span>kitchen</span> fan oven · 1–9 induction</li><li><span>rhythm</span> fresh box on Tuesday</li><li><span>staples</span> salt, pepper, oils, water</li></ul></div>
+      <div class="ent"><h3>Our list</h3><ul><li>recipe · added by · when</li><li>reactions <span>Craig ♥ · Mary ♥</span></li><li><span>agreed items rise first</span></li></ul></div>
+      <div class="ent"><h3>Cook log</h3><ul><li>date · who cooked</li><li><span>it was</span> · <span>but it</span> · <span>next time</span> · <span>we'll</span></li></ul><div class="rel">→ can create a Version · feeds taste learning</div></div>
+      <div class="ent"><h3>Version</h3><ul><li>v1 = as imported</li><li>changes · created from which log</li><li><span>the original always one tap away</span></li></ul></div>
+      <div class="ent"><h3>Pantry</h3><ul><li>ingredient · fridge / cupboard / freezer</li><li>source <span>box · receipt · photo · manual</span></li><li>use-by estimate</li></ul></div>
+      <div class="ent"><h3>Reference</h3><ul><li>ingredient vocabulary <span>(167 names)</span></li><li>UK seasonality calendar</li><li>favourites <span>per person</span></li></ul></div>
+    </div>
+  </section>
+
+  <!-- 3 RANKING -->
+  <section id="ranking">
+    <div class="num" style="color:var(--a-rank)">3 · Suggestions</div>
+    <h2>How the order is decided</h2>
+    <p class="sub">Two gates, then a gentle ladder. Every card says why it's there.</p>
+    <div class="gate">
+      <div><b>Gate 1 · Who's eating</b><span class="small">Both or Mary → pescatarian only · Craig alone → everything</span></div>
+      <div><b>Gate 2 · What's recommended</b><span class="small">Landing page: mains and lunches. Sides, baking and breakfast live in the library.</span></div>
+      <div><b>Your choices on the page</b><span class="small">Feel like (mood) · With (ingredients) narrow the results</span></div>
+    </div>
+    <div class="ladder">
+      <div class="step"><div class="n">1</div><b>Our list</b><p>Agreed by both first, then either</p><div class="why">"On our list · Mary"</div></div>
+      <div class="step"><div class="n">2</div><b>Favourites</b><p>Both ♥, then either</p><div class="why">"Craig's favourite"</div></div>
+      <div class="step"><div class="n">3</div><b>Season</b><p>Ingredients at their peak plus the way of eating, blended by month. A gentle nudge.</p><div class="why">"Fennel at its best"</div></div>
+      <div class="step"><div class="n">4</div><b>The week</b><p>Fresh first Tue–Thu, cupboard Sun–Mon</p><div class="why">"Uses the cod before it turns"</div></div>
+      <div class="step"><div class="n">5</div><b>What we have</b><p>Most ingredients in, perishables first</p><div class="why">"Have 9 of 11"</div></div>
+      <div class="step"><div class="n">6</div><b>Speed</b><p>Quicker first on weeknights</p><div class="why">"30 min"</div></div>
+    </div>
+    <div class="learn">
+      <div><b>Learns from the cook log.</b> "Lovely" and "make it again" lift a dish; "not for us" lowers it. No stars.</div>
+      <div><b>Never a bubble.</b> One "Something different" slot: another season, or a forgotten save.</div>
+      <div><b>Later.</b> The weather nudges lighter or warmer; the box email fills "With" automatically.</div>
+    </div>
+  </section>
+
+  <!-- 4 PIPELINE -->
+  <section id="pipeline">
+    <div class="num" style="color:var(--a-pipe)">4 · Getting recipes in</div>
+    <h2>From a saved Reel to a recipe you can cook</h2>
+    <p class="sub">Scripts do the heavy lifting for free. Sonnet does the writing. Every gap is marked honestly.</p>
+    <div class="pipe">
+      <div class="stage"><div><div class="who">Source</div><h3>Instagram "food" collection</h3></div><p>533 saved posts listed once, captions saved. Sorted into full, partial, spoken, not a recipe, carousel.</p><div class="out">state.csv · URL list in Obsidian</div></div>
+      <div class="down">↓</div>
+      <div class="stage"><div><div class="who">Script · no AI</div><h3>collect.py</h3></div><p>Video at 720p (one request per post, at most 50 a run and 2 runs a day), audio extracted on the Mac, cover image, frame sheets, hero candidates.</p><div class="out">media/&lt;code&gt;/ (about 3.5 GB in total)</div></div>
+      <div class="down">↓</div>
+      <div class="stage"><div><div class="who">On the Mac · no AI cost</div><h3>Whisper transcript</h3></div><p>Kept raw, timestamped. Whether it's speech or lyrics is judged when writing.</p><div class="out">transcript.txt</div></div>
+      <div class="down">↓</div>
+      <div class="stage"><div><div class="who">Sonnet</div><h3>Merge and write</h3></div><p>Creator website &gt; caption &gt; comment &gt; speech &gt; on-screen text. UK, grams, fan °C, hob 1–9. Nigel Slater-style voice. Every label. Swaps for meat. Gaps marked "needs checking".</p><div class="out">Obsidian notes · seasonality.csv · vocab</div></div>
+      <div class="down">↓</div>
+      <div class="stage"><div><div class="who">Script</div><h3>build_data.py</h3></div><p>Turns the notes into the app's data. Later, it loads them into the database.</p><div class="out">app/recipes.js → Postgres</div></div>
+      <div class="down">↓</div>
+      <div class="stage future"><div><div class="who">Later</div><h3>Intake</h3></div><p>The Abel &amp; Cole box email, receipts, photos of the shopping (Claude vision), "fill in what's missing" from the video.</p><div class="out">Pantry · fixes to "needs checking"</div></div>
+    </div>
+  </section>
+
+  <!-- 5 TECH -->
+  <section id="tech">
+    <div class="num" style="color:var(--a-tech)">5 · How it runs</div>
+    <h2>Prototype now, home app next</h2>
+    <p class="sub">The plan is to build your own, because the parts that make it yours (mood and season suggestions, our list, the cook-log story, video cook mode) aren't in off-the-shelf apps.</p>
+    <div class="tech">
+      <div class="col now"><h3>Now · prototype</h3>
+        <div class="tr"><div class="k">Master copy</div><div class="v">Obsidian notes (Markdown with structured data)</div></div>
+        <div class="tr"><div class="k">Media</div><div class="v">~/Documents/Recipes/media</div></div>
+        <div class="tr"><div class="k">App</div><div class="v">Static test app + wireframes, opened on the Mac</div></div>
+        <div class="tr"><div class="k">Access</div><div class="v">This Mac only</div></div>
+        <div class="tr"><div class="k">Processing</div><div class="v">Scripts + Claude Code (Sonnet)</div></div>
+      </div>
+      <div class="mid"><span>→</span><span>→</span><span>→</span><span>→</span><span>→</span></div>
+      <div class="col target"><h3>Target · home app</h3>
+        <div class="tr"><div class="k">Master copy</div><div class="v">Postgres: household · recipes · pantry (calendar later)</div></div>
+        <div class="tr"><div class="k">Media</div><div class="v">The same folders on the home server</div></div>
+        <div class="tr"><div class="k">App</div><div class="v">Installable web app: phone layout + kitchen-screen layout</div></div>
+        <div class="tr"><div class="k">Access</div><div class="v">Tailscale (private, works anywhere) + HTTPS + two logins</div></div>
+        <div class="tr"><div class="k">Processing</div><div class="v">Scheduled jobs; Claude API batch for writing</div></div>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="layer"><div class="lab">On your devices</div><div class="pill">Phones (Craig, Mary)</div><div class="pill later">Kitchen screen</div><div class="pill later">Tablet</div></div>
+      <div class="layer"><div class="lab">Private network</div><div class="pill">Tailscale + HTTPS</div></div>
+      <div class="layer"><div class="lab">Home server</div><div class="pill">Web app</div><div class="pill">API</div><div class="pill">Postgres</div><div class="pill">Media files</div><div class="pill">Scheduled jobs</div></div>
+      <div class="layer"><div class="lab">Outside services</div><div class="pill">Instagram (your login)</div><div class="pill">Claude API</div><div class="pill later">Weather</div><div class="pill later">Personal email (box)</div><div class="pill later">Calendars</div></div>
+    </div>
+  </section>
+
+  <!-- 6 STATUS -->
+  <section id="status">
+    <div class="num" style="color:var(--a-pipe)">6 · Where we are</div>
+    <h2>Progress</h2>
+    <div class="stats">
+      <div class="stat"><div class="v">533</div><div class="k">saved posts listed and sorted</div></div>
+      <div class="stat"><div class="v">37</div><div class="k">recipes written · 7 ok, 30 needs checking</div><div class="bar2"><i style="width:7.5%"></i></div></div>
+      <div class="stat"><div class="v">13</div><div class="k">posts collecting tomorrow</div></div>
+      <div class="stat"><div class="v">167</div><div class="k">ingredients with UK seasons</div></div>
+    </div>
+    <div class="road">
+      <div><div class="st done">Done</div><b>Foundations</b><ul><li>Collection listed and sorted</li><li>Pipeline proven</li><li>37 recipes with every label</li><li>Seasonal model, weekly rhythm</li></ul></div>
+      <div><div class="st done">Done</div><b>Design direction</b><ul><li>References board</li><li>6 routes → feedback</li><li>Landing option 3 · filters</li><li>Cook-log story</li></ul></div>
+      <div><div class="st now">Next</div><b>Test in the kitchen</b><ul><li>Test app on option 3 with real data</li><li>Cook 2–3 recipes</li><li>Fill in "needs checking"</li></ul></div>
+      <div><div class="st next">Then</div><b>Full collection</b><ul><li>Remaining ~480 posts (about a week)</li><li>Recipe data files as the master copy</li></ul></div>
+      <div><div class="st next">Then</div><b>Real build</b><ul><li>Choose a home machine</li><li>Database, app, Tailscale</li><li>Kitchen screen and calendar later</li></ul></div>
+    </div>
+  </section>
+</div>
+</body>
+</html>

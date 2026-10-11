@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Route 6 · Poster</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Jost:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#17100c; --card:#2b1d17; --raised:#39261c; --line:#4a3225;
+  --text:#ebdac6; --text-2:#b39476;
+  --brass:#d4a463; --steel:#ada396; --yolk:#f2c75c;
+  --plaster:#efe8de; --ink:#2b1812; --ink-2:#55392a;
+  --page:#dcd5ca; --page-ink:#2b1812; --page-ink-2:#5a4436;
+  --num:"Big Shoulders Display", "Jost", sans-serif;
+  --sans:"Jost", system-ui, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--page);color:var(--page-ink);font-family:var(--sans);font-size:16px;line-height:1.4;-webkit-font-smoothing:antialiased}
+svg{display:block}
+.ico{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- page ---------- */
+.page{max-width:1300px;margin:0 auto;padding:40px 24px 64px}
+.masthead{display:grid;grid-template-columns:auto 1fr;gap:8px 28px;align-items:end;margin-bottom:36px}
+.masthead .no{font-family:var(--num);font-weight:900;font-size:148px;line-height:.78;color:var(--ink);letter-spacing:-.01em}
+.masthead h1{font-weight:800;font-size:44px;line-height:1;letter-spacing:-.01em}
+.masthead h1 span{display:inline-block;background:var(--yolk);padding:2px 12px 6px;margin-left:6px;border-radius:10px}
+.masthead p{font-size:18px;color:var(--page-ink-2);max-width:62ch;margin-top:10px}
+.masthead p b{color:var(--page-ink);font-weight:600}
+.legend{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.legend span{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:500;color:var(--page-ink)}
+.legend i{width:22px;height:22px;border-radius:6px;display:inline-block}
+
+.frames{display:flex;flex-wrap:wrap;gap:36px;justify-content:center}
+.frame{flex:0 0 auto}
+.frame-cap{display:flex;gap:10px;align-items:baseline;margin:0 0 12px 6px;font-weight:600;font-size:16px}
+.frame-cap b{font-family:var(--num);font-weight:900;font-size:26px;line-height:1}
+.frame-cap span{color:var(--page-ink-2);font-weight:500}
+
+/* ---------- phone ---------- */
+.phone{width:390px;height:844px;border-radius:52px;background:var(--bg);color:var(--text);position:relative;overflow:hidden;
+  box-shadow:0 0 0 10px #1c1410,0 0 0 11px #0d0907,0 30px 60px -20px rgba(40,24,14,.55)}
+.screen{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
+.screen::-webkit-scrollbar{display:none}
+.status{position:sticky;top:0;z-index:20;height:50px;display:flex;align-items:center;justify-content:space-between;padding:6px 30px 0 34px;font-weight:600;font-size:16px;background:var(--bg)}
+.status .icons{display:flex;gap:6px;align-items:center}
+.status svg{height:13px;width:auto;fill:currentColor}
+.island{position:absolute;left:50%;top:11px;transform:translateX(-50%);width:118px;height:34px;border-radius:20px;background:#000;z-index:30}
+
+/* ---------- shared block bits ---------- */
+.n{font-family:var(--num);font-weight:900;line-height:.82;letter-spacing:-.005em;font-variant-numeric:lining-nums tabular-nums}
+.unit{font-family:var(--sans);font-weight:600;font-size:18px;letter-spacing:0}
+.lab{font-size:14px;font-weight:700;letter-spacing:.09em;text-transform:uppercase}
+.on-yolk{background:var(--yolk);color:var(--ink)}
+.on-plaster{background:var(--plaster);color:var(--ink)}
+.on-brass{background:var(--brass);color:#1f130d}
+.on-steel{background:var(--steel);color:#1f130d}
+.on-raised{background:var(--raised);color:var(--text)}
+.check-dash{outline:2.5px dashed currentColor;outline-offset:-2.5px}
+
+/* ========== 1. DISCOVER ========== */
+.d-wrap{padding:6px 16px 120px}
+.d-head{display:flex;justify-content:space-between;align-items:baseline;margin:4px 2px 12px}
+.d-head h2{font-weight:700;font-size:24px;letter-spacing:-.01em}
+.d-head small{font-size:16px;color:var(--text-2);font-weight:500}
+.who{display:grid;grid-template-columns:1.15fr 1fr 1.15fr;gap:6px;background:var(--card);padding:5px;border-radius:16px;margin-bottom:14px}
+.who div{height:48px;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:16px;border-radius:12px;color:var(--text)}
+.who .sel{background:var(--yolk);color:var(--ink);font-weight:700}
+.who-lab{font-size:14px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--text-2);margin:0 2px 8px}
+
+.tonight{display:grid;grid-template-columns:1fr 150px;border-radius:22px;overflow:hidden;height:226px;margin-bottom:20px}
+.tonight .txt{padding:16px 6px 14px 18px;display:flex;flex-direction:column}
+.tonight .lab{color:var(--ink-2)}
+.tonight .big{display:flex;align-items:baseline;gap:6px;margin:8px 0 6px}
+.tonight .big .n{font-size:108px}
+.tonight h3{text-wrap:balance;font-size:20px;font-weight:700;line-height:1.15;letter-spacing:-.005em}
+.tonight .have{margin-top:auto;font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px}
+.media{position:relative;overflow:hidden;background:#000}
+.media video,.media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pv{position:absolute;left:8px;top:8px;display:inline-flex;align-items:center;gap:7px;background:rgba(23,16,12,.86);color:var(--text);border-radius:999px;padding:5px 11px 5px 9px;font-size:14px;font-weight:600}
+.pv .dot{width:9px;height:9px;border-radius:50%;background:var(--yolk);box-shadow:0 0 0 3px rgba(242,199,92,.28)}
+.pv svg{width:16px;height:16px}
+.bar{display:inline-grid;grid-auto-flow:column;gap:2px}
+.bar i{width:6px;height:14px;border-radius:2px;background:currentColor}
+.bar i.no{background:transparent;box-shadow:inset 0 0 0 1.5px currentColor;opacity:.55}
+
+.sec-h{display:flex;justify-content:space-between;align-items:baseline;margin:0 2px 10px}
+.sec-h h3{font-size:18px;font-weight:700}
+.sec-h span{color:var(--text-2);font-size:16px;font-weight:500}
+.mains{display:flex;gap:8px;overflow:hidden;margin:0 -16px 18px;padding:0 16px;-webkit-mask-image:linear-gradient(to right,#000 80%,transparent 99%);mask-image:linear-gradient(to right,#000 80%,transparent 99%)}
+.main{flex:0 0 102px;height:96px;border-radius:18px;padding:12px 12px 10px;display:flex;flex-direction:column;justify-content:space-between}
+.main .ico{width:30px;height:30px;stroke-width:2.4}
+.main b{font-size:16px;font-weight:700;line-height:1.1}
+
+.filters{display:grid;grid-template-columns:auto auto 1fr;gap:8px;margin-bottom:12px}
+.chip{height:46px;border-radius:14px;display:flex;align-items:center;gap:8px;padding:0 14px;font-weight:600;font-size:16px;background:var(--card);color:var(--text);box-shadow:inset 0 0 0 2px var(--line);white-space:nowrap}
+.chip.on{background:var(--plaster);color:var(--ink);box-shadow:none}
+.chip .n{font-size:24px;line-height:1}
+
+.row{display:grid;grid-template-columns:92px 1fr 72px;min-height:92px;border-radius:18px;overflow:hidden;background:var(--card);margin-bottom:8px}
+.row .t{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px}
+.row .t .n{font-size:54px}
+.row .t .unit{font-size:15px}
+.row .t.unk .n{font-size:30px;line-height:1}
+.row .t.unk{margin:10px;border-radius:12px;outline:2.5px dashed var(--brass);outline-offset:-2.5px;background:transparent;color:var(--brass)}
+.row .t.unk .unit{font-size:14px;line-height:1.1;text-align:center}
+.row .mid{padding:10px 8px 10px 14px;display:flex;flex-direction:column;justify-content:center;gap:4px;min-width:0}
+.row h4{font-size:16px;font-weight:600;line-height:1.2;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.row .meta{font-size:16px;color:var(--text-2);display:flex;gap:8px;align-items:center}
+.row .meta .bar{color:var(--brass)}
+.row .ph{position:relative}
+.row .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
+.dock{position:absolute;left:0;right:0;bottom:0;z-index:15;padding:14px 16px 30px;background:linear-gradient(to bottom,rgba(23,16,12,0),var(--bg) 26%)}
+.search{height:60px;border-radius:18px;display:flex;align-items:center;gap:12px;padding:0 18px;font-size:17px;font-weight:500}
+.search .ico{width:26px;height:26px;stroke-width:2.6}
+.search span{color:var(--ink-2)}
+.home-ind{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:3px;background:var(--text);opacity:.85;z-index:40}
+.home-ind.dark{background:var(--ink)}
+
+/* ========== 2. RECIPE ========== */
+.r-hero{position:relative;height:250px;margin:0 16px;border-radius:22px;overflow:hidden}
+.r-hero video{object-position:50% 30%}
+.r-hero .back{position:absolute;left:10px;top:10px;width:48px;height:48px;border-radius:14px;background:var(--plaster);color:var(--ink);display:grid;place-items:center}
+.r-hero .pv{left:auto;right:10px;top:14px}
+.r-hero .watch{position:absolute;left:10px;bottom:10px;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 16px 0 12px;border-radius:14px;background:rgba(23,16,12,.86);color:var(--text);font-weight:600;font-size:16px}
+.r-nums{display:grid;grid-template-columns:1.25fr 1fr;gap:8px;margin:8px 16px 0}
+.r-nums > div{border-radius:22px;padding:14px 16px 14px;height:158px;display:flex;flex-direction:column}
+.r-nums .lab{color:var(--ink-2);font-size:14px}
+.r-nums .big{display:flex;align-items:baseline;gap:6px;margin-top:6px}
+.r-nums .big .n{font-size:100px}
+.r-nums .foot{margin-top:auto;font-size:16px;font-weight:600;line-height:1.2}
+.serves .big .n.ghost{font-size:86px;color:transparent;-webkit-text-stroke:2.5px #1f130d}
+.serves .foot{font-weight:500}
+.r-title{padding:18px 18px 16px}
+.r-title h2{text-wrap:balance;font-size:30px;font-weight:800;line-height:1.05;letter-spacing:-.015em}
+.r-title p{margin-top:8px;color:var(--text-2);font-size:16px;font-weight:500}
+.r-title p b{color:var(--text);font-weight:600}
+.r-intro{padding:6px 18px 18px;font-size:17px;line-height:1.5;color:var(--text)}
+.marinate{margin:0 16px 10px;border-radius:18px;padding:14px 16px;display:flex;gap:14px;align-items:center}
+.marinate .n{font-size:52px}
+.marinate p{font-size:16px;line-height:1.3;font-weight:500}
+.marinate p b{font-weight:700}
+
+.blk{margin:0 16px 10px;border-radius:22px;padding:18px 16px 10px}
+.blk-h{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:8px}
+.blk-h h3{font-size:24px;font-weight:800;letter-spacing:-.01em;line-height:1}
+.blk-h .tally{display:flex;align-items:baseline;gap:6px;font-weight:600;font-size:16px}
+.blk-h .tally .n{font-size:44px}
+.ing{display:grid;grid-template-columns:30px 1fr;gap:12px;align-items:start;padding:11px 0;border-top:2px solid var(--line);font-size:17px;line-height:1.3}
+.ing .box{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;margin-top:-2px}
+.ing .box.yes{background:var(--brass);color:#1f130d}
+.ing .box.no{box-shadow:inset 0 0 0 2.5px var(--text-2)}
+.ing .box svg{width:18px;height:18px;stroke-width:3}
+.ing .q{font-weight:700}
+.ing .sub{display:block;font-size:16px;color:var(--text-2);margin-top:2px}
+.ing .need{display:inline-flex;align-items:center;gap:6px;margin-top:6px;font-size:15px;font-weight:600;color:var(--brass);padding:3px 10px;border-radius:8px;outline:2px dashed var(--brass);outline-offset:-2px}
+.method .step{display:grid;grid-template-columns:44px 1fr;gap:10px;padding:14px 0;border-top:2px solid rgba(43,24,18,.18)}
+.method .step .n{font-size:44px;color:var(--ink)}
+.method p{font-size:17px;line-height:1.4}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.tag{display:inline-flex;align-items:center;gap:6px;height:44px;padding:0 14px 0 10px;border-radius:12px;font-weight:700;font-size:16px}
+.tag svg{width:20px;height:20px;stroke-width:2.4}
+.tag.timer{background:var(--ink);color:var(--yolk)}
+.tag.vid{box-shadow:inset 0 0 0 2px var(--ink);color:var(--ink)}
+.source{margin:6px 16px 0;padding:18px 16px;border-radius:22px;background:var(--card);font-size:16px;color:var(--text-2)}
+.source b{color:var(--text);font-weight:600}
+.r-dock{position:absolute;left:0;right:0;bottom:0;z-index:15;padding:14px 16px 28px;background:linear-gradient(to bottom,rgba(23,16,12,0),var(--bg) 24%)}
+.start{height:72px;border-radius:20px;display:flex;align-items:center;justify-content:space-between;padding:0 14px 0 22px;font-weight:800;font-size:22px}
+.start small{font-weight:600;font-size:16px;color:var(--ink-2);margin-left:10px}
+.start .go{width:48px;height:48px;border-radius:14px;background:var(--ink);color:var(--yolk);display:grid;place-items:center}
+.start .go svg{width:26px;height:26px;stroke-width:2.8}
+
+/* ========== 3. COOK ========== */
+.c-wrap{position:absolute;inset:50px 0 0 0;display:flex;flex-direction:column;padding:4px 14px 30px}
+.c-top{display:flex;align-items:center;justify-content:space-between;margin:2px 2px 10px}
+.c-top .x{width:48px;height:48px;border-radius:14px;background:var(--raised);display:grid;place-items:center;color:var(--text)}
+.c-top .stepno{display:flex;align-items:baseline;gap:8px;font-weight:600;font-size:18px;color:var(--text-2)}
+.c-top .stepno .n{font-size:46px;color:var(--text)}
+.prog{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin:0 2px 12px}
+.prog i{height:10px;border-radius:5px;background:var(--line)}
+.prog i.done{background:var(--brass)}
+.prog i.now{background:var(--yolk)}
+.timers{display:grid;grid-template-columns:1fr 124px;gap:8px;margin-bottom:8px}
+.timers > div{border-radius:22px;padding:12px 14px 12px}
+.timers .lab{font-size:14px}
+.timers .t1 .n{font-size:106px;display:block;margin:6px 0 4px;letter-spacing:-.01em}
+.timers .t1 .foot{display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:16px}
+.timers .t2{display:flex;flex-direction:column}
+.timers .t2 .n{font-size:56px;margin:10px 0 0}
+.timers .t2 .foot{margin-top:auto;font-weight:600;font-size:16px;line-height:1.2}
+.ring{width:22px;height:22px}
+.c-step{border-radius:24px;padding:18px 18px 18px;flex:1;display:flex;flex-direction:column;min-height:0}
+.c-step p{font-size:31px;line-height:1.22;font-weight:500;letter-spacing:-.005em}
+.c-step p b{font-weight:800}
+.c-uses{margin-top:auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-top:12px}
+.c-uses .lab{width:100%;color:var(--ink-2);font-size:14px}
+.c-uses .u{display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 14px;border-radius:12px;background:var(--ink);color:var(--plaster);font-size:18px;font-weight:700}
+.c-uses .u em{font-style:normal;font-weight:500;color:var(--yolk);font-size:16px;padding-left:8px;border-left:2px dashed var(--yolk)}
+.c-nav{display:grid;grid-template-columns:1fr 1.7fr;gap:8px;margin-top:8px;height:118px}
+.c-nav > div{border-radius:24px;display:flex;flex-direction:column;justify-content:center;padding:0 20px}
+.c-nav .lab{font-size:14px;opacity:1}
+.c-nav b{font-size:28px;font-weight:800;display:flex;align-items:center;gap:8px;line-height:1.1}
+.c-nav b svg{width:30px;height:30px;stroke-width:3}
+.c-nav .back .lab{color:var(--text-2)}
+.c-nav .next .lab{color:var(--ink-2)}
+.c-nav .next{align-items:flex-end;text-align:right}
+
+/* ---------- rationale ---------- */
+.why{margin-top:64px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.why section{border-radius:22px;padding:22px 22px 24px}
+.why h3{display:flex;align-items:baseline;gap:10px;font-size:22px;font-weight:800;margin-bottom:10px}
+.why h3 .n{font-size:40px}
+.why p{font-size:16px;line-height:1.5}
+.why p + p{margin-top:10px}
+.why .dark{background:var(--bg);color:var(--text)}
+.why .dark p{color:var(--text)}
+@media (max-width:1100px){.why{grid-template-columns:1fr 1fr}}
+@media (max-width:700px){
+  .why{grid-template-columns:1fr}
+  .masthead{grid-template-columns:1fr}
+  .masthead .no{font-size:110px}
+  .masthead h1{font-size:34px}
+  .page{padding:28px 16px 48px}
+}
+@media (max-width:430px){
+  .frames{gap:28px}
+  .frame{transform-origin:top left}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="masthead">
+  <div class="no">06</div>
+  <div>
+    <h1>Route 6 <span>Poster</span></h1>
+    <p><b>The idea:</b> the kitchen as a market sign. Big blocks of yolk, plaster, brass and walnut; cooking times printed huge; one thing to read from across the room, and very few words.</p>
+    <p><b>Video:</b> the card in focus plays a silent, looping preview, marked “Silent preview”. On the recipe the photo block is the video, still until tapped, with sound on tap; ▶ times in the method jump straight into it.</p>
+  </div>
+  <div class="legend" aria-label="Colour blocks">
+    <span><i style="background:var(--yolk)"></i>Yolk · tonight, now</span>
+    <span><i style="background:var(--plaster)"></i>Plaster · the method</span>
+    <span><i style="background:var(--brass)"></i>Brass · have it</span>
+    <span><i style="background:var(--steel)"></i>Steel · other timers</span>
+    <span><i style="background:var(--bg)"></i>Walnut · ground</span>
+    <span><i style="outline:2.5px dashed var(--ink);outline-offset:-2.5px"></i>Dashed · needs checking</span>
+  </div>
+</header>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-sig" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></symbol>
+    <symbol id="i-wifi" viewBox="0 0 16 12"><path d="M8 2.2c2.3 0 4.4.9 6 2.4l1.3-1.4A10.4 10.4 0 0 0 8 .3 10.4 10.4 0 0 0 .7 3.2L2 4.6a8.5 8.5 0 0 1 6-2.4Zm0 3.8c1.3 0 2.5.5 3.4 1.3l1.3-1.4A6.8 6.8 0 0 0 8 4.1 6.8 6.8 0 0 0 3.3 6l1.3 1.4C5.5 6.5 6.7 6 8 6Zm0 3.8c.5 0 1 .2 1.3.5L8 11.7 6.7 10.3c.3-.3.8-.5 1.3-.5Z"/></symbol>
+    <symbol id="i-batt" viewBox="0 0 27 12"><rect x=".6" y=".6" width="22.8" height="10.8" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".5"/><rect x="2.3" y="2.3" width="16" height="7.4" rx="1.8"/><path d="M25 4v4c.8-.3 1.4-1.1 1.4-2S25.8 4.3 25 4Z" opacity=".5"/></symbol>
+  </defs>
+</svg>
+
+<div class="frames">
+
+<!-- ================= 1 DISCOVER ================= -->
+<figure class="frame">
+  <figcaption class="frame-cap"><b>1</b> Discover <span>choosing what to cook</span></figcaption>
+  <div class="phone">
+    <div class="island"></div>
+    <div class="screen">
+      <div class="status"><span>18:12</span><span class="icons"><svg viewBox="0 0 18 12"><use href="#i-sig"/></svg><svg viewBox="0 0 16 12"><use href="#i-wifi"/></svg><svg viewBox="0 0 27 12" style="height:12px"><use href="#i-batt"/></svg></span></div>
+      <div class="d-wrap">
+        <div class="who-lab">Who’s eating?</div>
+        <div class="who" role="radiogroup" aria-label="Who’s eating?">
+          <div class="sel" role="radio" aria-checked="true">Both of us</div>
+          <div role="radio" aria-checked="false">Mary</div>
+          <div role="radio" aria-checked="false">Craig alone</div>
+        </div>
+
+        <article class="tonight on-yolk" aria-label="Tonight: Creamy tomato and basil beans">
+          <div class="txt">
+            <span class="lab">For tonight</span>
+            <div class="big"><span class="n">30</span><span class="unit">min</span></div>
+            <h3>Creamy tomato and basil beans</h3>
+            <div class="have">Have 11 of 13</div>
+          </div>
+          <div class="media">
+            <video muted loop playsinline preload="none" poster="../../media/C8j51_HKkxG/hero.jpg" style="transform:scale(2.3);transform-origin:8% 100%"><source src="../../media/C8j51_HKkxG/video.mp4" type="video/mp4"></video>
+            <span class="pv"><span class="dot"></span>Silent preview</span>
+          </div>
+        </article>
+
+        <div class="sec-h"><h3>By main ingredient</h3><span>7</span></div>
+        <div class="mains">
+          <div class="main on-brass"><svg class="ico" viewBox="0 0 32 32"><path d="M3 16c4-6 10-8 16-6 2.5.8 4.5 2.6 6 6-1.5 3.4-3.5 5.2-6 6-6 2-12 0-16-6Z"/><path d="M25 16l4-5v10Z"/><circle cx="9" cy="15" r="1.2" fill="currentColor"/></svg><b>Fish</b></div>
+          <div class="main on-plaster"><svg class="ico" viewBox="0 0 32 32"><path d="M6 26C6 13 14 5 27 5c0 13-8 21-21 21Z"/><path d="M6 26 19 13"/></svg><b>Veg</b></div>
+          <div class="main on-steel"><svg class="ico" viewBox="0 0 32 32"><path d="M10 6c5-2 10 1 9 6-.5 2.5 1 4 4 5 4 1.5 4 8-2 9-7 1.5-15-3-15-11 0-4 1.5-7.5 4-9Z"/></svg><b>Beans &amp; pulses</b></div>
+          <div class="main on-raised"><svg class="ico" viewBox="0 0 32 32"><path d="M4 15h24c0 6-5 11-12 11S4 21 4 15Z"/><path d="M9 15c0-3 2-3 2-6s2-3 2-6M15 15c0-3 2-3 2-6s2-3 2-6M21 15c0-3 2-3 2-6"/></svg><b>Pasta &amp; noodles</b></div>
+          <div class="main on-yolk"><svg class="ico" viewBox="0 0 32 32"><path d="M16 4c5 0 10 8 10 14a10 10 0 0 1-20 0C6 12 11 4 16 4Z"/></svg><b>Eggs</b></div>
+          <div class="main on-brass"><svg class="ico" viewBox="0 0 32 32"><path d="M16 28V6M16 12c-3 0-5-2-5-5 3 0 5 2 5 5Zm0 0c3 0 5-2 5-5-3 0-5 2-5 5Zm0 7c-3 0-5-2-5-5 3 0 5 2 5 5Zm0 0c3 0 5-2 5-5-3 0-5 2-5 5Z"/></svg><b>Rice &amp; grains</b></div>
+          <div class="main on-plaster"><svg class="ico" viewBox="0 0 32 32"><path d="M5 26h22M7 26V15h18v11M7 15c0-3 4-5 9-5s9 2 9 5"/><path d="M16 10V6"/></svg><b>Baking &amp; sweet</b></div>
+        </div>
+
+        <div class="filters">
+          <div class="chip on">Quick <span class="n">1</span></div>
+          <div class="chip">Not cooked yet <span class="n">9</span></div>
+          <div class="chip">Have most</div>
+        </div>
+
+        <div class="row"><div class="t on-plaster"><span class="n">22</span><span class="unit">min</span></div><div class="mid"><h4>Japanese mirin baked cod</h4><div class="meta">+ 1 hr marinating</div></div><div class="ph"><img src="../../media/C6_FrdiyZjh/hero.jpg" alt="" style="object-position:55% 30%"></div></div>
+        <div class="row"><div class="t on-brass"><span class="n">40</span><span class="unit">min</span></div><div class="mid"><h4>Roast sweet potatoes with spinach and cannellini cream</h4><div class="meta">have 11 of 13</div></div><div class="ph"><img src="../../media/Cyf04RxIO8c/hero.jpg" alt=""></div></div>
+        <div class="row"><div class="t on-steel"><span class="n">60</span><span class="unit">min</span></div><div class="mid"><h4>Baked curd cheese casserole</h4><div class="meta">have 4 of 8</div></div><div class="ph"><img src="../../media/DVbI3SgDMBz/hero.jpg" alt=""></div></div>
+        <div class="row"><div class="t on-raised"><span class="n">80</span><span class="unit">min</span></div><div class="mid"><h4>Scarpaccia with pepper and onion</h4><div class="meta">have 9 of 10</div></div><div class="ph"><img src="../../media/C8kODErKIKh/hero.jpg" alt=""></div></div>
+        <div class="row"><div class="t on-plaster"><span class="n">90</span><span class="unit">min</span></div><div class="mid"><h4>Broccolini beans with tinned fish</h4><div class="meta">have 10 of 15</div></div><div class="ph"><img src="../../media/DHdyddgRAs4/hero.jpg" alt=""></div></div>
+        <div class="row"><div class="t unk"><span class="n">?</span><span class="unit">time to check</span></div><div class="mid"><h4>Cod with mustard sauce in paper boats</h4><div class="meta">have 3 of 8</div></div><div class="ph"><img src="../../media/DPB6Q6SjBh5/hero.jpg" alt=""></div></div>
+        <div class="row"><div class="t unk"><span class="n">?</span><span class="unit">time to check</span></div><div class="mid"><h4>Late summer minestrone with fennel and saffron</h4><div class="meta">have 5 of 10</div></div><div class="ph"><img src="../../media/CwiWc2KId6o/hero.jpg" alt=""></div></div>
+        <div class="row"><div class="t unk"><span class="n">?</span><span class="unit">time to check</span></div><div class="mid"><h4>Upside-down apple tarts</h4><div class="meta">have 5 of 7</div></div><div class="ph"><img src="../../media/DO7BUjkEVrQ/hero.jpg" alt=""></div></div>
+      </div>
+    </div>
+    <div class="dock">
+      <div class="search on-plaster"><svg class="ico" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m20 20-4.6-4.6"/></svg><span>Search, or what’s in the fridge</span></div>
+    </div>
+    <div class="home-ind"></div>
+  </div>
+</figure>
+
+<!-- ================= 2 RECIPE ================= -->
+<figure class="frame">
+  <figcaption class="frame-cap"><b>2</b> Recipe <span>Japanese mirin baked cod</span></figcaption>
+  <div class="phone">
+    <div class="island"></div>
+    <div class="screen">
+      <div class="status"><span>18:14</span><span class="icons"><svg viewBox="0 0 18 12"><use href="#i-sig"/></svg><svg viewBox="0 0 16 12"><use href="#i-wifi"/></svg><svg viewBox="0 0 27 12" style="height:12px"><use href="#i-batt"/></svg></span></div>
+
+      <div class="r-hero media">
+        <video muted playsinline preload="none" poster="../../media/C6_FrdiyZjh/hero.jpg"><source src="../../media/C6_FrdiyZjh/video.mp4" type="video/mp4"></video>
+        <div class="back" aria-label="Back"><svg class="ico" viewBox="0 0 24 24" style="stroke-width:2.8"><path d="M15 5l-7 7 7 7"/></svg></div>
+        <span class="pv"><span class="dot"></span>Silent preview</span>
+        <div class="watch"><svg class="ico" viewBox="0 0 24 24" style="width:20px;height:20px"><path d="M7 4.5v15l12-7.5Z" fill="currentColor" stroke="none"/></svg>Watch with sound · 0:44</div>
+      </div>
+
+      <div class="r-nums">
+        <div class="on-yolk">
+          <span class="lab">Cooking</span>
+          <div class="big"><span class="n">22</span><span class="unit">min</span></div>
+          <div class="foot">+ 1 hr marinating first</div>
+        </div>
+        <div class="on-brass serves check-dash" style="color:#1f130d">
+          <span class="lab" style="color:#3a2418">Serves</span>
+          <div class="big"><span class="n ghost">2?</span></div>
+          <div class="foot">2 pieces shown, to check</div>
+        </div>
+      </div>
+
+      <div class="r-title">
+        <h2>Japanese mirin baked cod</h2>
+        <p>By <b>Lisa</b> · @thelisafeed</p>
+      </div>
+
+      <div class="blk on-raised">
+        <div class="blk-h"><h3>Ingredients</h3><div class="tally"><span>have</span><span class="n" style="color:var(--yolk)">8</span><span>of 11</span></div></div>
+        <div class="ing"><span class="box yes"><svg class="ico" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><div>Cod fillets, skin on<br><span class="need"><svg class="ico" viewBox="0 0 24 24" style="width:16px;height:16px"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>Amount needs checking</span><span class="sub">2 pieces in the video</span></div></div>
+        <div class="ing"><span class="box yes"><svg class="ico" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><div><span class="q">1 tbsp</span> mirin</div></div>
+        <div class="ing"><span class="box yes"><svg class="ico" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><div><span class="q">1 tbsp</span> Japanese soy sauce</div></div>
+        <div class="ing"><span class="box no"></span><div><span class="q">1 tsp</span> shiro dashi<span class="sub">Not in the cupboard</span></div></div>
+        <div class="ing"><span class="box yes"><svg class="ico" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><div><span class="q">1 tbsp</span> sugar (about 12 g)</div></div>
+        <div class="ing"><span class="box no"></span><div>Bok choy, halved lengthways<span class="sub">Not in the fridge · amount not stated</span></div></div>
+        <div class="ing"><span class="box yes"><svg class="ico" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><div>A little oil and a pinch of salt</div></div>
+        <div class="ing"><span class="box yes"><svg class="ico" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><div>Sesame seeds, to finish</div></div>
+        <div class="ing"><span class="box no"></span><div>Yuzu kosho, to serve<span class="sub">Optional. Fine without</span></div></div>
+        <div class="ing"><span class="box yes"><svg class="ico" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><div>Rice, to serve</div></div>
+      </div>
+
+      <p class="r-intro" style="padding-top:12px">Four things stirred into a marinade, an hour’s wait, and a fillet that comes out of the oven lacquered and sticky at the edges.</p>
+      <div class="blk on-plaster method">
+        <div class="blk-h"><h3>Method</h3><div class="tally"><span class="n">7</span><span>steps</span></div></div>
+        <div class="step"><span class="n">1</span><div><p>Stir together 1 tbsp mirin, 1 tbsp soy sauce, 1 tsp shiro dashi and 1 tbsp sugar.</p></div></div>
+        <div class="step"><span class="n">2</span><div><p>Turn the cod in the marinade until glossy, then leave it in the fridge for at least an hour.</p><div class="tags"><span class="tag timer"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M10 2.5h4"/></svg>1 hr</span><span class="tag vid"><svg class="ico" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5Z" fill="currentColor" stroke="none"/></svg>0:17</span></div></div></div>
+        <div class="step"><span class="n">3</span><div><p>Heat the oven to 180°C fan.</p></div></div>
+        <div class="step"><span class="n">4</span><div><p>Halve the bok choy and lay it on a tray with a little oil and salt.</p><div class="tags"><span class="tag vid"><svg class="ico" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5Z" fill="currentColor" stroke="none"/></svg>0:22</span></div></div></div>
+        <div class="step"><span class="n">5</span><div><p>Set the cod on the same tray, skin side up, and bake for 15 minutes.</p><div class="tags"><span class="tag timer"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M10 2.5h4"/></svg>15 min</span></div></div></div>
+        <div class="step"><span class="n">6</span><div><p>Lift off the bok choy. Grill the cod at 200°C for 5–7 minutes, until dark and sticky.</p><div class="tags"><span class="tag timer"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M10 2.5h4"/></svg>7 min</span><span class="tag vid"><svg class="ico" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5Z" fill="currentColor" stroke="none"/></svg>0:27</span></div></div></div>
+        <div class="step"><span class="n">7</span><div><p>Scatter with sesame seeds and eat with rice, yuzu kosho on the side.</p><div class="tags"><span class="tag vid"><svg class="ico" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5Z" fill="currentColor" stroke="none"/></svg>0:34</span></div></div></div>
+      </div>
+
+      <div class="source">From <b>Lisa (@thelisafeed)</b> on Instagram, 15 May 2024. Salmon works as well, she says.</div>
+      <div style="height:130px"></div>
+    </div>
+    <div class="r-dock">
+      <div class="start on-yolk">Start cooking<small>7 steps</small><span style="flex:1"></span><span class="go"><svg class="ico" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+    </div>
+    <div class="home-ind"></div>
+  </div>
+</figure>
+
+<!-- ================= 3 COOK ================= -->
+<figure class="frame">
+  <figcaption class="frame-cap"><b>3</b> Cook mode <span>step 5 of 7, two timers</span></figcaption>
+  <div class="phone">
+    <div class="island"></div>
+    <div class="status" style="position:absolute;left:0;right:0"><span>18:52</span><span class="icons"><svg viewBox="0 0 18 12"><use href="#i-sig"/></svg><svg viewBox="0 0 16 12"><use href="#i-wifi"/></svg><svg viewBox="0 0 27 12" style="height:12px"><use href="#i-batt"/></svg></span></div>
+    <div class="c-wrap">
+      <div class="c-top">
+        <div class="x" aria-label="Leave cook mode"><svg class="ico" viewBox="0 0 24 24" style="stroke-width:2.8"><path d="M6 6l12 12M18 6 6 18"/></svg></div>
+        <div class="stepno">Step <span class="n">5</span> of 7</div>
+        <div class="x" aria-label="Ingredients"><svg class="ico" viewBox="0 0 24 24"><path d="M5 6h14M5 12h14M5 18h9"/></svg></div>
+      </div>
+      <div class="prog" aria-hidden="true"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="now"></i><i></i><i></i></div>
+
+      <div class="timers">
+        <div class="t1 on-plaster">
+          <span class="lab" style="color:var(--ink-2)">Bake · this step</span>
+          <span class="n">11:42</span>
+          <div class="foot"><span>of 15 min</span><svg class="ring" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="#c9bdae" stroke-width="4"/><circle cx="12" cy="12" r="9" fill="none" stroke="#2b1812" stroke-width="4" stroke-dasharray="44.1 56.5" transform="rotate(-90 12 12)"/></svg></div>
+        </div>
+        <div class="t2 on-steel">
+          <span class="lab" style="color:#2b1812">Rice</span>
+          <span class="n">3:05</span>
+          <div class="foot">left</div>
+        </div>
+      </div>
+
+      <div class="c-step on-yolk">
+        <p>Set the cod on the same tray, skin side up, and <b>bake for 15 minutes</b>, until the marinade is bubbling and the fish has begun to colour.</p>
+        <div class="c-uses">
+          <span class="lab">This step uses</span>
+          <span class="u">Cod, skin on <em>amount to check</em></span>
+        </div>
+      </div>
+
+      <div class="c-nav">
+        <div class="back on-raised"><span class="lab">Step 4</span><b><svg class="ico" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>Back</b></div>
+        <div class="next on-plaster"><span class="lab">Step 6 · grill</span><b>Next<svg class="ico" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></b></div>
+      </div>
+    </div>
+    <div class="home-ind"></div>
+  </div>
+</figure>
+
+</div>
+
+<div class="why">
+  <section class="on-yolk"><h3><span class="n">UX</span></h3>
+    <p><b>Fridge:</b> search sits at the bottom as a solid plaster block, so a thumb reaches it with the door held open, and every recipe row says “have 11 of 13” in plain words.</p>
+    <p><b>Propped up:</b> cook mode is three stacked signs: the clock, the step, the way on. Back and Next are 118 px tall and the full width, made to be hit with a knuckle.</p>
+    <p><b>Sofa:</b> one Tonight block, then a board of times, so choosing starts with how long you have.</p>
+  </section>
+  <section class="on-plaster"><h3><span class="n">UI</span></h3>
+    <p>Numbers are set in Big Shoulders Display at 54 to 118 px; words are Jost at 500 to 800. Colour carries meaning: yolk is tonight and now, plaster is the method and the way forward, brass is what you have, steel is the other timer.</p>
+    <p>Photos are cropped hard into blocks with no gradients or gloss. The phone stays dark walnut, so the yolk block is the brightest thing in a dim kitchen.</p>
+  </section>
+  <section class="dark"><h3><span class="n">Content</span></h3>
+    <p>Loud shapes, quiet words: “Something for tonight”, “Start cooking”, “Next”. Times come first because they decide supper. Marinating is shown as “+ 1 hr”, so the 22 never misleads.</p>
+    <p>Anything unconfirmed has a dashed outline: the hollow “2?” for servings, the cod amount, and a “?” where a time isn’t given. Steps are trimmed to one idea each, in grams, fan °C and hob numbers.</p>
+  </section>
+  <section class="on-steel"><h3><span class="n">Risks</span></h3>
+    <p>Blocks this big leave little room. The board shows eight recipes, not fifty, and long titles run to three lines.</p>
+    <p>A colour code has to be learned. If yolk turns up too often it stops meaning “now”.</p>
+    <p>The hollow numeral is subtle, so it needs testing to show it reads as “not sure” and not as decoration.</p>
+  </section>
+</div>
+
+</div>
+</body>
+</html>

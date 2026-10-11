@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="dark">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cook Log Story</title>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  /* Cook log as a fill-in story (inspired by The Case of the Golden Idol). Dark wireframe. Words are colour-coded by type. */
+  :root { --page:#121110; --scr:#1c1a18; --ink:#e8e4de; --mid:#9a948c; --soft:#6f6a63; --chip:#2b2825; --note:#c9a06b;
+          --w-dish:#c9a06b; --w-people:#9fbf9a; --w-feel:#8fb3c4; --w-time:#e6c46a; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--page); color:var(--ink); font:16px/1.55 Jost, system-ui, sans-serif; }
+  .intro { max-width:1700px; margin:0 auto; padding:40px 32px 0; }
+  .intro h1 { font-weight:400; font-size:34px; margin:0 0 6px; }
+  .intro p { color:var(--mid); max-width:960px; margin:0 0 8px; }
+  .key { display:flex; gap:22px; flex-wrap:wrap; margin:14px 0 0; font-size:14px; color:var(--mid); }
+  .key i { display:inline-block; width:22px; height:6px; border-radius:3px; margin-right:6px; vertical-align:2px; }
+  .grid { max-width:1700px; margin:0 auto; padding:28px 32px 60px; display:flex; flex-wrap:wrap; gap:36px; align-items:flex-start; }
+  .opt { flex:0 0 390px; }
+  .opt h2 { font-weight:400; font-size:21px; margin:0 0 12px; }
+  .phone { position:relative; width:390px; height:844px; background:var(--scr); border-radius:44px; box-shadow:0 20px 50px rgba(0,0,0,.5); overflow:hidden; }
+  .status { display:flex; justify-content:space-between; padding:16px 30px 0; font-size:14px; font-weight:500; }
+  .scr { padding:18px 24px 0; }
+  .meta { font-size:13px; color:var(--mid); }
+  .story { font-size:27px; font-weight:300; line-height:1.55; margin-top:18px; }
+  .w { font-weight:400; padding:0 2px; border-bottom:2px solid; }
+  .w.dish { color:var(--w-dish); border-color:var(--w-dish); }
+  .w.people { color:var(--w-people); border-color:var(--w-people); }
+  .w.feel { color:var(--w-feel); border-color:var(--w-feel); }
+  .w.time { color:var(--w-time); border-color:var(--w-time); }
+  .blank { display:inline-block; min-width:110px; border-bottom:2px dashed var(--soft); color:var(--soft); font-weight:300; }
+  .blank.active { border-bottom-color:var(--w-feel); color:var(--w-feel); }
+  .hint { font-size:13px; color:var(--mid); margin-top:20px; }
+  .bank { position:absolute; left:0; right:0; bottom:0; background:#24211e; border-radius:24px 24px 0 0; padding:14px 22px 30px; }
+  .grab { width:40px; height:4px; border-radius:2px; background:#4a4540; margin:0 auto 14px; }
+  .bank .lab { font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--mid); margin:0 0 8px; }
+  .words { display:flex; flex-wrap:wrap; gap:10px 12px; }
+  .words span { font-size:17px; padding:6px 14px; border-radius:18px; background:var(--chip); }
+  .words.feel span { color:var(--w-feel); } .words.time span { color:var(--w-time); }
+  .words span.mine { color:var(--mid); }
+  .btns { position:absolute; left:24px; right:24px; bottom:30px; display:flex; gap:10px; }
+  .btn { flex:1; text-align:center; padding:14px; border-radius:24px; background:var(--chip); font-size:16px; }
+  .btn.main { background:var(--ink); color:var(--scr); }
+  .apply { margin-top:24px; font-size:15px; color:var(--ink); display:flex; gap:12px; align-items:flex-start; }
+  .tick { width:22px; height:22px; border-radius:6px; background:var(--w-time); flex:none; display:grid; place-items:center; color:var(--scr); font-size:14px; margin-top:2px; }
+  .entry { margin:0 0 26px; }
+  .entry .d { font-size:13px; color:var(--mid); margin-bottom:2px; }
+  .entry .s { font-size:18px; font-weight:300; line-height:1.5; }
+  .ver { font-size:13px; color:var(--w-time); margin-top:4px; }
+  .h { font-size:20px; font-weight:400; margin:0 0 4px; }
+  .ann { margin-top:16px; font-size:14.5px; color:var(--ink); }
+  .ann p { margin:0 0 8px; } .ann b { font-weight:500; }
+  .ann ul { padding-left:18px; margin:6px 0; } .ann li { margin:0 0 6px; }
+  @media (max-width:460px) { .opt { flex-basis:100%; } .phone { width:100%; } }
+</style>
+</head>
+<body>
+<div class="intro">
+  <h1>Cook log · write it as a story</h1>
+  <p>When you finish cook mode, the log appears as a short story with blanks. <b>Context fills itself in</b> (the dish, the day, who's eating); you tap the rest from a few suggested words, or type your own. The finished story becomes the cook log entry, and <b>"Next time…" can become the next version of the recipe</b>. No stars or scores: the words carry the rating.</p>
+  <div class="key"><span><i style="background:var(--w-dish)"></i>Dish and ingredients</span><span><i style="background:var(--w-people)"></i>People</span><span><i style="background:var(--w-feel)"></i>How it was</span><span><i style="background:var(--w-time)"></i>Changes, amounts and times</span><span><i style="background:var(--soft)"></i>Blank, still to fill</span></div>
+</div>
+
+<div class="grid">
+
+  <div class="opt">
+    <h2>1 · The story appears</h2>
+    <div class="phone">
+      <div class="status"><span>19:58</span><span>●●● ▮</span></div>
+      <div class="scr">
+        <div class="meta">Finished · Japanese mirin baked cod</div>
+        <div class="story">
+          On <span class="w time">Tuesday</span>, <span class="w people">Mary</span> made the <span class="w dish">mirin baked cod</span>.<br>
+          It was <span class="blank">&nbsp;</span>,<br>
+          but it <span class="blank">&nbsp;</span>.<br>
+          Next time, <span class="blank">&nbsp;</span>.<br>
+          We'll <span class="blank">&nbsp;</span>.
+        </div>
+        <div class="hint">Tap a gap to fill it in. Change any coloured word if it's wrong.</div>
+      </div>
+      <div class="btns"><div class="btn">Not now</div><div class="btn main">Save to our log</div></div>
+    </div>
+    <div class="ann">
+      <p><b>Pre-filled</b> from what the app already knows: the day, who cooked (set to whoever pressed Start), and the dish.</p>
+      <p><b>Four gaps:</b> how it was · what it needed · next time · would we make it again. The last one replaces the old "Would cook again?" question.</p>
+    </div>
+  </div>
+
+  <div class="opt">
+    <h2>2 · Choosing a word</h2>
+    <div class="phone">
+      <div class="status"><span>19:58</span><span>●●● ▮</span></div>
+      <div class="scr">
+        <div class="meta">Finished · Japanese mirin baked cod</div>
+        <div class="story">
+          On <span class="w time">Tuesday</span>, <span class="w people">Mary</span> made the <span class="w dish">mirin baked cod</span>.<br>
+          It was <span class="w feel">lovely</span>,<br>
+          but it <span class="blank active">&nbsp;</span>.
+        </div>
+      </div>
+      <div class="bank">
+        <div class="grab"></div>
+        <div class="lab">But it…</div>
+        <div class="words feel"><span>needed more ginger</span><span>was a bit salty</span><span>needed longer</span><span>was too sweet</span><span>needed more sauce</span><span>was perfect as is</span><span class="mine">write my own…</span></div>
+        <div class="lab" style="margin-top:18px">It was…</div>
+        <div class="words feel"><span>lovely</span><span>really good</span><span>fine</span><span>not for us</span></div>
+      </div>
+    </div>
+    <div class="ann">
+      <p><b>Short, suggested phrases</b> that fit the gap, with "write my own" always available.</p>
+      <p><b>Suggestions come from the recipe:</b> sweet marinade → "too sweet", "more ginger". The old quick tags (too salty, needed longer) live here now.</p>
+    </div>
+  </div>
+
+  <div class="opt">
+    <h2>3 · Finished, and the next version</h2>
+    <div class="phone">
+      <div class="status"><span>19:59</span><span>●●● ▮</span></div>
+      <div class="scr">
+        <div class="meta">Finished · Japanese mirin baked cod</div>
+        <div class="story" style="font-size:25px">
+          On <span class="w time">Tuesday</span>, <span class="w people">Mary</span> made the <span class="w dish">mirin baked cod</span>.
+          It was <span class="w feel">lovely</span>, but it <span class="w feel">was a bit sweet</span>.
+          Next time, <span class="w time">halve the sugar</span> and <span class="w time">marinate overnight</span>.
+          We'll <span class="w feel">make it again soon</span>.
+        </div>
+        <div class="apply"><div class="tick">✓</div><div>Make this <b>our version (v2)</b>: ½ tbsp sugar, marinate overnight.<div class="meta">The original stays one tap away.</div></div></div>
+      </div>
+      <div class="btns"><div class="btn main">Save to our log</div></div>
+    </div>
+    <div class="ann">
+      <p><b>"Next time" changes are real edits.</b> When they map to an amount, time or step ("halve the sugar"), the app offers to apply them as <b>v2</b>, already ticked. Untick to keep them as a note only.</p>
+      <p><b>"We'll make it again soon"</b> puts it back on our list for later. "Not for us" quietly lowers it in suggestions.</p>
+    </div>
+  </div>
+
+  <div class="opt">
+    <h2>4 · Reading it back</h2>
+    <div class="phone">
+      <div class="status"><span>12:10</span><span>●●● ▮</span></div>
+      <div class="scr">
+        <div class="meta">Japanese mirin baked cod · our version v2</div>
+        <div class="h" style="margin-top:14px">Our log</div>
+        <div class="meta" style="margin-bottom:22px">Cooked twice</div>
+        <div class="entry"><div class="d">Saturday 18 October · Craig</div><div class="s"><span class="w feel">Even better.</span> The overnight marinade made it. Next time, <span class="w time">a little more ginger</span>.</div><div class="ver">Suggested for v3</div></div>
+        <div class="entry"><div class="d">Tuesday 7 October · Mary</div><div class="s">It was <span class="w feel">lovely</span>, but it <span class="w feel">was a bit sweet</span>. Next time, <span class="w time">halve the sugar</span> and <span class="w time">marinate overnight</span>.</div><div class="ver">Became v2</div></div>
+        <div class="meta" style="margin-top:20px">Original recipe from Lisa · @thelisafeed</div>
+      </div>
+    </div>
+    <div class="ann">
+      <p><b>The log reads like a diary of the dish,</b> newest first, with who cooked and what changed. Each entry links to the version it created.</p>
+      <p><b>Across the app,</b> these stories feed a quiet "Cooked lately" and help the suggestions learn what you love, without a single star.</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

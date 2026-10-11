@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="dark">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Landing Wireframes</title>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  /* Wireframe: greyscale on purpose, so we judge structure and content, not colour. */
+  :root { --page:#121110; --ink:#e8e4de; --mid:#9a948c; --soft:#6f6a63; --img:#3a3632; --scr:#1c1a18; --note:#c9a06b; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--page); color:var(--ink); font:16px/1.55 Jost, system-ui, sans-serif; }
+  .intro { max-width:1320px; margin:0 auto; padding:40px 32px 8px; }
+  .intro h1 { font-weight:400; font-size:36px; margin:0 0 6px; letter-spacing:-.01em; }
+  .intro p { color:var(--mid); max-width:820px; margin:0 0 6px; }
+  .jobs { display:flex; gap:28px; flex-wrap:wrap; margin:22px 0 0; font-size:15px; }
+  .jobs b { font-weight:500; }
+  .jobs span { color:var(--mid); }
+  .options { max-width:1320px; margin:0 auto; padding:24px 32px 60px; display:flex; gap:40px; flex-wrap:wrap; align-items:flex-start; }
+  .opt { flex:0 0 390px; }
+  .opt h2 { font-weight:400; font-size:24px; margin:0; }
+  .opt .idea { color:var(--mid); font-size:15px; margin:2px 0 16px; min-height:48px; }
+
+  /* Phone: full scroll shown; the dashed marker shows where the first screen ends (844px). */
+  .phone { position:relative; width:390px; background:var(--scr); border-radius:44px; padding:0 0 110px; box-shadow:0 20px 50px rgba(0,0,0,.5); overflow:hidden; }
+  .fold { position:absolute; left:0; right:0; top:844px; height:0; border-top:2px dashed #e07a5f; z-index:5; }
+  .fold::after { content:'end of first screen'; position:absolute; right:14px; top:4px; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#e07a5f; }
+  .status { display:flex; justify-content:space-between; padding:16px 30px 0; font-size:14px; font-weight:500; }
+  .scr { padding:20px 20px 0; }
+  img.ph { display:block; width:100%; object-fit:cover; filter:grayscale(1) contrast(.9); background:var(--img); border-radius:14px; }
+  .kicker { font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--mid); }
+  .t { font-size:19px; line-height:1.25; font-weight:400; }
+  .meta { font-size:14px; color:var(--mid); }
+  .h { font-size:22px; font-weight:400; margin:40px 0 4px; letter-spacing:-.005em; }
+  .sub { font-size:14px; color:var(--mid); margin:0 0 14px; }
+  .rail { display:flex; gap:14px; overflow:hidden; margin-right:-20px; }
+  .rail .c { flex:0 0 62%; }
+  .rail .c .t { margin-top:10px; }
+  .who { font-size:14px; color:var(--mid); }
+  .who b { color:var(--ink); font-weight:500; }
+  /* Bottom bar: always there, in thumb reach. Search doubles as "what's in the fridge". */
+  .bar { position:absolute; left:0; right:0; bottom:0; padding:14px 20px 26px; background:linear-gradient(transparent, var(--scr) 28%); display:flex; gap:10px; align-items:center; z-index:6; }
+  .search { flex:1; background:var(--chip); border-radius:26px; padding:13px 18px; color:var(--mid); font-size:15px; }
+  .icon { width:48px; height:48px; border-radius:50%; background:var(--chip); display:grid; place-items:center; font-size:13px; color:var(--mid); }
+  .seg { display:flex; gap:22px; font-size:16px; margin:0 0 16px; }
+  .seg span { color:var(--soft); } .seg span.on { color:var(--ink); }
+  .seg span.on::after { content:''; display:block; height:2px; background:var(--ink); margin-top:4px; }
+  .resume { background:#2f2c29; color:#f2efe9; border-radius:16px; padding:14px 16px; display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; }
+  .resume .meta { color:#b8b2aa; }
+  .list .row { display:flex; gap:14px; align-items:center; margin:0 0 16px; }
+  .list .row img { width:76px; height:76px; flex:none; border-radius:10px; }
+  .full { margin:0; position:relative; }
+  .full img.ph { border-radius:0; height:520px; }
+  .full .over { position:absolute; left:20px; right:20px; bottom:20px; color:#fff; }
+  .full .over .meta { color:#e6e2dc; }
+  .full::after { content:''; position:absolute; inset:45% 0 0 0; background:linear-gradient(transparent, rgba(0,0,0,.65)); pointer-events:none; }
+  .full .over { z-index:1; }
+  .ann { margin-top:22px; font-size:14.5px; color:var(--ink); }
+  .ann ol { padding-left:20px; margin:8px 0 0; } .ann li { margin:0 0 8px; } .ann li::marker { color:var(--note); }
+  .ann h3 { font-weight:500; font-size:15px; margin:18px 0 4px; }
+  .ann .pro { color:#8fbf8a; } .ann .con { color:#e08a7a; }
+  .n { display:inline-grid; place-items:center; width:20px; height:20px; border-radius:50%; background:var(--note); color:#fff; font-size:11px; font-weight:500; vertical-align:2px; margin-right:6px; }
+  .ia { max-width:1320px; margin:0 auto 60px; padding:0 32px; }
+  .ia h2 { font-weight:400; font-size:24px; margin:0 0 8px; }
+  .ia table { border-collapse:collapse; font-size:15px; width:100%; max-width:1000px; }
+  .ia td, .ia th { text-align:left; padding:8px 20px 8px 0; vertical-align:top; }
+  .ia th { font-weight:500; color:var(--mid); font-size:13px; letter-spacing:.08em; text-transform:uppercase; }
+  @media (max-width:460px) { .opt { flex-basis:100%; } .phone { width:100%; } }
+</style>
+</head>
+<body>
+
+<div class="intro">
+  <h1>Landing page · three wireframe options</h1>
+  <p>Built from your answers: the landing page is for <b>dinner</b> (weeknight and weekend, plus lunch), with <b>a few suggestions by speed</b>, <b>our shared list</b>, and <b>search</b> for the one you remember. Sides and baking live in the library, not here. Filters are hidden behind the bottom bar.</p>
+  <p>Greyscale on purpose. No lines and no boxes inside boxes: spacing and type do the separating. The full scroll is shown, and the dashed red line marks the end of the first screen.</p>
+  <div class="jobs">
+    <div><b>Job 1</b> <span>Decide what to cook now</span></div>
+    <div><b>Job 2</b> <span>Cook from our list</span></div>
+    <div><b>Job 3</b> <span>Find one I remember</span></div>
+    <div><b>Always</b> <span>Get back to a cook in progress</span></div>
+  </div>
+</div>
+
+<div class="intro" style="padding-top:18px">
+  <h2 style="font-weight:400;font-size:24px;margin:0 0 6px">The week's rhythm (applies to every option)</h2>
+  <p>Fresh things arrive on <b>Tuesday</b> (fish, tofu, vegetables, fruit), so suggestions follow the week:</p>
+  <div class="jobs" style="margin-top:12px">
+    <div><b>Tue–Thu · Fresh first</b> <span>fish, tofu and veg recipes lead, using up the most perishable things first (fish before veg)</span></div>
+    <div><b>Fri–Sun · Weekend cooking</b> <span>longer projects move up, still using what's left</span></div>
+    <div><b>Sun–Mon · From the cupboard</b> <span>store-cupboard recipes lead: pasta, beans, rice, tins</span></div>
+  </div>
+  <p style="margin-top:12px">The frames show <b>Sunday evening</b>, so they lean on the cupboard. On a Tuesday the first band would read "Fresh this week", with the fish dishes first.</p>
+</div>
+
+<div class="options">
+
+  <!-- OPTION A -->
+  <div class="opt">
+    <h2>A · Tonight, by speed</h2>
+    <p class="idea">Suggestions lead. Three speed bands answer "how long have we got?", with our list underneath.</p>
+    <div class="phone">
+      <div class="fold"></div>
+      <div class="status"><span>18:42</span><span>●●● ▮</span></div>
+      <div class="scr">
+        <div class="kicker">Sunday evening · from the cupboard</div>
+        <div style="font-size:30px;font-weight:300;line-height:1.15;margin:4px 0 6px">Something for tonight</div>
+        <div class="who">For <b>both of us</b> · change</div>
+
+        <div class="h" style="margin-top:30px">Quick</div>
+        <div class="sub">Under 30 minutes</div>
+        <div class="rail">
+          <div class="c"><img class="ph" src="../../media/C8j51_HKkxG/hero.jpg" style="height:250px" alt=""><div class="t">Creamy tomato and basil beans</div><div class="meta">30 min · have 11 of 13</div></div>
+          <div class="c"><img class="ph" src="../../media/DPB6Q6SjBh5/hero.jpg" style="height:250px" alt=""><div class="t">Cod with mustard sauce in paper boats</div><div class="meta">Time to check · have 5 of 7</div></div>
+        </div>
+
+        <div class="h">About an hour</div>
+        <div class="sub">Worth the wait</div>
+        <div class="rail">
+          <div class="c"><img class="ph" src="../../media/C6_FrdiyZjh/hero.jpg" style="height:200px" alt=""><div class="t">Japanese mirin baked cod</div><div class="meta">22 min, after 1 hr marinating</div></div>
+          <div class="c"><img class="ph" src="../../media/Cyf04RxIO8c/hero.jpg" style="height:200px" alt=""><div class="t">Roast sweet potatoes with spinach and cannellini cream</div><div class="meta">40 min · have 8 of 10</div></div>
+        </div>
+
+        <div class="h">Weekend cooking</div>
+        <div class="sub">Slower, for Saturday and Sunday</div>
+        <div class="rail">
+          <div class="c"><img class="ph" src="../../media/CwiWc2KId6o/hero.jpg" style="height:200px" alt=""><div class="t">Late summer minestrone with fennel and saffron</div><div class="meta">1 hr 30 · have 8 of 10</div></div>
+          <div class="c"><img class="ph" src="../../media/DHdyddgRAs4/hero.jpg" style="height:200px" alt=""><div class="t">Broccolini beans with tinned fish</div><div class="meta">1 hr 30 · have 9 of 12</div></div>
+        </div>
+
+        <div class="h">Our list</div>
+        <div class="sub">3 lined up · added by both of you</div>
+        <div class="list">
+          <div class="row"><img class="ph" src="../../media/C6_FrdiyZjh/hero.jpg" alt=""><div><div class="t">Japanese mirin baked cod</div><div class="meta">Added by Mary · Thursday</div></div></div>
+          <div class="row"><img class="ph" src="../../media/C8kODErKIKh/hero.jpg" alt=""><div><div class="t">Scarpaccia with pepper and onion</div><div class="meta">Added by Craig · last week</div></div></div>
+        </div>
+
+        <div class="h">Lunch</div>
+        <div class="sub">Something lighter</div>
+        <div class="meta">…</div>
+      </div>
+      <div class="bar"><div class="search">Search, or what's in the fridge</div><div class="icon">list</div><div class="icon">all</div></div>
+    </div>
+    <div class="ann">
+      <h3>How it works</h3>
+      <ol>
+        <li><b>Speed bands</b> (Quick · About an hour · Weekend) are the main way to decide. Weekend cooking moves to the top on Saturday and Sunday.</li>
+        <li><b>Our list</b> comes after the suggestions, as a compact list with who added it and when.</li>
+        <li><b>The bottom bar</b>: search (also "what's in the fridge"), the list, and the full library with filters.</li>
+        <li><b>Who's eating</b> is one quiet line, not a set of controls.</li>
+      </ol>
+      <h3>Trade-offs</h3>
+      <p class="pro">+ Answers "how long have we got?" straight away. + Easy to scan. Long names wrap without breaking anything.</p>
+      <p class="con">− Our list sits below the first screen, so job 2 takes a scroll. − Three rails can feel like a streaming app.</p>
+    </div>
+  </div>
+
+  <!-- OPTION B -->
+  <div class="opt">
+    <h2>B · Our list first</h2>
+    <p class="idea">The shared list leads: what we've already chosen. Suggestions by speed fill in below, one band at a time.</p>
+    <div class="phone">
+      <div class="fold"></div>
+      <div class="status"><span>18:42</span><span>●●● ▮</span></div>
+      <div class="scr">
+        <div class="resume"><div><div style="font-size:15px">Cooking: Japanese mirin baked cod</div><div class="meta">Step 5 · bake timer 11:42</div></div><div>›</div></div>
+        <div class="kicker">Our list · 3 · cupboard end of the week</div>
+        <img class="ph" src="../../media/C6_FrdiyZjh/hero.jpg" style="height:300px;margin-top:10px" alt="">
+        <div class="t" style="font-size:24px;font-weight:300;margin-top:12px">Japanese mirin baked cod</div>
+        <div class="meta">Fish · Japanese · weeknight · 22 min after marinating</div>
+        <div class="meta">Added by Mary · have 9 of 11</div>
+        <div class="list" style="margin-top:22px">
+          <div class="row"><img class="ph" src="../../media/C8kODErKIKh/hero.jpg" alt=""><div><div class="t">Scarpaccia with pepper and onion</div><div class="meta">Added by Craig · 1 hr 20</div></div></div>
+          <div class="row"><img class="ph" src="../../media/CwiWc2KId6o/hero.jpg" alt=""><div><div class="t">Late summer minestrone with fennel and saffron</div><div class="meta">Added by Mary · 1 hr 30</div></div></div>
+        </div>
+
+        <div class="h">Or something else</div>
+        <div class="seg" style="margin-top:12px"><span class="on">Quick</span><span>An hour</span><span>Weekend</span><span>Lunch</span></div>
+        <div class="rail">
+          <div class="c"><img class="ph" src="../../media/C8j51_HKkxG/hero.jpg" style="height:230px" alt=""><div class="t">Creamy tomato and basil beans</div><div class="meta">30 min · have 11 of 13</div></div>
+          <div class="c"><img class="ph" src="../../media/DPB6Q6SjBh5/hero.jpg" style="height:230px" alt=""><div class="t">Cod with mustard sauce in paper boats</div><div class="meta">Time to check</div></div>
+        </div>
+      </div>
+      <div class="bar"><div class="search">Search, or what's in the fridge</div><div class="icon">all</div></div>
+    </div>
+    <div class="ann">
+      <h3>How it works</h3>
+      <ol>
+        <li><b>Cook in progress</b> appears at the very top only while timers are running.</li>
+        <li><b>Next on our list</b> is the hero: a large photo, with the meta line "Fish · Japanese · weeknight" (from the Cookbook route).</li>
+        <li><b>The rest of the list</b> sits underneath as compact rows.</li>
+        <li><b>"Or something else"</b>: one rail with plain-word tabs by speed and meal (Quick · An hour · Weekend · Lunch), not pills.</li>
+      </ol>
+      <h3>Trade-offs</h3>
+      <p class="pro">+ Rewards building the list together. + Calmest page: one big image and one rail. + Jobs 1 and 2 are both on the first screen.</p>
+      <p class="con">− An empty list needs a good empty state ("Nothing lined up. Here's something quick."). − Only one speed band is visible at a time.</p>
+    </div>
+  </div>
+
+  <!-- OPTION C -->
+  <div class="opt">
+    <h2>C · Full-screen, one at a time</h2>
+    <p class="idea">Photography leads. Each suggestion fills the screen with a reason to cook it. Swipe across for more; the list is one tap away.</p>
+    <div class="phone">
+      <div class="fold"></div>
+      <div class="full">
+        <img class="ph" src="../../media/C8j51_HKkxG/hero.jpg" style="height:600px" alt="">
+        <div style="position:absolute;top:16px;left:30px;right:30px;display:flex;justify-content:space-between;color:#fff;font-size:14px;font-weight:500;z-index:1"><span>18:42</span><span>●●● ▮</span></div>
+        <div style="position:absolute;top:58px;left:20px;right:20px;display:flex;gap:22px;color:#fff;font-size:16px;z-index:1"><span style="border-bottom:2px solid #fff;padding-bottom:3px">For tonight</span><span style="opacity:.7">Our list · 3</span></div>
+        <div class="over">
+          <div class="kicker" style="color:#e6e2dc">Quick · 30 min · from the cupboard</div>
+          <div style="font-size:30px;font-weight:300;line-height:1.15;margin:6px 0">Creamy tomato and basil beans</div>
+          <div class="meta">Veg · weeknight · have 11 of 13</div>
+          <div style="display:flex;gap:6px;margin-top:14px"><span style="width:18px;height:3px;background:#fff;border-radius:2px"></span><span style="width:8px;height:3px;background:#ffffff80;border-radius:2px"></span><span style="width:8px;height:3px;background:#ffffff80;border-radius:2px"></span><span style="width:8px;height:3px;background:#ffffff80;border-radius:2px"></span></div>
+        </div>
+      </div>
+      <div class="scr">
+        <div class="h" style="margin-top:22px">Next up: an hour</div>
+        <div class="rail">
+          <div class="c"><img class="ph" src="../../media/C6_FrdiyZjh/hero.jpg" style="height:180px" alt=""><div class="t">Japanese mirin baked cod</div><div class="meta">22 min, after 1 hr marinating</div></div>
+          <div class="c"><img class="ph" src="../../media/Cyf04RxIO8c/hero.jpg" style="height:180px" alt=""><div class="t">Roast sweet potatoes with spinach and cannellini cream</div><div class="meta">40 min</div></div>
+        </div>
+        <div class="h">Weekend cooking</div>
+        <div class="meta">…</div>
+      </div>
+      <div class="bar"><div class="search">Search, or what's in the fridge</div><div class="icon">all</div></div>
+    </div>
+    <div class="ann">
+      <h3>How it works</h3>
+      <ol>
+        <li><b>For tonight | Our list</b>: two plain-word tabs at the top switch the whole screen.</li>
+        <li><b>One full-screen suggestion</b>, with its reason first ("Quick · 30 min"). Swipe sideways through 4–5 picks; the dots show how many.</li>
+        <li><b>Muted video</b> can play behind the title once you pause on a card.</li>
+        <li><b>Below the fold</b>: the other speed bands, for browsing.</li>
+      </ol>
+      <h3>Trade-offs</h3>
+      <p class="pro">+ Makes the most of the photos and video (you said they help a lot). + Feels like the Reels it came from. + Leads naturally into the full-screen recipe.</p>
+      <p class="con">− Only one suggestion visible at a time, so it's slower to compare options. − Weak photos (some Reel frames) are exposed at full size. − Long names take up much of the image.</p>
+    </div>
+  </div>
+</div>
+
+<div class="ia">
+  <h2>Where everything else lives</h2>
+  <table>
+    <tr><th>Place</th><th>What's there</th><th>How you get there</th></tr>
+    <tr><td>Landing</td><td>Dinner and lunch suggestions by speed · our list · cook in progress</td><td>Opening the app</td></tr>
+    <tr><td>Our list</td><td>The shared queue: added by, when, tick off when cooked</td><td>Bottom bar, or a section on the landing page</td></tr>
+    <tr><td>Search</td><td>Recipe names, ingredients, creators, <i>and</i> "what's in the fridge" (type or tap ingredients)</td><td>The bottom bar, always</td></tr>
+    <tr><td>Library</td><td>Everything, including <b>sides, baking, sauces and breakfast</b>, with all the filters (diet, cuisine, time, needs checking)</td><td>Bottom bar "all"</td></tr>
+    <tr><td>Recipe → Cook mode</td><td>Full-screen image or video, then focused steps (the atmosphere-to-focus transition)</td><td>Any card</td></tr>
+  </table>
+</div>
+</body>
+</html>
