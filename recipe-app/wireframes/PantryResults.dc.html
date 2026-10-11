@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>What can we make</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#1F1F1D}a:hover{color:#000}
+.ph{background:#E6E6E1;border:1px dashed #A8A8A2;display:flex;align-items:center;justify-content:center;color:#5C5C57;font:500 11px 'IBM Plex Mono',monospace;text-align:center;box-sizing:border-box}
+.lbl{font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.06em;text-transform:uppercase;color:#5C5C57}
+.tag{display:inline-flex;align-items:center;height:24px;padding:0 8px;border-radius:6px;background:#EDEDE8;font-size:12px;color:#3D3D39}
+.icon{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:22px;background:#fff;border:1px solid #DADAD5;color:#1F1F1D;text-decoration:none;box-sizing:border-box}
+.small{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 12px;border-radius:10px;border:1px solid #C9C9C4;background:#fff;font:500 13px 'IBM Plex Sans',sans-serif;color:#1F1F1D;cursor:pointer}
+.small-on{background:#1F1F1D;color:#fff;border-color:#1F1F1D}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:56px;font-size:11px;font-weight:500;color:#5C5C57;text-decoration:none}
+.tab-on,.tab-on:hover{color:#C2410C}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; display: flex; flex-direction: column; background: #F4F4F2; font-family: 'IBM Plex Sans', sans-serif; color: #1F1F1D; overflow: hidden; box-sizing: border-box">
+  <div style="flex: 1; overflow-y: auto; padding: 14px 16px 20px; display: flex; flex-direction: column; gap: 16px">
+    <div style="display: flex; align-items: center; gap: 12px">
+      <a href="Pantry.dc.html" class="icon" aria-label="Back to what's in">
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
+      </a>
+      <div style="display: flex; flex-direction: column">
+        <span class="lbl">Based on 17 things in</span>
+        <h1 style="margin: 0; font-size: 22px; font-weight: 700">What can we make?</h1>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <h2 style="margin: 0; font-size: 17px; font-weight: 600">Ready to cook · have everything</h2>
+      <sc-for list="{{ready}}" as="r" hint-placeholder-count="2">
+        <a href="Recipe.dc.html" style="display: flex; gap: 12px; padding: 12px; background: #fff; border: 1px solid #DADAD5; border-radius: 14px; text-decoration: none; color: #1F1F1D">
+          <div class="ph" style="width: 72px; height: 72px; border-radius: 10px; flex-shrink: 0">Reel</div>
+          <div style="display: flex; flex-direction: column; gap: 6px; flex: 1">
+            <span style="font-weight: 600; font-size: 16px">{{r.title}}</span>
+            <span style="font-size: 13px; color: #5C5C57">{{r.meta}}</span>
+            <span class="tag" style="align-self: flex-start; background: #1F1F1D; color: #fff">Have everything</span>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <h2 style="margin: 0; font-size: 17px; font-weight: 600">Missing 1 or 2 things</h2>
+      <sc-for list="{{close}}" as="c" hint-placeholder-count="2">
+        <div style="display: flex; flex-direction: column; gap: 10px; padding: 12px; background: #fff; border: 1px solid #DADAD5; border-radius: 14px">
+          <a href="Recipe.dc.html" style="display: flex; gap: 12px; text-decoration: none; color: #1F1F1D">
+            <div class="ph" style="width: 72px; height: 72px; border-radius: 10px; flex-shrink: 0">Reel</div>
+            <div style="display: flex; flex-direction: column; gap: 6px; flex: 1">
+              <span style="font-weight: 600; font-size: 16px">{{c.title}}</span>
+              <span style="font-size: 13px; color: #5C5C57">{{c.meta}}</span>
+              <span class="tag" style="align-self: flex-start; background: #FFF1E0; color: #7C2D12">Missing: {{c.missing}}</span>
+            </div>
+          </a>
+          <div style="font-size: 14px; color: #3D3D39; padding: 8px 10px; background: #F4F4F2; border-radius: 8px">Swap idea: {{c.swap}}</div>
+          <button type="button" class="{{c.cls}}" onClick="{{c.pick}}">{{c.btn}}</button>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <nav aria-label="Main" style="display: flex; border-top: 1px solid #DADAD5; background: #fff; padding-bottom: 14px">
+    <a href="Main.dc.html" class="tab">
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"></path><path d="M4 21V5"></path></svg>
+      Recipes
+    </a>
+    <a href="Pantry.dc.html" class="tab tab-on" aria-current="page">
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"></rect><path d="M5 10h14M9 5v2M9 13v3"></path></svg>
+      What's in
+    </a>
+    <a href="AddRecipe.dc.html" class="tab">
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v8M8 12h8"></path></svg>
+      Add
+    </a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { listed: {} };
+  }
+  renderVals() {
+    var self = this;
+    var ready = [
+      { title: "Sticky miso aubergine", meta: "30 min · ★ 4.5 · cooked 3×" },
+      { title: "Courgette & feta fritters", meta: "25 min · Not cooked yet" }
+    ];
+    var close = [
+      { title: "Chicken katsu curry", meta: "45 min · ★ 4", missing: "panko breadcrumbs", swap: "blitzed stale bread or crushed cornflakes" },
+      { title: "Creamy tomato orzo", meta: "20 min · ★ 4", missing: "orzo, basil", swap: "any small pasta; skip the basil or use spinach" }
+    ].map(function (c) {
+      var on = !!self.state.listed[c.title];
+      return Object.assign({}, c, {
+        cls: on ? "small small-on" : "small",
+        btn: on ? "On the shopping list ✓" : "+ Add missing to shopping list",
+        pick: function () {
+          var l = Object.assign({}, self.state.listed);
+          l[c.title] = !l[c.title];
+          self.setState({ listed: l });
+        }
+      });
+    });
+    return { ready: ready, close: close };
+  }
+}
+</script>
+</body>
+</html>

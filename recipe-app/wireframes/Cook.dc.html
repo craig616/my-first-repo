@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Cook mode</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit}a:hover{color:inherit}
+.big{display:flex;align-items:center;justify-content:center;gap:8px;min-height:68px;border-radius:16px;font:600 18px 'IBM Plex Sans',sans-serif;cursor:pointer;text-decoration:none;box-sizing:border-box}
+.go,.go:hover{background:#C2410C;color:#fff;border:0}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; display: flex; flex-direction: column; background: {{bg}}; color: {{fg}}; font-family: 'IBM Plex Sans', sans-serif; overflow: hidden; box-sizing: border-box; padding: 16px 16px 22px; gap: 16px">
+  <div style="display: flex; align-items: center; justify-content: space-between">
+    <a href="Recipe.dc.html" style="display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: 22px; border: 1px solid {{line}}; font-weight: 500; text-decoration: none">
+      <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+      Exit
+    </a>
+    <div style="display: flex; align-items: center; gap: 6px; font: 500 12px 'IBM Plex Mono', monospace; color: {{muted}}">
+      <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path></svg>
+      Screen stays on
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 10px">
+    <div style="display: flex; justify-content: space-between; font: 600 13px 'IBM Plex Mono', monospace; letter-spacing: .06em; text-transform: uppercase; color: {{muted}}">
+      <span>Step {{stepNo}} of {{total}}</span>
+      <span>Sticky miso aubergine · v3</span>
+    </div>
+    <div style="display: flex; gap: 6px" aria-hidden="true">
+      <sc-for list="{{bars}}" as="b" hint-placeholder-count="5">
+        <div style="flex: 1; height: 6px; border-radius: 3px; background: {{b.color}}"></div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="flex: 1; display: flex; flex-direction: column; gap: 18px; overflow-y: auto">
+    <p style="margin: 0; font-size: 31px; line-height: 1.3; font-weight: 600" aria-live="polite">{{text}}</p>
+
+    <sc-if value="{{hasUses}}" hint-placeholder-val="{{true}}">
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <span style="font: 500 11px 'IBM Plex Mono', monospace; letter-spacing: .06em; text-transform: uppercase; color: {{muted}}">You'll need</span>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap">
+          <sc-for list="{{uses}}" as="u" hint-placeholder-count="2">
+            <span style="display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border-radius: 10px; background: {{card}}; font-size: 16px">{{u}}</span>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{hasTimer}}" hint-placeholder-val="{{true}}">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px; border-radius: 16px; background: {{card}}">
+        <div style="display: flex; flex-direction: column; gap: 2px">
+          <span style="font-size: 14px; color: {{muted}}">{{timerName}}</span>
+          <span style="font: 600 40px 'IBM Plex Mono', monospace" aria-live="polite">{{clock}}</span>
+        </div>
+        <button type="button" class="big go" style="min-height: 56px; padding: 0 22px" onClick="{{toggleTimer}}">{{timerBtn}}</button>
+      </div>
+    </sc-if>
+
+    <button type="button" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 14px; border-radius: 20px; border: 1px solid {{line}}; background: transparent; color: {{fg}}; font: 500 13px 'IBM Plex Mono', monospace; cursor: pointer">▶ Watch this step ({{ts}})</button>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; border: 1px dashed {{line}}; font-size: 14px; color: {{muted}}">
+    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2 2M9 2h6"></path></svg>
+    Also running: Rice · 08:12
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+    <button type="button" class="big" style="background: transparent; color: {{fg}}; border: 1.5px solid {{line}}" onClick="{{back}}">‹ Back</button>
+    <sc-if value="{{notLast}}" hint-placeholder-val="{{true}}">
+      <button type="button" class="big go" onClick="{{next}}">Next ›</button>
+    </sc-if>
+    <sc-if value="{{isLast}}" hint-placeholder-val="{{false}}">
+      <a href="Log.dc.html" class="big go">Finish &amp; log</a>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dark":{"editor":"boolean","default":true},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.steps = [
+      { text: "Heat the oven to 200°C (180°C fan, gas 6).", uses: [], ts: "0:04" },
+      { text: "Halve the aubergines, score the flesh in a criss-cross and brush with sesame oil. Roast cut-side up.", uses: ["2 aubergines", "1 tsp sesame oil"], timer: 1500, timerName: "Roast aubergines", ts: "0:11" },
+      { text: "Whisk the miso, mirin and honey into a glaze.", uses: ["2 tbsp miso", "1 tbsp mirin", "½ tbsp honey"], ts: "0:38" },
+      { text: "Brush the glaze over the aubergines and grill until bubbling.", uses: ["Glaze"], timer: 240, timerName: "Grill", ts: "0:52" },
+      { text: "Scatter with spring onion and sesame seeds. Serve with rice.", uses: ["2 spring onions", "1 tbsp sesame seeds"], ts: "1:10" }
+    ];
+    this.state = { step: 1, running: false, remaining: 1500 };
+    this.tick = null;
+  }
+  componentWillUnmount() { if (this.tick) clearInterval(this.tick); }
+  stopTimer() { if (this.tick) { clearInterval(this.tick); this.tick = null; } }
+  go(i) {
+    var s = this.steps[i];
+    this.stopTimer();
+    this.setState({ step: i, running: false, remaining: s.timer || 0 });
+  }
+  renderVals() {
+    var self = this;
+    var dark = this.props.dark !== false;
+    var c = dark
+      ? { bg: "#141413", fg: "#F4F4F2", muted: "#B5B5AE", card: "#26261F", line: "#4A4A44", off: "#3A3A35" }
+      : { bg: "#F4F4F2", fg: "#1F1F1D", muted: "#5C5C57", card: "#FFFFFF", line: "#C9C9C4", off: "#DADAD5" };
+    var i = this.state.step;
+    var s = this.steps[i];
+    var r = this.state.remaining;
+    var mm = Math.floor(r / 60), ss = r % 60;
+    var bars = this.steps.map(function (_, j) { return { color: j <= i ? "#C2410C" : c.off }; });
+    return {
+      bg: c.bg, fg: c.fg, muted: c.muted, card: c.card, line: c.line,
+      bars: bars,
+      stepNo: i + 1,
+      total: this.steps.length,
+      text: s.text,
+      uses: s.uses,
+      hasUses: s.uses.length > 0,
+      hasTimer: !!s.timer,
+      timerName: s.timerName || "",
+      clock: (mm < 10 ? "0" : "") + mm + ":" + (ss < 10 ? "0" : "") + ss,
+      timerBtn: this.state.running ? "Pause" : (r === 0 ? "Done" : "Start"),
+      ts: s.ts,
+      notLast: i < this.steps.length - 1,
+      isLast: i === this.steps.length - 1,
+      toggleTimer: function () {
+        if (self.state.running) { self.stopTimer(); self.setState({ running: false }); return; }
+        if (self.state.remaining <= 0) return;
+        self.setState({ running: true });
+        self.tick = setInterval(function () {
+          var left = self.state.remaining - 1;
+          if (left <= 0) { self.stopTimer(); self.setState({ remaining: 0, running: false }); }
+          else self.setState({ remaining: left });
+        }, 1000);
+      },
+      back: function () { if (i > 0) self.go(i - 1); },
+      next: function () { if (i < self.steps.length - 1) self.go(i + 1); }
+    };
+  }
+}
+</script>
+</body>
+</html>

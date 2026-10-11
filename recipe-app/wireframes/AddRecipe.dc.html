@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Add a recipe</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#1F1F1D}a:hover{color:#000}
+.lbl{font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.06em;text-transform:uppercase;color:#5C5C57}
+.opt{display:flex;align-items:center;gap:12px;width:100%;padding:14px;border-radius:14px;border:1px solid #DADAD5;background:#fff;text-align:left;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;color:#1F1F1D;box-sizing:border-box}
+.opt-on{border:2px solid #1F1F1D;padding:13px}
+.btn,.btn:hover{display:flex;align-items:center;justify-content:center;min-height:54px;border-radius:14px;background:#C2410C;color:#fff;font-weight:600;font-size:17px;text-decoration:none}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:56px;font-size:11px;font-weight:500;color:#5C5C57;text-decoration:none}
+.tab-on,.tab-on:hover{color:#C2410C}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; display: flex; flex-direction: column; background: #F4F4F2; font-family: 'IBM Plex Sans', sans-serif; color: #1F1F1D; overflow: hidden; box-sizing: border-box">
+  <div style="flex: 1; overflow-y: auto; padding: 20px 16px 16px; display: flex; flex-direction: column; gap: 14px">
+    <div style="display: flex; flex-direction: column; gap: 2px">
+      <span class="lbl">New recipe</span>
+      <h1 style="margin: 0; font-size: 28px; font-weight: 700">Add a recipe</h1>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 8px" role="radiogroup" aria-label="How are you adding it?">
+      <sc-for list="{{opts}}" as="o" hint-placeholder-count="3">
+        <button type="button" role="radio" aria-checked="{{o.sel}}" class="{{o.cls}}" onClick="{{o.pick}}">
+          <div style="width: 40px; height: 40px; border-radius: 10px; background: #EDEDE8; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font: 600 12px 'IBM Plex Mono', monospace; color: #3D3D39">{{o.badge}}</div>
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-weight: 600; font-size: 15px">{{o.title}}</span>
+            <span style="font-size: 13px; color: #5C5C57; line-height: 1.35">{{o.sub}}</span>
+          </div>
+        </button>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{isPaste}}" hint-placeholder-val="{{true}}">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <label for="paste" class="lbl">Paste a caption, recipe text or link</label>
+        <textarea id="paste" rows="5" placeholder="Paste the Instagram caption, a recipe website link, or type it out" style="font: 400 15px 'IBM Plex Sans', sans-serif; border: 1px solid #C9C9C4; border-radius: 12px; padding: 12px; resize: none; background: #fff; color: #1F1F1D"></textarea>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isUpload}}" hint-placeholder-val="{{false}}">
+      <label style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; min-height: 150px; border: 1.5px dashed #A8A8A2; border-radius: 14px; background: #fff; cursor: pointer; text-align: center; padding: 16px">
+        <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#5C5C57" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"></path></svg>
+        <span style="font-weight: 600">Choose a screen recording or screenshots</span>
+        <span style="font-size: 13px; color: #5C5C57">We'll transcribe what's said and read any text on screen</span>
+        <input type="file" accept="video/*,image/*" multiple style="position: absolute; width: 1px; height: 1px; opacity: 0">
+      </label>
+    </sc-if>
+
+    <sc-if value="{{isImport}}" hint-placeholder-val="{{false}}">
+      <label style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; min-height: 150px; border: 1.5px dashed #A8A8A2; border-radius: 14px; background: #fff; cursor: pointer; text-align: center; padding: 16px">
+        <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#5C5C57" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l5 5v15H6z"></path><path d="M14 2v6h6"></path></svg>
+        <span style="font-weight: 600">Choose an export file</span>
+        <span style="font-size: 13px; color: #5C5C57">CSV, JSON or text exported from your recipe app, or your Instagram saved-posts export</span>
+        <input type="file" accept=".csv,.json,.txt,.zip" style="position: absolute; width: 1px; height: 1px; opacity: 0">
+      </label>
+    </sc-if>
+
+    <div style="display: flex; gap: 10px; padding: 12px; border-radius: 12px; background: #EDEDE8; font-size: 13px; line-height: 1.45; color: #3D3D39">
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink: 0; margin-top: 1px"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path></svg>
+      <span>Recipe only in the video? Upload a screen recording of the Reel. Anything we can't read clearly gets marked "needs checking" rather than guessed.</span>
+    </div>
+  </div>
+
+  <div style="padding: 10px 16px 12px">
+    <a href="NeedsCheck.dc.html" class="btn">Extract recipe</a>
+  </div>
+
+  <nav aria-label="Main" style="display: flex; border-top: 1px solid #DADAD5; background: #fff; padding-bottom: 14px">
+    <a href="Main.dc.html" class="tab">
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"></path><path d="M4 21V5"></path></svg>
+      Recipes
+    </a>
+    <a href="Pantry.dc.html" class="tab">
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"></rect><path d="M5 10h14M9 5v2M9 13v3"></path></svg>
+      What's in
+    </a>
+    <a href="AddRecipe.dc.html" class="tab tab-on" aria-current="page">
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v8M8 12h8"></path></svg>
+      Add
+    </a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { mode: "paste" };
+  }
+  renderVals() {
+    var self = this;
+    var m = this.state.mode;
+    var defs = [
+      { id: "paste", badge: "TXT", title: "Paste text or a link", sub: "Instagram caption, recipe website or your own notes" },
+      { id: "upload", badge: "VID", title: "Upload a video or screenshots", sub: "Screen recording of a Reel, or photos of a cookbook page" },
+      { id: "import", badge: "CSV", title: "Import in bulk", sub: "Export file from Deglaze, SousChef AI or ReciMe" }
+    ];
+    var opts = defs.map(function (d) {
+      return Object.assign({}, d, {
+        sel: d.id === m ? "true" : "false",
+        cls: d.id === m ? "opt opt-on" : "opt",
+        pick: function () { self.setState({ mode: d.id }); }
+      });
+    });
+    return { opts: opts, isPaste: m === "paste", isUpload: m === "upload", isImport: m === "import" };
+  }
+}
+</script>
+</body>
+</html>

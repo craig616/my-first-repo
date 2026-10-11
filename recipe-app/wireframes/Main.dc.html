@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Recipe library</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#1F1F1D}a:hover{color:#000}
+.ph{background:#E6E6E1;border:1px dashed #A8A8A2;display:flex;align-items:center;justify-content:center;color:#5C5C57;font:500 11px 'IBM Plex Mono',monospace;text-align:center;box-sizing:border-box}
+.chip{display:inline-flex;align-items:center;min-height:36px;padding:0 14px;border:1px solid #C9C9C4;border-radius:18px;background:#fff;font:500 14px 'IBM Plex Sans',sans-serif;color:#1F1F1D;text-decoration:none;white-space:nowrap;box-sizing:border-box;cursor:pointer}
+.chip-on,.chip-on:hover{background:#1F1F1D;color:#fff;border-color:#1F1F1D}
+.tag{display:inline-flex;align-items:center;height:24px;padding:0 8px;border-radius:6px;background:#EDEDE8;font-size:12px;color:#3D3D39}
+.lbl{font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.06em;text-transform:uppercase;color:#5C5C57}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:56px;font-size:11px;font-weight:500;color:#5C5C57;text-decoration:none}
+.tab-on,.tab-on:hover{color:#C2410C}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; display: flex; flex-direction: column; background: #F4F4F2; font-family: 'IBM Plex Sans', sans-serif; color: #1F1F1D; overflow: hidden; box-sizing: border-box">
+  <div style="flex: 1; overflow-y: auto; padding: 20px 16px 24px; display: flex; flex-direction: column; gap: 16px">
+    <div style="display: flex; align-items: center; justify-content: space-between">
+      <div style="display: flex; flex-direction: column; gap: 2px">
+        <span class="lbl">Shared cookbook</span>
+        <h1 style="margin: 0; font-size: 28px; font-weight: 700">Our recipes</h1>
+      </div>
+      <div style="display: flex">
+        <div class="ph" style="width: 36px; height: 36px; border-radius: 18px; border-style: solid; font-size: 12px">C</div>
+        <div class="ph" style="width: 36px; height: 36px; border-radius: 18px; border-style: solid; margin-left: -8px; font-size: 12px">P</div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 6px">
+      <label for="q" class="lbl">Search recipes or ingredients</label>
+      <div style="display: flex; align-items: center; gap: 8px; height: 48px; padding: 0 14px; background: #fff; border: 1px solid #C9C9C4; border-radius: 12px">
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5C5C57" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+        <input id="q" type="search" placeholder="e.g. aubergine, katsu, under 30 min" style="flex: 1; border: 0; outline: 0; font: 400 15px 'IBM Plex Sans', sans-serif; background: transparent; color: #1F1F1D">
+      </div>
+    </div>
+
+    <div style="display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px; padding: 0 16px 4px">
+      <a href="Filters.dc.html" class="chip" style="gap: 6px">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"></path></svg>
+        Filters
+      </a>
+      <sc-for list="{{chips}}" as="c" hint-placeholder-count="5">
+        <button type="button" class="{{c.cls}}" onClick="{{c.pick}}">{{c.label}}</button>
+      </sc-for>
+    </div>
+
+    <div style="display: flex; align-items: center; justify-content: space-between">
+      <h2 style="margin: 0; font-size: 18px; font-weight: 600">Best match to what's in</h2>
+      <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #5C5C57">Sort
+        <select style="font: 500 13px 'IBM Plex Sans', sans-serif; border: 1px solid #C9C9C4; border-radius: 8px; padding: 6px 8px; background: #fff; color: #1F1F1D">
+          <option>Pantry match</option>
+          <option>Recently added</option>
+          <option>Most cooked</option>
+          <option>Best rated</option>
+        </select>
+      </label>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px">
+      <sc-for list="{{recipes}}" as="r" hint-placeholder-count="4">
+        <a href="{{r.href}}" style="display: flex; gap: 12px; padding: 12px; background: #fff; border: 1px solid #DADAD5; border-radius: 14px; text-decoration: none; color: #1F1F1D">
+          <div class="ph" style="width: 88px; height: 104px; border-radius: 10px; flex-shrink: 0">Reel<br>thumbnail</div>
+          <div style="display: flex; flex-direction: column; gap: 6px; min-width: 0; flex: 1">
+            <div style="font-weight: 600; font-size: 16px; line-height: 1.25">{{r.title}}</div>
+            <div style="font-size: 13px; color: #5C5C57">{{r.meta}}</div>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap">
+              <sc-if value="{{r.check}}" hint-placeholder-val="{{false}}">
+                <span class="tag" style="background: #FFF1E0; color: #7C2D12; border: 1px dashed #B45309">Needs checking</span>
+              </sc-if>
+              <sc-if value="{{r.ok}}" hint-placeholder-val="{{true}}">
+                <span class="tag" style="background: #1F1F1D; color: #fff">{{r.have}}</span>
+                <span class="tag">{{r.rating}}</span>
+              </sc-if>
+            </div>
+            <div style="font-size: 12px; color: #5C5C57">{{r.by}}</div>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+  </div>
+
+  <nav aria-label="Main" style="display: flex; border-top: 1px solid #DADAD5; background: #fff; padding-bottom: 14px">
+    <a href="Main.dc.html" class="tab tab-on" aria-current="page">
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"></path><path d="M4 21V5"></path></svg>
+      Recipes
+    </a>
+    <a href="Pantry.dc.html" class="tab">
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"></rect><path d="M5 10h14M9 5v2M9 13v3"></path></svg>
+      What's in
+    </a>
+    <a href="AddRecipe.dc.html" class="tab">
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v8M8 12h8"></path></svg>
+      Add
+    </a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { chip: "All" };
+  }
+  renderVals() {
+    var self = this;
+    var labels = ["All", "Midweek", "Fakeaway", "Veggie", "Under 30 min", "Baking"];
+    var chips = labels.map(function (l) {
+      return {
+        label: l,
+        cls: self.state.chip === l ? "chip chip-on" : "chip",
+        pick: function () { self.setState({ chip: l }); }
+      };
+    });
+    var recipes = [
+      { title: "Sticky miso aubergine", meta: "30 min · Japanese · Veggie", have: "Have 9/10", rating: "★ 4.5 · cooked 3×", by: "Added by Craig", href: "Recipe.dc.html", ok: true, check: false },
+      { title: "Chicken katsu curry", meta: "45 min · Fakeaway", have: "Have 8/10", rating: "★ 4 · cooked 2×", by: "Added by [Partner]", href: "Recipe.dc.html", ok: true, check: false },
+      { title: "Courgette & feta fritters", meta: "25 min · Midweek · Veggie", have: "Have 6/9", rating: "Not cooked yet", by: "Added by [Partner]", href: "Recipe.dc.html", ok: true, check: false },
+      { title: "Gochujang butter noodles", meta: "15 min · Korean", have: "", rating: "", by: "Added by Craig · from a video Reel", href: "NeedsCheck.dc.html", ok: false, check: true }
+    ];
+    return { chips: chips, recipes: recipes, false: false, true: true };
+  }
+}
+</script>
+</body>
+</html>

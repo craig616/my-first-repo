@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>What's in</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#1F1F1D}a:hover{color:#000}
+.lbl{font:500 11px 'IBM Plex Mono',monospace;letter-spacing:.06em;text-transform:uppercase;color:#5C5C57}
+.seg{flex:1;min-height:40px;border:0;border-radius:10px;background:transparent;font:500 14px 'IBM Plex Sans',sans-serif;color:#3D3D39;cursor:pointer}
+.seg-on{background:#fff;color:#1F1F1D;box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.chip{display:inline-flex;align-items:center;min-height:36px;padding:0 12px;border:1px dashed #A8A8A2;border-radius:18px;background:transparent;font:500 14px 'IBM Plex Sans',sans-serif;color:#1F1F1D;cursor:pointer}
+.btn,.btn:hover{display:flex;align-items:center;justify-content:center;min-height:54px;border-radius:14px;background:#C2410C;color:#fff;font-weight:600;font-size:17px;text-decoration:none}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:56px;font-size:11px;font-weight:500;color:#5C5C57;text-decoration:none}
+.tab-on,.tab-on:hover{color:#C2410C}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; display: flex; flex-direction: column; background: #F4F4F2; font-family: 'IBM Plex Sans', sans-serif; color: #1F1F1D; overflow: hidden; box-sizing: border-box">
+  <div style="flex: 1; overflow-y: auto; padding: 20px 16px 16px; display: flex; flex-direction: column; gap: 14px">
+    <div style="display: flex; flex-direction: column; gap: 2px">
+      <span class="lbl">Updated by [Partner] · yesterday</span>
+      <h1 style="margin: 0; font-size: 28px; font-weight: 700">What's in?</h1>
+    </div>
+
+    <div style="display: flex; gap: 4px; padding: 4px; background: #E6E6E1; border-radius: 12px" role="tablist">
+      <sc-for list="{{locs}}" as="l" hint-placeholder-count="3">
+        <button type="button" role="tab" class="{{l.cls}}" aria-selected="{{l.sel}}" onClick="{{l.pick}}">{{l.label}}</button>
+      </sc-for>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 6px">
+      <label for="add" class="lbl">Add to {{locName}}</label>
+      <div style="display: flex; gap: 8px">
+        <input id="add" type="text" value="{{draft}}" onChange="{{type}}" placeholder="e.g. halloumi" style="flex: 1; min-width: 0; height: 48px; padding: 0 14px; border: 1px solid #C9C9C4; border-radius: 12px; font: 400 15px 'IBM Plex Sans', sans-serif; background: #fff; color: #1F1F1D; box-sizing: border-box">
+        <button type="button" onClick="{{add}}" style="height: 48px; padding: 0 18px; border: 0; border-radius: 12px; background: #1F1F1D; color: #fff; font: 600 15px 'IBM Plex Sans', sans-serif; cursor: pointer">Add</button>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <span class="lbl">Quick add</span>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap">
+        <sc-for list="{{staples}}" as="s" hint-placeholder-count="6">
+          <button type="button" class="chip" onClick="{{s.pick}}">+ {{s.label}}</button>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="background: #fff; border: 1px solid #DADAD5; border-radius: 14px; overflow: hidden">
+      <sc-for list="{{items}}" as="it" hint-placeholder-count="6">
+        <div style="display: flex; align-items: center; gap: 10px; padding: 4px 6px 4px 14px; border-top: 1px solid #EDEDE8">
+          <span style="flex: 1; font-size: 15px">{{it.label}}</span>
+          <button type="button" aria-label="{{it.removeLabel}}" onClick="{{it.remove}}" style="width: 44px; height: 44px; border: 0; background: transparent; color: #5C5C57; cursor: pointer; display: flex; align-items: center; justify-content: center">
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+          </button>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="padding: 10px 16px 12px; background: #F4F4F2">
+    <a href="PantryResults.dc.html" class="btn">What can we make?</a>
+  </div>
+
+  <nav aria-label="Main" style="display: flex; border-top: 1px solid #DADAD5; background: #fff; padding-bottom: 14px">
+    <a href="Main.dc.html" class="tab">
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"></path><path d="M4 21V5"></path></svg>
+      Recipes
+    </a>
+    <a href="Pantry.dc.html" class="tab tab-on" aria-current="page">
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"></rect><path d="M5 10h14M9 5v2M9 13v3"></path></svg>
+      What's in
+    </a>
+    <a href="AddRecipe.dc.html" class="tab">
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v8M8 12h8"></path></svg>
+      Add
+    </a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loc: "Fridge",
+      draft: "",
+      lists: {
+        Fridge: ["Eggs", "Whole milk", "Cheddar", "Feta", "Courgettes", "Double cream", "Chicken thighs"],
+        Cupboard: ["Plain flour", "Jasmine rice", "White miso", "Soy sauce", "Honey", "Sesame oil", "Tinned tomatoes"],
+        Freezer: ["Peas", "Puff pastry", "Prawns"]
+      }
+    };
+  }
+  addItem(name) {
+    var n = (name || "").trim();
+    if (!n) return;
+    var lists = Object.assign({}, this.state.lists);
+    var cur = lists[this.state.loc].slice();
+    if (cur.indexOf(n) === -1) cur.unshift(n);
+    lists[this.state.loc] = cur;
+    this.setState({ lists: lists, draft: "" });
+  }
+  renderVals() {
+    var self = this;
+    var loc = this.state.loc;
+    var locs = ["Fridge", "Cupboard", "Freezer"].map(function (l) {
+      return { label: l, cls: l === loc ? "seg seg-on" : "seg", sel: l === loc ? "true" : "false", pick: function () { self.setState({ loc: l }); } };
+    });
+    var cur = this.state.lists[loc];
+    var items = cur.map(function (it) {
+      return {
+        label: it,
+        removeLabel: "Remove " + it,
+        remove: function () {
+          var lists = Object.assign({}, self.state.lists);
+          lists[loc] = lists[loc].filter(function (x) { return x !== it; });
+          self.setState({ lists: lists });
+        }
+      };
+    });
+    var staples = ["Onions", "Garlic", "Butter", "Lemons", "Spring onions", "Coriander"].filter(function (s) {
+      return cur.indexOf(s) === -1;
+    }).map(function (s) { return { label: s, pick: function () { self.addItem(s); } }; });
+    return {
+      locs: locs, locName: loc.toLowerCase(), items: items, staples: staples,
+      draft: this.state.draft,
+      type: function (e) { self.setState({ draft: e.target.value }); },
+      add: function () { self.addItem(self.state.draft); }
+    };
+  }
+}
+</script>
+</body>
+</html>
