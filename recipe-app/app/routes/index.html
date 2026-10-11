@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design Routes</title>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#17100c; --fill:#2b1d17; --line:#4a3225; --ink:#ebdac6; --mid:#b39476; --accent:#d4a463; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.6 Jost, system-ui, sans-serif; }
+  header { padding:28px 24px 8px; max-width:1300px; margin:0 auto; }
+  h1 { font-weight:500; font-size:28px; margin:0 0 4px; }
+  p { color:var(--mid); margin:0; }
+  nav { position:sticky; top:0; z-index:2; background:var(--bg); border-bottom:1px solid var(--line); display:flex; gap:8px; overflow-x:auto; padding:12px 24px; }
+  nav a { color:var(--ink); text-decoration:none; white-space:nowrap; border:1px solid var(--line); background:var(--fill); padding:6px 14px; border-radius:20px; font-size:15px; }
+  nav a:hover { border-color:var(--accent); color:var(--accent); }
+  section { max-width:1300px; margin:0 auto; padding:24px; border-bottom:1px solid var(--line); }
+  section h2 { font-weight:500; font-size:22px; margin:0 0 12px; }
+  section h2 a { color:var(--accent); font-size:15px; margin-left:10px; }
+  iframe { width:100%; height:1150px; border:0; border-radius:12px; background:var(--fill); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Six routes · three frames each</h1>
+  <p>Discover · Recipe (Japanese mirin baked cod) · Cook mode (step 5, two timers). Static frames: layout, UI and content only.</p>
+</header>
+<nav>
+  <a href="#r1">1 Index</a><a href="#r2">2 Cookbook</a><a href="#r3">3 Kitchen drawer</a>
+  <a href="#r4">4 Counter</a><a href="#r5">5 Reel</a><a href="#r6">6 Poster</a>
+</nav>
+<section id="r1"><h2>1 · Index <a href="1-index.html">open on its own</a></h2><iframe src="1-index.html" loading="lazy" title="Route 1 Index"></iframe></section>
+<section id="r2"><h2>2 · Cookbook <a href="2-cookbook.html">open on its own</a></h2><iframe src="2-cookbook.html" loading="lazy" title="Route 2 Cookbook"></iframe></section>
+<section id="r3"><h2>3 · Kitchen drawer <a href="3-kitchen-drawer.html">open on its own</a></h2><iframe src="3-kitchen-drawer.html" loading="lazy" title="Route 3 Kitchen drawer"></iframe></section>
+<section id="r4"><h2>4 · Counter <a href="4-counter.html">open on its own</a></h2><iframe src="4-counter.html" loading="lazy" title="Route 4 Counter"></iframe></section>
+<section id="r5"><h2>5 · Reel <a href="5-reel.html">open on its own</a></h2><iframe src="5-reel.html" loading="lazy" title="Route 5 Reel"></iframe></section>
+<section id="r6"><h2>6 · Poster <a href="6-poster.html">open on its own</a></h2><iframe src="6-poster.html" loading="lazy" title="Route 6 Poster"></iframe></section>
+</body>
+</html>

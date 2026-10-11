@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="dark">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Landing Option 3 Refined</title>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  /* Option 3 refined: a calmer scale (smaller headings, circles and thumbnails) so content leads. Greyscale; no lines, no boxes in boxes. */
+  :root { --page:#121110; --ink:#e8e4de; --mid:#9a948c; --soft:#6f6a63; --img:#3a3632; --scr:#1c1a18; --chip:#2b2825; --note:#c9a06b; --lvl:#8fb3c4; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--page); color:var(--ink); font:16px/1.5 Jost, system-ui, sans-serif; }
+  .intro { max-width:1400px; margin:0 auto; padding:40px 32px 0; }
+  .intro h1 { font-weight:400; font-size:34px; margin:0 0 6px; }
+  .intro p { color:var(--mid); max-width:900px; margin:0 0 8px; }
+  .grid { max-width:1400px; margin:0 auto; padding:26px 32px 40px; display:flex; flex-wrap:wrap; gap:40px; align-items:flex-start; }
+  .opt { flex:0 0 390px; }
+  .opt h2 { font-weight:400; font-size:22px; margin:0 0 14px; }
+  .phone { position:relative; width:390px; height:844px; background:var(--scr); border-radius:44px; box-shadow:0 20px 50px rgba(0,0,0,.5); overflow:hidden; }
+  .status { display:flex; justify-content:space-between; padding:16px 30px 0; font-size:14px; font-weight:500; }
+  .scr { padding:14px 20px 0; }
+  .meta { font-size:13px; color:var(--mid); }
+  .lab { font-size:15px; color:var(--mid); margin:0 0 6px; }
+  .words { display:flex; flex-wrap:wrap; gap:4px 16px; font-size:17px; font-weight:300; }
+  .words .on { font-weight:400; border-bottom:1.5px solid var(--ink); }
+  .ing { display:flex; gap:14px; overflow:hidden; margin-right:-20px; }
+  .ing div { flex:0 0 62px; text-align:center; font-size:13px; line-height:1.3; }
+  .ing img { width:62px; height:62px; border-radius:50%; object-fit:cover; filter:grayscale(1); background:var(--img); display:block; margin-bottom:5px; }
+  .ing .on img { outline:1.5px solid var(--ink); outline-offset:3px; }
+  .ing small { display:block; color:var(--mid); font-size:11px; }
+  img.ph { display:block; width:100%; object-fit:cover; filter:grayscale(1) contrast(.9); background:var(--img); border-radius:10px; }
+  .sec { font-size:18px; font-weight:400; margin:26px 0 10px; display:flex; justify-content:space-between; align-items:baseline; }
+  .sec span { font-size:13px; color:var(--mid); font-weight:400; }
+  .row { display:flex; gap:14px; align-items:center; margin:0 0 12px; }
+  .row img { width:64px; height:64px; flex:none; border-radius:9px; }
+  .t { font-size:16px; line-height:1.3; }
+  .why { font-size:12px; color:var(--note); }
+  .why svg { width:11px; height:11px; vertical-align:-1px; }
+  .rail { display:flex; gap:12px; overflow:hidden; margin-right:-20px; }
+  .rail .c { flex:0 0 44%; }
+  .rail .c .t { margin-top:6px; font-size:15px; }
+  .bar { position:absolute; left:0; right:0; bottom:0; padding:12px 20px 26px; background:linear-gradient(transparent, var(--scr) 30%); display:flex; gap:10px; z-index:6; }
+  .search { flex:1; background:var(--chip); border-radius:24px; padding:12px 18px; color:var(--mid); font-size:15px; }
+  .icon { width:46px; height:46px; border-radius:50%; background:var(--chip); display:grid; place-items:center; position:relative; }
+  .icon svg { width:20px; height:20px; }
+  .icon .dot { position:absolute; top:9px; right:9px; width:8px; height:8px; border-radius:50%; background:var(--note); }
+  /* filter sheet */
+  .dim { position:absolute; inset:0; background:rgba(29,27,25,.35); }
+  .sheet { position:absolute; left:0; right:0; bottom:0; top:96px; background:var(--scr); border-radius:24px 24px 0 0; padding:12px 22px 0; overflow:hidden; }
+  .grab { width:40px; height:4px; border-radius:2px; background:#4a4540; margin:0 auto 14px; }
+  .sh { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px; }
+  .sh b { font-size:20px; font-weight:400; } .sh span { font-size:14px; color:var(--mid); }
+  .fg { margin:11px 0 0; }
+  .fg .lab { font-size:12px; letter-spacing:.1em; text-transform:uppercase; margin-bottom:6px; }
+  .opts { display:flex; flex-wrap:wrap; gap:4px 14px; font-size:16px; font-weight:300; }
+  .opts .on { font-weight:400; border-bottom:1.5px solid var(--ink); }
+  .opts .off { color:var(--soft); }
+  .show { position:absolute; left:22px; right:22px; bottom:26px; background:var(--ink); color:var(--scr); border-radius:24px; padding:13px; text-align:center; font-size:16px; }
+  .ann { margin-top:16px; font-size:14.5px; }
+  .ann p { margin:0 0 8px; } .ann b { font-weight:500; }
+  .ann ul { padding-left:18px; margin:6px 0; } .ann li { margin:0 0 6px; }
+  @media (max-width:460px) { .opt { flex-basis:100%; } .phone { width:100%; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <symbol id="heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" fill="currentColor"/></symbol>
+  <symbol id="listic" viewBox="0 0 24 24"><path d="M6 4h12v16l-6-4-6 4z" fill="currentColor"/></symbol>
+  <symbol id="leaf" viewBox="0 0 24 24"><path d="M5 19c0-8 6-14 15-14 0 9-6 15-14 15M5 19l7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="sliders" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/><circle cx="16" cy="7" r="2" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="8" cy="17" r="2" stroke="currentColor" stroke-width="1.6" fill="none"/></symbol>
+</defs></svg>
+
+<div class="intro">
+  <h1>Option 3, refined</h1>
+  <p><b>Calmer scale:</b> smaller questions, mood words and ingredient circles, so the recipes lead and more fits on screen. The first screen now holds <b>Feel like · With · Best match</b>, with the next component peeking in. Below it, <b>more recommendations</b>. The bottom-right button opens <b>filters</b>.</p>
+</div>
+
+<div class="grid">
+
+  <!-- FRAME 1: FIRST SCREEN -->
+  <div class="opt">
+    <h2>1 · First screen</h2>
+    <div class="phone">
+      <div class="status"><span>18:42</span><span>●●● ▮</span></div>
+      <div class="scr">
+        <div class="meta">Sunday evening · for both of us · early autumn</div>
+        <div class="lab" style="margin-top:16px">Feel like</div>
+        <div class="words"><span class="on">Comforting</span><span>Light</span><span>Spicy</span><span>Warming</span><span>Fresh &amp; green</span><span>Something special</span></div>
+        <div class="lab" style="margin-top:18px">With</div>
+        <div class="ing">
+          <div class="on"><img src="../../media/C6_FrdiyZjh/hero.jpg" alt="">Cod<small>use soon</small></div>
+          <div><img src="../../media/Cyf04RxIO8c/hero.jpg" alt="">Spinach<small>use soon</small></div>
+          <div><img src="../../media/C4kZDKtBbQO/hero.jpg" alt="">Tofu<small>a few days</small></div>
+          <div><img src="../../media/DHdyddgRAs4/hero.jpg" alt="">Broccolini<small>a few days</small></div>
+          <div><img src="../../media/CwiWc2KId6o/hero.jpg" alt="">Cupboard<small>pasta, tins</small></div>
+        </div>
+        <div class="sec">Best match <span>3 of 9</span></div>
+        <div class="row"><img class="ph" src="../../media/C6_FrdiyZjh/hero.jpg" alt=""><div><div class="why"><svg><use href="#listic"/></svg> On our list · Mary</div><div class="t">Japanese mirin baked cod</div><div class="meta">22 min + marinating · have 9 of 11</div></div></div>
+        <div class="row"><img class="ph" src="../../media/DPB6Q6SjBh5/hero.jpg" alt=""><div><div class="why"><svg><use href="#heart"/></svg> Craig's favourite</div><div class="t">Cod with mustard sauce in paper boats</div><div class="meta">Time to check · have 5 of 7</div></div></div>
+        <div class="row"><img class="ph" src="../../media/DHdyddgRAs4/hero.jpg" alt=""><div><div class="why" style="color:var(--mid)">Swap the tinned fish for the cod</div><div class="t">Broccolini beans with tinned fish</div><div class="meta">1 hr 30 · have 9 of 12</div></div></div>
+        <div class="sec">In season now <span>early autumn</span></div>
+        <div class="rail">
+          <div class="c"><img class="ph" src="../../media/CwiWc2KId6o/hero.jpg" style="height:120px" alt=""></div>
+          <div class="c"><img class="ph" src="../../media/Cyf04RxIO8c/hero.jpg" style="height:120px" alt=""></div>
+        </div>
+      </div>
+      <div class="bar"><div class="search">Search, or what's in the fridge</div><div class="icon"><svg><use href="#sliders"/></svg></div></div>
+    </div>
+    <div class="ann">
+      <p><b>Scale:</b> questions are now small labels ("Feel like", "With"), the moods are 17px words, the circles 62px and the thumbnails 64px. The recipes carry the weight, and three best matches plus the next section fit on screen.</p>
+      <p><b>The meta line</b> sets the context quietly: day, who's eating, season.</p>
+    </div>
+  </div>
+
+  <!-- FRAME 2: BELOW -->
+  <div class="opt">
+    <h2>2 · Scrolling down: more ideas</h2>
+    <div class="phone">
+      <div class="status"><span>18:42</span><span>●●● ▮</span></div>
+      <div class="scr">
+        <div class="sec" style="margin-top:6px">In season now <span>early autumn</span></div>
+        <div class="rail">
+          <div class="c"><img class="ph" src="../../media/CwiWc2KId6o/hero.jpg" style="height:150px" alt=""><div class="why" style="margin-top:6px"><svg><use href="#leaf"/></svg> Fennel at its best</div><div class="t">Late summer minestrone with fennel and saffron</div></div>
+          <div class="c"><img class="ph" src="../../media/Cyf04RxIO8c/hero.jpg" style="height:150px" alt=""><div class="why" style="margin-top:6px"><svg><use href="#leaf"/></svg> Sweet potato season</div><div class="t">Roast sweet potatoes with spinach and cannellini cream</div></div>
+          <div class="c"><img class="ph" src="../../media/C8kODErKIKh/hero.jpg" style="height:150px" alt=""></div>
+        </div>
+        <div class="sec">Quick tonight <span>under 30 min</span></div>
+        <div class="row"><img class="ph" src="../../media/C8j51_HKkxG/hero.jpg" alt=""><div><div class="why"><svg><use href="#heart"/></svg> Both of you</div><div class="t">Creamy tomato and basil beans</div><div class="meta">30 min · from the cupboard</div></div></div>
+        <div class="row"><img class="ph" src="../../media/DPB6Q6SjBh5/hero.jpg" alt=""><div><div class="t">Cod with mustard sauce in paper boats</div><div class="meta">Time to check</div></div></div>
+        <div class="sec">Our list <span>3 · agreed first</span></div>
+        <div class="row"><img class="ph" src="../../media/C6_FrdiyZjh/hero.jpg" alt=""><div><div class="t">Japanese mirin baked cod</div><div class="meta">Mary ♥ · Craig ♥</div></div></div>
+        <div class="row"><img class="ph" src="../../media/C8kODErKIKh/hero.jpg" alt=""><div><div class="t">Scarpaccia with pepper and onion</div><div class="meta">Craig ♥ · Mary hasn't looked</div></div></div>
+        <div class="sec">Something different <span>from another season</span></div>
+        <div class="row"><img class="ph" src="../../media/DO7BUjkEVrQ/hero.jpg" alt=""><div><div class="t">Upside-down apple tarts</div><div class="meta">Rediscovered from your saves · never opened</div></div></div>
+      </div>
+      <div class="bar"><div class="search">Search, or what's in the fridge</div><div class="icon"><svg><use href="#sliders"/></svg></div></div>
+    </div>
+    <div class="ann">
+      <p><b>Below "Best match", in order:</b></p>
+      <ul>
+        <li><b>In season now:</b> rises with the calendar, with a reason on each card ("Fennel at its best")</li>
+        <li><b>Quick tonight:</b> under 30 minutes</li>
+        <li><b>Our list:</b> agreed first, with both your reactions</li>
+        <li><b>Something different:</b> one from another season, or a forgotten save, so you don't end up in a bubble</li>
+      </ul>
+      <p>Sections reorder with the week: on Tuesday, <b>Use what's fresh</b> joins near the top; on Sunday and Monday, <b>From the cupboard</b> does.</p>
+    </div>
+  </div>
+
+  <!-- FRAME 3: FILTER SHEET -->
+  <div class="opt">
+    <h2>3 · The filter button (bottom right)</h2>
+    <div class="phone">
+      <div class="status"><span>18:42</span><span>●●● ▮</span></div>
+      <div class="dim"></div>
+      <div class="sheet">
+        <div class="grab"></div>
+        <div class="sh"><b>Narrow it down</b><span>Clear all</span></div>
+        <div class="fg"><div class="lab">Who's eating</div><div class="opts"><span class="on">Both of us</span><span>Mary</span><span>Craig alone</span></div></div>
+        <div class="fg"><div class="lab">Time</div><div class="opts"><span class="on">Any</span><span>Under 20 min</span><span>Under 45 min</span><span>An hour or two</span><span>All afternoon</span></div></div>
+        <div class="fg"><div class="lab">Meal</div><div class="opts"><span class="on">Dinner</span><span>Lunch</span><span class="off">Sides</span><span class="off">Baking</span><span class="off">Breakfast</span><span class="off">Sauces</span></div></div>
+        <div class="fg"><div class="lab">Show</div><div class="opts"><span>Our list</span><span>Favourites</span><span>Not tried yet</span><span>Cooked before</span><span>Needs checking</span></div></div>
+        <div class="fg"><div class="lab">Diet</div><div class="opts"><span class="on">Pescatarian</span><span>Vegetarian</span><span>Vegan</span><span>Gluten-free</span><span>Dairy-free</span></div></div>
+        <div class="fg"><div class="lab">How it's cooked</div><div class="opts"><span>One pan</span><span>No oven</span><span>Oven</span><span>Barbecue</span><span>Slow cook</span><span>No cook</span></div></div>
+        <div class="fg"><div class="lab">Cuisine</div><div class="opts"><span>Italian</span><span>Japanese</span><span>Korean</span><span>Middle Eastern</span><span>Indian</span><span>More…</span></div></div>
+        <div class="fg"><div class="lab">Order by</div><div class="opts"><span class="on">Best for now</span><span>Quickest</span><span>Most we have</span><span>Recently saved</span></div></div>
+        <div class="show">Show 9 recipes</div>
+      </div>
+    </div>
+    <div class="ann">
+      <p><b>What's in the filters:</b> everything you'd want <i>sometimes</i>, kept off the landing page.</p>
+      <ul>
+        <li><b>Who's eating</b> lives here (the default comes from the day and stays visible in the meta line)</li>
+        <li><b>Meal</b> includes sides, baking, breakfast and sauces: the library lives behind this, not in the recommendations</li>
+        <li><b>Show:</b> our list, favourites, not tried yet (instead of a "not cooked yet" section), cooked before, needs checking</li>
+        <li><b>Order by:</b> "Best for now" is the default (list → favourites → season → week → what we have)</li>
+        <li><b>The button shows a dot when filters are on</b>, and the count updates live</li>
+      </ul>
+      <p><b>Where our list lives:</b> as a section on the page, and as "Show: our list" here, so the bottom bar stays at two elements.</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,777 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Supper Wireframe Flow</title>
+<style>
+  /* Layout: neutral greyscale wireframes. Structure and behaviour only; no visual design. One marker colour (blue) for the numbered notes. Dark to match the kitchen use. */
+  :root {
+    --page:#111111; --scr:#1d1d1d; --raise:#2a2a2a; --fill:#3a3a3a; --hi:#d9d9d9;
+    --ink:#e6e6e6; --mid:#9c9c9c; --soft:#6c6c6c; --note:#7fa7c9;
+    --font: system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    color-scheme:dark;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--page); color:var(--ink); font:15px/1.5 var(--font); }
+  .page { max-width:1500px; margin:0 auto; padding-inline:24px; padding-block:44px 90px; }
+  .eyebrow { font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--mid); }
+  h1 { font-weight:300; font-size:clamp(30px,5vw,44px); margin:8px 0 10px; line-height:1.1; text-wrap:balance; }
+  .lede { color:var(--mid); max-width:72ch; margin:0; font-size:16px; }
+  .lede b, .note b { color:var(--ink); font-weight:500; }
+  h2 { font-weight:300; font-size:30px; margin:0 0 6px; }
+  h2 small { font-size:14px; color:var(--mid); margin-left:10px; }
+  .sub { color:var(--mid); margin:0 0 26px; max-width:80ch; }
+  section.part { margin-top:80px; }
+  .toc { display:flex; flex-wrap:wrap; gap:6px 22px; margin-top:26px; }
+  .toc a { color:var(--mid); text-decoration:none; min-height:32px; display:inline-flex; align-items:center; }
+  .toc a:hover { color:var(--ink); }
+
+  /* ---- navigation map ---- */
+  .map { display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:18px; }
+  .place { background:var(--scr); border-radius:14px; padding:18px 18px 16px; }
+  .place h3 { margin:0 0 2px; font-weight:400; font-size:19px; }
+  .place .role { color:var(--mid); font-size:13.5px; margin:0 0 12px; }
+  .place ol { margin:0; padding-left:0; list-style:none; display:grid; gap:6px; }
+  .place li { font-size:14px; display:flex; gap:8px; align-items:baseline; }
+  .place li span { color:var(--mid); }
+  .place li i { font-style:normal; color:var(--note); font-size:12.5px; min-width:22px; }
+  .focusflow { margin-top:18px; background:var(--scr); border-radius:14px; padding:18px; display:flex; flex-wrap:wrap; gap:10px 14px; align-items:center; font-size:14.5px; }
+  .focusflow b { font-weight:400; background:var(--raise); padding:8px 14px; border-radius:20px; }
+  .focusflow .ar { color:var(--soft); }
+  .focusflow .lbl { color:var(--mid); width:100%; font-size:13.5px; }
+  .ways { display:grid; grid-template-columns:repeat(auto-fit, minmax(230px,1fr)); gap:14px 26px; margin-top:8px; }
+  .ways div { font-size:14.5px; color:var(--mid); }
+  .ways b { display:block; color:var(--ink); font-weight:400; font-size:16px; margin-bottom:2px; }
+  .ways b i { font-style:normal; color:var(--note); margin-right:6px; }
+
+  /* ---- frames ---- */
+  .row { display:flex; flex-wrap:wrap; gap:44px 40px; }
+  .shot { flex:0 0 390px; max-width:100%; }
+  .shot h3 { font-weight:400; font-size:17px; margin:0 0 10px; }
+  .shot h3 span { color:var(--mid); font-size:14px; margin-left:6px; }
+  .ph { width:390px; height:844px; border-radius:40px; background:var(--scr); position:relative; overflow:hidden; box-shadow:0 18px 40px rgba(0,0,0,.5); }
+  .sb { height:46px; display:flex; justify-content:space-between; align-items:center; padding:6px 28px 0; font-size:14px; color:var(--mid); }
+  .in { padding:6px 20px 0; }
+  .notes { margin:14px 0 0; padding:0; list-style:none; display:grid; gap:7px; }
+  .notes li { display:grid; grid-template-columns:24px 1fr; gap:6px; font-size:14px; color:var(--mid); }
+  .notes li b { color:var(--ink); font-weight:500; }
+  .n { display:inline-grid; place-items:center; width:18px; height:18px; border-radius:50%; background:var(--note); color:#0d1720; font:600 11px/1 var(--font); font-style:normal; flex:none; vertical-align:middle; }
+  .ph .n { position:absolute; z-index:6; box-shadow:0 0 0 2px var(--scr); }
+  .notes .n { margin-top:1px; }
+
+  /* wireframe primitives */
+  .lbl { font-size:12.5px; color:var(--mid); }
+  .meta { font-size:13px; color:var(--mid); }
+  .h { font-size:19px; font-weight:400; margin:0; }
+  .hrow { display:flex; justify-content:space-between; align-items:baseline; margin:18px 0 8px; }
+  .hrow .h { font-size:18px; }
+  .img { background:var(--fill); border-radius:6px; position:relative; color:var(--soft); font-size:11px; display:grid; place-items:center; flex:none; }
+  .chips { display:flex; gap:8px; flex-wrap:nowrap; overflow:hidden; }
+  .chips.wrap { flex-wrap:wrap; }
+  .chip { flex:none; height:36px; padding:0 14px; border-radius:18px; background:var(--raise); display:inline-flex; align-items:center; gap:6px; font-size:14px; color:var(--ink); }
+  .chip.on { background:var(--hi); color:#111; }
+  .chip.ghost { background:none; color:var(--mid); padding:0 6px; }
+  .word { font-size:16px; color:var(--mid); padding:8px 0; white-space:nowrap; flex:none; }
+  .word.on { color:var(--ink); text-decoration:underline; text-underline-offset:6px; }
+  .cards { display:flex; gap:12px; overflow:hidden; margin-right:-20px; }
+  .card { flex:0 0 106px; }
+  .card .img { width:106px; height:140px; }
+  .card .t { font-size:13.5px; margin-top:6px; line-height:1.3; }
+  .card .m { font-size:11.5px; color:var(--mid); margin-top:2px; line-height:1.35; }
+  .list { display:grid; gap:14px; }
+  .li { display:grid; grid-template-columns:56px 1fr auto; gap:12px; align-items:center; }
+  .li .img { width:56px; height:56px; }
+  .li .t { font-size:15px; line-height:1.3; }
+  .li .m { font-size:12.5px; color:var(--mid); }
+  .li .r { color:var(--soft); font-size:18px; }
+  .btn { height:52px; border-radius:26px; background:var(--hi); color:#111; display:flex; align-items:center; justify-content:center; font-size:16px; }
+  .btn.sec { background:var(--raise); color:var(--ink); }
+  .field { height:46px; border-radius:23px; background:var(--raise); display:flex; align-items:center; gap:10px; padding:0 16px; color:var(--mid); font-size:15px; }
+  .field .fx { margin-left:auto; color:var(--ink); }
+  .search { position:absolute; left:16px; right:16px; bottom:96px; z-index:4; }
+  .tabs { position:absolute; left:0; right:0; bottom:0; height:84px; background:#181818; display:grid; grid-template-columns:repeat(4,1fr); padding:8px 6px 26px; z-index:4; }
+  .tabs div { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; font-size:11.5px; color:var(--soft); }
+  .tabs div::before { content:""; width:24px; height:20px; border-radius:5px; background:var(--fill); }
+  .tabs div.on { color:var(--ink); }
+  .tabs div.on::before { background:var(--hi); }
+  .fade { position:absolute; left:0; right:0; bottom:84px; height:110px; background:linear-gradient(transparent, var(--scr) 70%); z-index:3; }
+  .dim { position:absolute; inset:0; background:rgba(0,0,0,.55); z-index:5; }
+  .sheet { position:absolute; left:0; right:0; bottom:0; background:#242424; border-radius:22px 22px 0 0; z-index:6; padding:10px 20px 30px; }
+  .sheet .grab { width:40px; height:5px; border-radius:3px; background:var(--fill); margin:0 auto 14px; }
+  .pinned { position:absolute; left:0; right:0; bottom:0; padding:12px 20px 30px; background:linear-gradient(transparent, var(--scr) 30%); z-index:4; }
+  .ghostbg { opacity:.35; }
+  .tick { width:22px; height:22px; border-radius:6px; background:var(--raise); flex:none; display:grid; place-items:center; font-size:13px; }
+  .tick.on { background:var(--hi); color:#111; }
+  .state { font-size:12px; color:var(--mid); background:var(--raise); padding:3px 10px; border-radius:12px; }
+  .state.low { color:var(--ink); }
+  .seg { display:grid; grid-template-columns:1fr 1fr; background:var(--raise); border-radius:22px; padding:3px; height:44px; }
+  .seg div { display:grid; place-items:center; border-radius:19px; font-size:14px; color:var(--mid); }
+  .seg div.on { background:var(--hi); color:#111; }
+  .banner { background:var(--raise); border-radius:12px; padding:12px 14px; font-size:14px; }
+  .banner .meta { margin-top:2px; }
+  .blank { color:var(--ink); text-decoration:underline; text-underline-offset:5px; text-decoration-color:var(--mid); }
+  .open { display:inline-block; min-width:70px; border-bottom:2px solid var(--hi); }
+
+  /* ---- decisions ---- */
+  .decide { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:18px; }
+  .dq { background:var(--scr); border-radius:14px; padding:18px 20px; }
+  .dq h3 { font-weight:400; font-size:17px; margin:0 0 8px; }
+  .dq p { margin:0 0 8px; color:var(--mid); font-size:14.5px; }
+  .dq p b { color:var(--ink); font-weight:500; }
+
+  @media (max-width:440px) {
+    .page { padding-inline:16px; }
+    .shot { flex-basis:100%; }
+    .ph { zoom:.86; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="eyebrow">Wireframe · structure and behaviour · 5 October 2026</div>
+  <h1>Where everything lives</h1>
+  <p class="lede">Deliberately plain. This page fixes <b>where things live and how they behave</b> across the whole app, so the visual design can't move them. It starts from landing option 3 (the working prototype) and adds the rest: navigation, Our list, the log, the Kitchen, how ingredients get in, adding a recipe and settings. The numbered notes are the rules each screen has to keep.</p>
+  <nav class="toc">
+    <a href="#nav">Navigation</a><a href="#tonight">Tonight</a><a href="#cook">Recipe and cooking</a><a href="#together">Our list and log</a><a href="#kitchen">Kitchen and ingredients</a><a href="#more">Add a recipe, settings</a><a href="#decide">Decisions for you</a>
+  </nav>
+
+  <!-- ================= NAV ================= -->
+  <section class="part" id="nav">
+    <h2>Navigation</h2>
+    <p class="sub">Four places on a tab bar at the bottom, in thumb reach. Search sits just above the tab bar on Tonight. Recipe, cook mode and the story are a focused flow: the tab bar goes away, so cooking feels like a different room.</p>
+    <div class="map">
+      <div class="place">
+        <h3>Tonight</h3>
+        <p class="role">Choosing. The home screen.</p>
+        <ol>
+          <li><i>1</i>Home <span>Feel like, With, For tonight, discovery</span></li>
+          <li><i>2</i>With picker <span>sheet</span></li>
+          <li><i>3</i>Search and library</li>
+          <li><i>4</i>Filters <span>sheet</span></li>
+        </ol>
+      </div>
+      <div class="place">
+        <h3>Our list</h3>
+        <p class="role">The shared queue of what to cook next.</p>
+        <ol>
+          <li><i>8</i>Our list</li>
+          <li><i>13</i>Add a recipe <span>from the + here, or the share sheet</span></li>
+        </ol>
+      </div>
+      <div class="place">
+        <h3>Kitchen</h3>
+        <p class="role">What we have, and what to buy.</p>
+        <ol>
+          <li><i>10</i>We have <span>fridge, cupboard, staples</span></li>
+          <li><i>11</i>Add to kitchen <span>sheet</span></li>
+          <li><i>12</i>To buy <span>if a shopping list is in v1</span></li>
+        </ol>
+      </div>
+      <div class="place">
+        <h3>Log</h3>
+        <p class="role">What we've cooked, as stories.</p>
+        <ol>
+          <li><i>9</i>Our log <span>diary by date and by dish</span></li>
+        </ol>
+      </div>
+    </div>
+    <div class="focusflow">
+      <span class="lbl">The focused flow (no tab bar). You can reach it from any place.</span>
+      <b>5 · Recipe</b><span class="ar">→</span><b>6 · Cook mode</b><span class="ar">→</span><b>7 · Story</b><span class="ar">→</span><b>back where you started</b>
+      <span class="lbl">Leaving cook mode halfway keeps your place. A "Carry on cooking" bar then sits above the tabs everywhere until you finish or dismiss it.</span>
+    </div>
+    <div class="focusflow">
+      <span class="lbl">Settings and household (14) open from your initial at the top right of Tonight. You rarely need them, so they don't get a tab.</span>
+    </div>
+
+    <h3 style="font-weight:400;font-size:20px;margin:40px 0 4px">How ingredients get in: one Kitchen, five ways in</h3>
+    <p class="sub" style="margin-bottom:14px">The Kitchen is the one list of what we have. Everything else reads from it or adds to it. It records <b style="color:var(--ink);font-weight:500">have / running low / out</b>, not quantities, because nobody weighs what's left in the bag.</p>
+    <div class="ways">
+      <div><b><i>a</i>The box arrives</b>On Tuesday the Kitchen asks "Is the box in?" One tap adds this week's items, which you can review. Later the Abel &amp; Cole email can do this on its own.</div>
+      <div><b><i>b</i>Add by hand</b>"+ Add" in the Kitchen opens a search sheet with suggestions. You can add several at once, or paste a list.</div>
+      <div><b><i>c</i>Tonight's With</b>Picking an ingredient that isn't in the Kitchen asks "Add to the Kitchen too?" It's off by default, because tonight's choice is only for tonight.</div>
+      <div><b><i>d</i>From a recipe</b>Each ingredient shows whether you have it. Tap a missing one to say "we have it" or "add to buy".</div>
+      <div><b><i>e</i>After cooking</b>The story's last line asks "Used up anything?" and offers the recipe's fresh ingredients to clear. Ticking a "to buy" item moves it into the Kitchen.</div>
+    </div>
+  </section>
+
+  <!-- ================= TONIGHT ================= -->
+  <section class="part" id="tonight">
+    <h2>Tonight <small>choosing</small></h2>
+    <p class="sub">Landing option 3, as in the prototype. Only the search position and the tab bar are new.</p>
+    <div class="row">
+
+      <!-- 1 HOME -->
+      <div class="shot">
+        <h3>1 · Home <span>Tonight tab</span></h3>
+        <div class="ph">
+          <div class="sb"><span>18:42</span><span>●●● ▮</span></div>
+          <div class="in">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span class="meta">Tuesday evening · mid autumn · the box is in</span>
+              <span class="chip" style="width:36px;padding:0;justify-content:center">C</span>
+            </div>
+            <i class="n" data-side="r">1</i>
+            <div class="lbl" style="margin-top:14px">Feel like</div>
+            <div class="chips" style="gap:18px"><span class="word">comforting</span><span class="word on">light</span><span class="word">quick</span><span class="word">something new</span><span class="word">for a crowd</span></div>
+            <i class="n">2</i>
+            <div class="lbl" style="margin-top:6px">With</div>
+            <div class="chips" style="margin-top:6px"><span class="chip on">cod ×</span><span class="chip on">spinach ×</span><span class="chip ghost">+ add</span></div>
+            <i class="n">3</i>
+            <div class="hrow"><span class="h">For tonight</span><span class="meta">10 ideas</span></div>
+            <i class="n">4</i>
+            <div class="cards">
+              <div class="card"><div class="img">photo</div><div class="t">Japanese mirin baked cod</div><div class="m">1 hr 22 · mostly waiting<br>on our list · uses the cod</div></div>
+              <div class="card"><div class="img">photo</div><div class="t">Cod grenobloise</div><div class="m">25 min<br>light · uses the cod</div></div>
+              <div class="card"><div class="img">photo</div><div class="t">Creamy pesto orzo with crispy salmon</div><div class="m">30 min<br>uses the spinach</div></div>
+              <div class="card"><div class="img">photo</div><div class="t">Roast sweet…</div></div>
+            </div>
+            <div class="hrow" style="margin-top:22px"><span class="h">In season</span><span class="meta">mid autumn</span></div>
+            <i class="n">5</i>
+            <div class="cards">
+              <div class="card"><div class="img">photo</div><div class="t">Creamy kabocha pumpkin soup</div><div class="m">squash at its best</div></div>
+              <div class="card"><div class="img">photo</div><div class="t">Late summer minestrone with fennel</div><div class="m">fennel ends soon</div></div>
+              <div class="card"><div class="img">photo</div><div class="t">Sticky soy glazed squash</div></div>
+              <div class="card"><div class="img">photo</div></div>
+            </div>
+            <div class="hrow" style="margin-top:22px"><span class="h">Quick tonight</span><span class="meta">under 30 min</span></div>
+          </div>
+          <div class="fade"></div>
+          <div class="search"><div class="field">⌕ <span>Search recipes, ingredients, people</span><span class="fx">☰</span></div></div>
+          <i class="n">6</i>
+          <div class="tabs"><div class="on">Tonight</div><div>Our list</div><div>Kitchen</div><div>Log</div></div>
+          <i class="n">7</i>
+        </div>
+        <ul class="notes">
+          <li><i class="n">1</i><span><b>Context line, then your initial.</b> Who's eating appears here only when it isn't the usual (for example "Craig alone"). Your initial opens settings (14).</span></li>
+          <li><i class="n">2</i><span><b>Feel like: one choice.</b> Tap again to clear it. It changes For tonight only.</span></li>
+          <li><i class="n">3</i><span><b>With: several, as removable chips.</b> "+ add" opens the picker (2). It starts empty each day; the picker suggests what to use soon.</span></li>
+          <li><i class="n">4</i><span><b>For tonight: a swipe row, about 3¼ visible, 10 ideas.</b> Every card has a time and a reason. This is the only row that Feel like and With change.</span></li>
+          <li><i class="n">5</i><span><b>Discovery stays open:</b> In season · Quick tonight · Our list · Something different. These change with the week, never with Feel like or With.</span></li>
+          <li><i class="n">6</i><span><b>Search above the tabs, with ☰ for filters.</b> Tapping it opens the library (3).</span></li>
+          <li><i class="n">7</i><span><b>Four tabs.</b> Our list shows a count when the other person adds something.</span></li>
+        </ul>
+      </div>
+
+      <!-- 2 WITH PICKER -->
+      <div class="shot">
+        <h3>2 · With picker <span>sheet over Home</span></h3>
+        <div class="ph">
+          <div class="sb"><span>18:42</span><span>●●● ▮</span></div>
+          <div class="in ghostbg"><div class="meta">Tuesday evening · mid autumn · the box is in</div><div class="hrow"><span class="h">For tonight</span></div><div class="cards"><div class="card"><div class="img"></div></div><div class="card"><div class="img"></div></div><div class="card"><div class="img"></div></div></div></div>
+          <div class="dim"></div>
+          <div class="sheet" style="top:120px">
+            <div class="grab"></div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline"><span class="h">Cook with…</span><span class="meta">Clear</span></div>
+            <div class="field" style="margin-top:14px">⌕ <span>Find an ingredient</span></div>
+            <i class="n">1</i>
+            <div class="lbl" style="margin-top:18px">Use soon · from the Kitchen</div>
+            <i class="n">2</i>
+            <div class="chips wrap" style="margin-top:8px"><span class="chip on">cod ✓</span><span class="chip on">spinach ✓</span><span class="chip">salmon</span><span class="chip">leeks</span><span class="chip">cavolo nero</span><span class="chip">mushrooms</span><span class="chip">crème fraîche</span></div>
+            <div class="lbl" style="margin-top:18px">In the cupboard</div>
+            <div class="chips wrap" style="margin-top:8px"><span class="chip">chickpeas</span><span class="chip">orzo</span><span class="chip">coconut milk</span><span class="chip">rice noodles</span><span class="chip">butter beans</span></div>
+            <div class="lbl" style="margin-top:18px">Not in the Kitchen</div>
+            <i class="n">3</i>
+            <div class="li" style="grid-template-columns:1fr auto;margin-top:8px"><div><div class="t">fennel</div><div class="m">just for tonight</div></div><span class="chip">Add to Kitchen too</span></div>
+            <div style="position:absolute;left:20px;right:20px;bottom:30px;display:grid;gap:8px">
+              <div class="btn">Show 14 ideas</div>
+            </div>
+            <i class="n">4</i>
+          </div>
+        </div>
+        <ul class="notes">
+          <li><i class="n">1</i><span><b>Search first,</b> then suggestions. Typing finds any ingredient in the 500 recipes.</span></li>
+          <li><i class="n">2</i><span><b>Use soon first:</b> fresh things, oldest first (the box on Tuesday). Then the cupboard. Tap to select, tap again to remove. You can pick several.</span></li>
+          <li><i class="n">3</i><span><b>Not in the Kitchen? Still allowed,</b> with the option to add it to the Kitchen (way in c). Off by default.</span></li>
+          <li><i class="n">4</i><span><b>The count updates live.</b> If nothing matches, it says so and suggests dropping one ingredient. It never shows an empty row.</span></li>
+        </ul>
+      </div>
+
+      <!-- 3 LIBRARY -->
+      <div class="shot">
+        <h3>3 · Search and library <span>from the search bar</span></h3>
+        <div class="ph">
+          <div class="sb"><span>18:42</span><span>●●● ▮</span></div>
+          <div class="in">
+            <div style="display:flex;justify-content:space-between;align-items:baseline"><span class="h">All recipes</span><span class="meta">496 · 38 match</span></div>
+            <i class="n">1</i>
+            <div class="chips" style="margin-top:12px"><span class="chip on">Both of us ×</span><span class="chip on">Under 30 min ×</span><span class="chip ghost">Best for now ▾</span></div>
+            <i class="n">2</i>
+            <div class="list" style="margin-top:18px">
+              <div class="li"><div class="img">photo</div><div><div class="t">Cod grenobloise</div><div class="m">25 min · Fish · French · have 6 of 8</div></div><span class="r">♡</span></div>
+              <div class="li"><div class="img">photo</div><div><div class="t">Creamy pesto orzo with crispy salmon</div><div class="m">30 min · Fish · Italian · have 5 of 9</div></div><span class="r">♡</span></div>
+              <div class="li"><div class="img">photo</div><div><div class="t">Hoisin garlic noodles</div><div class="m">15 min · Veg · Chinese · have 7 of 7</div></div><span class="r">♡</span></div>
+              <div class="li"><div class="img">photo</div><div><div class="t">Chilli peanut crispy rice salad with honey soy salmon</div><div class="m">35 min · Fish · Korean · have 8 of 13</div></div><span class="r">♡</span></div>
+              <div class="li"><div class="img">photo</div><div><div class="t">Creamy mushroom and miso pasta</div><div class="m">20 min · Veg · Japanese · have 6 of 9</div></div><span class="r">♡</span></div>
+              <div class="li"><div class="img">photo</div><div><div class="t">Tofu dan dan noodles</div><div class="m">25 min · Veg · Chinese · have 5 of 11</div></div><span class="r">♡</span></div>
+            </div>
+            <i class="n">3</i>
+          </div>
+          <div class="fade" style="bottom:300px;height:80px"></div>
+          <div style="position:absolute;left:0;right:0;bottom:0;height:300px;background:#202020;z-index:4">
+            <div style="padding:10px 16px"><div class="field" style="background:var(--raise)">⌕ <span style="color:var(--ink)">cod|</span><span class="fx">☰ ●</span></div></div>
+            <div style="padding:4px 20px" class="meta">Suggestions: <span style="color:var(--ink)">cod</span> (ingredient, 9) · <span style="color:var(--ink)">Cod grenobloise</span> · <span style="color:var(--ink)">@thelisafeed</span></div>
+            <div style="margin:12px 10px 0;height:210px;border-radius:10px;background:var(--raise);display:grid;place-items:center;color:var(--soft);font-size:12px">keyboard</div>
+          </div>
+          <i class="n">4</i>
+        </div>
+        <ul class="notes">
+          <li><i class="n">1</i><span><b>The whole library lives here:</b> sides, baking, breakfasts and sauces too, not only suppers.</span></li>
+          <li><i class="n">2</i><span><b>Active filters as removable chips,</b> and the order shown. Who's eating is always one of them.</span></li>
+          <li><i class="n">3</i><span><b>Rows designed for long names.</b> Each row shows time, the meta line and how many ingredients we have.</span></li>
+          <li><i class="n">4</i><span><b>Search stays at the bottom while typing.</b> Suggestions are grouped as ingredients, recipes and creators. ☰ opens filters (4), and a dot shows when filters are on.</span></li>
+        </ul>
+      </div>
+
+      <!-- 4 FILTERS -->
+      <div class="shot">
+        <h3>4 · Filters <span>sheet</span></h3>
+        <div class="ph">
+          <div class="sb"><span>18:42</span><span>●●● ▮</span></div>
+          <div class="dim"></div>
+          <div class="sheet" style="top:70px">
+            <div class="grab"></div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline"><span class="h">Narrow it down</span><span class="meta">Clear all</span></div>
+            <div class="lbl" style="margin-top:16px">Who's eating</div>
+            <div class="chips" style="margin-top:6px"><span class="chip on">Both of us</span><span class="chip">Mary</span><span class="chip">Craig alone</span></div>
+            <i class="n">1</i>
+            <div class="lbl" style="margin-top:14px">Meal</div>
+            <div class="chips wrap" style="margin-top:6px"><span class="chip">Breakfast</span><span class="chip">Lunch</span><span class="chip on">Supper</span><span class="chip">Sides</span><span class="chip">Baking &amp; sweet</span><span class="chip">Sauces</span></div>
+            <i class="n">2</i>
+            <div class="lbl" style="margin-top:14px">Time</div>
+            <div class="chips wrap" style="margin-top:6px"><span class="chip">Under 20 min</span><span class="chip on">Under 30 min</span><span class="chip">An hour or so</span><span class="chip">Slow</span></div>
+            <div class="lbl" style="margin-top:14px">Show</div>
+            <div class="chips wrap" style="margin-top:6px"><span class="chip">Our list</span><span class="chip">Favourites</span><span class="chip">New to us</span><span class="chip">Cooked before</span><span class="chip">Needs checking</span></div>
+            <i class="n">3</i>
+            <div class="lbl" style="margin-top:14px">Main ingredient · Cuisine · How it's cooked · Diet</div>
+            <div class="meta" style="margin-top:4px">each opens a short list</div>
+            <div class="lbl" style="margin-top:14px">Order by</div>
+            <div class="chips wrap" style="margin-top:6px"><span class="chip on">Best for now</span><span class="chip">Quickest</span><span class="chip">Most we have</span><span class="chip">Recently saved</span></div>
+            <div style="position:absolute;left:20px;right:20px;bottom:30px"><div class="btn">Show 38 recipes</div></div>
+          </div>
+        </div>
+        <ul class="notes">
+          <li><i class="n">1</i><span><b>Who's eating</b> defaults from the day. Craig alone allows meat.</span></li>
+          <li><i class="n">2</i><span><b>Meal by time of day and type</b> (from your round 1 notes). Several can be on.</span></li>
+          <li><i class="n">3</i><span><b>"New to us" is a filter here,</b> not a section on Home.</span></li>
+          <li><span></span><span>The count on the button updates live. The sheet closes to the library, never to Home.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= COOK ================= -->
+  <section class="part" id="cook">
+    <h2>Recipe and cooking <small>the focused flow, no tab bar</small></h2>
+    <p class="sub">From choosing to focus. The tab bar goes away when a recipe opens, and comes back when you leave the flow.</p>
+    <div class="row">
+
+      <!-- 5 RECIPE -->
+      <div class="shot">
+        <h3>5 · Recipe</h3>
+        <div class="ph">
+          <div class="img" style="position:absolute;left:0;right:0;top:0;height:300px;border-radius:0">video, poster first · ▶ Watch the Reel</div>
+          <div style="position:absolute;top:52px;left:16px;right:16px;display:flex;justify-content:space-between;z-index:2"><span class="chip">‹</span><span class="chip">⋯</span></div>
+          <i class="n">1</i>
+          <div class="in" style="padding-top:316px">
+            <div class="meta">Fish · Japanese · weeknight</div>
+            <div class="h" style="font-size:24px;margin-top:4px">Japanese mirin baked cod</div>
+            <div class="meta" style="margin-top:4px">Lisa @thelisafeed</div>
+            <div style="display:flex;justify-content:space-between;margin-top:12px;font-size:14px"><span>Takes about 1 hr 22 min<br><span class="meta">incl. 1 hr marinating</span></span><span style="text-align:right">Serves 2 ▾<br><span class="meta">not given; we guessed</span></span></div>
+            <i class="n">2</i>
+            <div style="display:flex;gap:10px;margin-top:14px;align-items:center"><div class="btn" style="flex:1">+ Add to our list</div><span class="chip">♡ C</span><span class="chip">♡ M</span></div>
+            <i class="n">3</i>
+            <div class="hrow" style="margin-top:20px"><span class="h">Ingredients</span><span class="meta">have 6 of 8</span></div>
+            <i class="n">4</i>
+            <div class="list" style="gap:8px;font-size:14.5px">
+              <div style="display:flex;justify-content:space-between"><span>500 g cod, 4 fillets</span><span class="meta">have</span></div>
+              <div style="display:flex;justify-content:space-between"><span>3 tbsp mirin</span><span class="meta">have</span></div>
+              <div style="display:flex;justify-content:space-between"><span>1 tbsp sake</span><span style="color:var(--ink)">need · add to buy</span></div>
+              <div style="display:flex;justify-content:space-between"><span>spring onion</span><span style="color:var(--ink)">need · add to buy</span></div>
+            </div>
+            <div class="meta" style="margin-top:10px">+ 4 more · then Method (7 steps, timers, ▶ jumps the video)</div>
+          </div>
+          <div class="pinned"><div class="btn">Start cooking</div></div>
+          <i class="n">5</i>
+        </div>
+        <ul class="notes">
+          <li><i class="n">1</i><span><b>Video at the top,</b> poster first. ▶ in a step jumps the video to that moment.</span></li>
+          <li><i class="n">2</i><span><b>A real time, never "time to check".</b> Serving numbers scale the quantities.</span></li>
+          <li><i class="n">3</i><span><b>One primary action: Add to our list.</b> ♡ is per person (C and M), so we can see agreement.</span></li>
+          <li><i class="n">4</i><span><b>Have and need, read from the Kitchen</b> (way in d). Tapping a need offers "We have it" or "Add to buy". A swap shows here if one is in the data.</span></li>
+          <li><i class="n">5</i><span><b>Start cooking is always pinned at the bottom.</b> If you're halfway through, it reads "Carry on: step 3 of 7".</span></li>
+        </ul>
+      </div>
+
+      <!-- 6 COOK MODE -->
+      <div class="shot">
+        <h3>6 · Cook mode</h3>
+        <div class="ph" style="background:#121212">
+          <div class="sb"><span>18:51</span><span>●●● ▮</span></div>
+          <div class="in">
+            <div style="display:flex;justify-content:space-between;align-items:center"><span class="chip">×</span><span class="meta">Step 2 of 7</span><span class="chip">Ingredients</span></div>
+            <i class="n">1</i>
+            <div style="display:flex;gap:6px;margin-top:12px"><i style="flex:1;height:4px;border-radius:2px;background:var(--hi)"></i><i style="flex:1;height:4px;border-radius:2px;background:var(--hi)"></i><i style="flex:1;height:4px;border-radius:2px;background:var(--fill)"></i><i style="flex:1;height:4px;border-radius:2px;background:var(--fill)"></i><i style="flex:1;height:4px;border-radius:2px;background:var(--fill)"></i><i style="flex:1;height:4px;border-radius:2px;background:var(--fill)"></i><i style="flex:1;height:4px;border-radius:2px;background:var(--fill)"></i></div>
+            <div class="banner" style="margin-top:14px;display:flex;justify-content:space-between;align-items:center"><span>Marinating<br><span class="meta">of 60 min</span></span><span style="font-size:34px;font-weight:300;font-variant-numeric:tabular-nums">52:14</span><span class="chip">❚❚</span></div>
+            <i class="n">2</i>
+            <div style="font-size:27px;line-height:1.3;font-weight:300;margin-top:26px">Turn the cod in the marinade so every side is coated, then cover and leave to marinate for at least 1 hour (the fridge is the safe place).</div>
+            <i class="n">3</i>
+            <div class="meta" style="margin-top:20px">For this step</div><div>cod</div>
+            <div class="meta" style="margin-top:12px">While you wait</div><div>Heat the oven to 180°C fan near the end.</div>
+            <div style="opacity:.6;margin-top:26px"><div class="meta">Next · step 3</div><div style="font-size:18px">Line a tray with baking paper and lay the cod skin-side down.</div></div>
+            <i class="n">4</i>
+          </div>
+          <div style="position:absolute;left:0;right:0;bottom:0;display:grid;grid-template-columns:1fr 1.6fr;height:92px;z-index:4"><div style="background:var(--raise);display:grid;place-items:center">‹ Back</div><div style="background:var(--hi);color:#111;display:grid;place-items:center">Next ›</div></div>
+          <i class="n">5</i>
+        </div>
+        <ul class="notes">
+          <li><i class="n">1</i><span><b>× keeps your place</b> and shows "Carry on cooking" everywhere. Ingredients open as a sheet.</span></li>
+          <li><i class="n">2</i><span><b>Timers stay on screen,</b> stacked if there are several, and you can start one from the step. Started timers keep running across steps.</span></li>
+          <li><i class="n">3</i><span><b>One step, big.</b> The screen stays on (wake lock).</span></li>
+          <li><i class="n">4</i><span><b>For this step, While you wait, and the next step</b> at 0.6 opacity.</span></li>
+          <li><i class="n">5</i><span><b>Back and Next joined, 92px tall.</b> Swiping works too. On the last step, Next becomes "Done", which opens the story (7).</span></li>
+        </ul>
+      </div>
+
+      <!-- 7 STORY -->
+      <div class="shot">
+        <h3>7 · Cook-log story <span>after Done</span></h3>
+        <div class="ph">
+          <div class="sb"><span>20:14</span><span>●●● ▮</span></div>
+          <div class="in">
+            <div class="meta">How did it go?</div>
+            <div style="font-size:24px;line-height:1.55;font-weight:300;margin-top:14px">On <span class="blank">Tuesday</span>, <span class="blank">Craig</span> made the <span class="blank">Japanese mirin baked cod</span>. It was <span class="blank">lovely</span>, but it <span class="blank">was a bit sweet</span>. Next time, <span class="open">&nbsp;</span>.</div>
+            <i class="n">1</i>
+            <div style="margin-top:22px" class="banner">Used up anything?<div class="chips wrap" style="margin-top:8px"><span class="chip on">cod ✓</span><span class="chip">spinach</span><span class="chip">spring onion</span></div><div class="meta" style="margin-top:6px">Ticked items leave the Kitchen</div></div>
+            <i class="n">2</i>
+          </div>
+          <div class="sheet" style="top:520px;background:#262626">
+            <div class="grab"></div>
+            <div class="lbl">Next time…</div>
+            <div class="chips wrap" style="margin-top:10px"><span class="chip">change nothing</span><span class="chip on">use less sugar</span><span class="chip">add more ginger</span><span class="chip">marinate overnight</span><span class="chip">make it ahead</span><span class="chip ghost">write my own</span></div>
+            <i class="n">3</i>
+            <div style="position:absolute;left:20px;right:20px;bottom:30px"><div class="btn">Save to our log</div></div>
+          </div>
+        </div>
+        <ul class="notes">
+          <li><i class="n">1</i><span><b>Fill in the blanks, with game sounds.</b> The cook defaults to whoever is signed in. Tap any blank to change it.</span></li>
+          <li><i class="n">2</i><span><b>Used up?</b> Offers the recipe's fresh ingredients, so the Kitchen stays true (way in e). Ticking one marks it as out.</span></li>
+          <li><i class="n">3</i><span><b>A change for next time makes "our version"</b> of the recipe. The original stays available.</span></li>
+          <li><span></span><span>Saving takes the dish off Our list after asking, then returns you to where you started cooking from.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TOGETHER ================= -->
+  <section class="part" id="together">
+    <h2>Our list and log <small>shared between both phones</small></h2>
+    <div class="row">
+
+      <!-- 8 OUR LIST -->
+      <div class="shot">
+        <h3>8 · Our list <span>Our list tab</span></h3>
+        <div class="ph">
+          <div class="sb"><span>18:42</span><span>●●● ▮</span></div>
+          <div class="in">
+            <div style="display:flex;justify-content:space-between;align-items:center"><span class="h" style="font-size:26px;font-weight:300">Our list</span><span class="chip">+ Add a recipe</span></div>
+            <i class="n" data-side="r">1</i>
+            <div class="lbl" style="margin-top:18px">Next up</div>
+            <div class="li" style="grid-template-columns:96px 1fr;margin-top:8px"><div class="img" style="width:96px;height:120px">photo</div><div><div class="t" style="font-size:18px">Japanese mirin baked cod</div><div class="m">Mary added on Sunday · 1 hr 22</div><div class="m" style="margin-top:4px">♡ Mary · ♡ Craig</div></div></div>
+            <i class="n">2</i>
+            <div class="lbl" style="margin-top:22px">Then</div>
+            <div class="list" style="margin-top:8px">
+              <div class="li"><div class="img">photo</div><div><div class="t">Chilli peanut crispy rice salad with honey soy salmon</div><div class="m">Craig · Thursday · ♡ Craig</div></div><span class="r">≡</span></div>
+              <div class="li"><div class="img">photo</div><div><div class="t">Charred hispi cabbage with whipped miso tofu</div><div class="m">Mary · Friday · Craig hasn't looked</div></div><span class="r">≡</span></div>
+              <div class="li"><div class="img">photo</div><div><div class="t">Scarpaccia with pepper and onion</div><div class="m">Craig · last week</div></div><span class="r">≡</span></div>
+            </div>
+            <i class="n" data-side="r">3</i>
+            <div class="lbl" style="margin-top:26px">Saved but not on the list · 493</div>
+            <div class="meta" style="margin-top:4px">Browse in the library: Show › Not on our list</div>
+            <i class="n">4</i>
+          </div>
+          <div class="tabs"><div>Tonight</div><div class="on">Our list</div><div>Kitchen</div><div>Log</div></div>
+        </div>
+        <ul class="notes">
+          <li><i class="n">1</i><span><b>Add a recipe lives here</b> (13). Sharing a Reel from Instagram lands here too.</span></li>
+          <li><i class="n">2</i><span><b>Next up is bigger.</b> It shows who added it, when, and both reactions. Things we both like rise first.</span></li>
+          <li><i class="n">3</i><span><b>Drag ≡ to reorder.</b> Swipe left to remove. Changes reach the other phone.</span></li>
+          <li><i class="n">4</i><span><b>Empty state:</b> "Nothing queued. Tap ♡ or + Add to our list on any recipe."</span></li>
+        </ul>
+      </div>
+
+      <!-- 9 LOG -->
+      <div class="shot">
+        <h3>9 · Our log <span>Log tab</span></h3>
+        <div class="ph">
+          <div class="sb"><span>18:42</span><span>●●● ▮</span></div>
+          <div class="in">
+            <span class="h" style="font-size:26px;font-weight:300">Our log</span>
+            <div class="seg" style="margin-top:14px"><div class="on">By date</div><div>By dish</div></div>
+            <i class="n">1</i>
+            <div class="lbl" style="margin-top:20px">This week</div>
+            <div class="li" style="grid-template-columns:56px 1fr;margin-top:8px;align-items:start"><div class="img">photo</div><div style="font-size:15px;line-height:1.45">On Tuesday, Craig made the Japanese mirin baked cod. It was lovely, but a bit sweet. Next time, less sugar.</div></div>
+            <div class="li" style="grid-template-columns:56px 1fr;margin-top:14px;align-items:start"><div class="img">photo</div><div style="font-size:15px;line-height:1.45">On Sunday, Mary made pasta e ceci. It was just right. We'll make it again soon.</div></div>
+            <i class="n">2</i>
+            <div class="lbl" style="margin-top:22px">September</div>
+            <div class="li" style="grid-template-columns:56px 1fr;margin-top:8px;align-items:start"><div class="img">photo</div><div style="font-size:15px;line-height:1.45">On the 28th, both of us made the sukiyaki. It was a lot of work, but worth it.</div></div>
+            <div class="meta" style="margin-top:22px">Tap a story → the dish's history: every time we've made it, and our version against the original.</div>
+            <i class="n">3</i>
+          </div>
+          <div class="tabs"><div>Tonight</div><div>Our list</div><div>Kitchen</div><div class="on">Log</div></div>
+        </div>
+        <ul class="notes">
+          <li><i class="n">1</i><span><b>By date or by dish.</b> By dish groups every time we've made something.</span></li>
+          <li><i class="n">2</i><span><b>The stories are the log.</b> No stars and no scores. "Lovely" lifts a dish in suggestions, and "not for us" sinks it.</span></li>
+          <li><i class="n">3</i><span><b>A dish's history</b> shows our versions and the notes we both wrote.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= KITCHEN ================= -->
+  <section class="part" id="kitchen">
+    <h2>Kitchen and ingredients <small>the new part</small></h2>
+    <p class="sub">One list of what we have. It feeds With, the have/need marks on recipes, "Most we have" and the ranking. It's kept up by the five ways in described under Navigation.</p>
+    <div class="row">
+
+      <!-- 10 KITCHEN -->
+      <div class="shot">
+        <h3>10 · Kitchen <span>Kitchen tab · We have</span></h3>
+        <div class="ph">
+          <div class="sb"><span>18:42</span><span>●●● ▮</span></div>
+          <div class="in">
+            <span class="h" style="font-size:26px;font-weight:300">Kitchen</span>
+            <div class="seg" style="margin-top:14px"><div class="on">We have · 34</div><div>To buy · 3</div></div>
+            <i class="n">1</i>
+            <div class="banner" style="margin-top:16px;display:flex;justify-content:space-between;align-items:center;gap:10px"><div>The box is in<div class="meta">9 things added today · cod, spinach, cavolo nero…</div></div><span class="chip" style="flex:none">Review</span></div>
+            <i class="n">2</i>
+            <div class="hrow" style="margin-top:20px"><span class="h">Use soon</span><span class="meta">fridge · oldest first</span></div>
+            <i class="n">3</i>
+            <div class="list" style="gap:10px;font-size:15px">
+              <div style="display:flex;justify-content:space-between;align-items:center"><span>cod <span class="meta">· bought Sat</span></span><span class="state">have</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center"><span>spinach <span class="meta">· bought Sat</span></span><span class="state low">running low</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center"><span>crème fraîche</span><span class="state">have</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center"><span>mushrooms</span><span class="state">have</span></div>
+            </div>
+            <div class="hrow" style="margin-top:20px"><span class="h">Cupboard</span><span class="meta">14</span></div>
+            <div class="meta" style="font-size:14px;color:var(--ink);line-height:1.6">chickpeas · orzo · coconut milk · rice noodles · butter beans · mirin · sake <span class="state" style="margin-left:4px">out</span> · …</div>
+            <div class="hrow" style="margin-top:20px"><span class="h">Always in</span><span class="meta">32 staples · edit</span></div>
+            <div class="meta">salt, oil, butter, eggs, onions, garlic… assumed, never asked about</div>
+            <i class="n">4</i>
+          </div>
+          <div class="search"><div style="display:flex;gap:10px"><div class="field" style="flex:1">+ <span>Add to the Kitchen</span></div><span class="chip" style="height:46px;border-radius:23px">Cook with these</span></div></div>
+          <i class="n">5</i>
+          <div class="tabs"><div>Tonight</div><div>Our list</div><div class="on">Kitchen</div><div>Log</div></div>
+        </div>
+        <ul class="notes">
+          <li><i class="n">1</i><span><b>Two views: We have and To buy.</b> To buy depends on the shopping list being in v1.</span></li>
+          <li><i class="n">2</i><span><b>Box day (way in a).</b> On Tuesday this asks "Is the box in?", and one tap adds the week's box. Afterwards it shows what came, as here, with Review and undo.</span></li>
+          <li><i class="n">3</i><span><b>Use soon, oldest first.</b> This also orders the With picker. Tapping an item cycles have → running low → out, and swiping removes it.</span></li>
+          <li><i class="n">4</i><span><b>Staples are assumed,</b> so the list stays short. You edit them once, in settings.</span></li>
+          <li><i class="n">5</i><span><b>Add at the bottom, in the same place as search on Tonight.</b> "Cook with these" sends your selected items to With on Tonight.</span></li>
+        </ul>
+      </div>
+
+      <!-- 11 ADD TO KITCHEN -->
+      <div class="shot">
+        <h3>11 · Add to the Kitchen <span>sheet</span></h3>
+        <div class="ph">
+          <div class="sb"><span>18:42</span><span>●●● ▮</span></div>
+          <div class="dim"></div>
+          <div class="sheet" style="top:70px">
+            <div class="grab"></div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline"><span class="h">Add to the Kitchen</span><span class="meta">Done</span></div>
+            <div class="field" style="margin-top:14px;color:var(--ink)">⌕ lee|</div>
+            <i class="n">1</i>
+            <div class="list" style="gap:10px;margin-top:12px;font-size:15px">
+              <div style="display:flex;justify-content:space-between"><span>leeks</span><span class="chip" style="height:32px">+ fridge</span></div>
+              <div style="display:flex;justify-content:space-between"><span>leek and potato… <span class="meta">(a recipe)</span></span><span class="meta">›</span></div>
+            </div>
+            <div class="lbl" style="margin-top:20px">From this week's box</div>
+            <i class="n">2</i>
+            <div class="list" style="gap:10px;margin-top:8px;font-size:15px">
+              <div style="display:flex;gap:10px;align-items:center"><span class="tick on">✓</span>cod fillets</div>
+              <div style="display:flex;gap:10px;align-items:center"><span class="tick on">✓</span>spinach</div>
+              <div style="display:flex;gap:10px;align-items:center"><span class="tick on">✓</span>cavolo nero</div>
+              <div style="display:flex;gap:10px;align-items:center"><span class="tick">&nbsp;</span>squash <span class="meta">(not in this week)</span></div>
+              <div class="meta">+ 5 more</div>
+            </div>
+            <div class="lbl" style="margin-top:20px">Recently used up</div>
+            <div class="chips wrap" style="margin-top:8px"><span class="chip">+ sake</span><span class="chip">+ spring onions</span><span class="chip">+ lemons</span></div>
+            <i class="n">3</i>
+            <div class="lbl" style="margin-top:20px">Other ways</div>
+            <div class="meta" style="color:var(--ink);margin-top:6px">Paste a list · Photo of a receipt (later) · Box email (later)</div>
+            <i class="n">4</i>
+            <div style="position:absolute;left:20px;right:20px;bottom:30px"><div class="btn">Add 3 to the Kitchen</div></div>
+          </div>
+        </div>
+        <ul class="notes">
+          <li><i class="n">1</i><span><b>Type to add.</b> It matches the ingredient names used across the recipes (cleaned up, so miso and white miso are one), and puts each item in fridge or cupboard.</span></li>
+          <li><i class="n">2</i><span><b>The box as a checklist.</b> It starts from last week's box until the email feed exists.</span></li>
+          <li><i class="n">3</i><span><b>Recently used up</b> makes restocking one tap.</span></li>
+          <li><i class="n">4</i><span><b>Pasting a list works now.</b> Receipt photos and the box email come later; they need the home server.</span></li>
+        </ul>
+      </div>
+
+      <!-- 12 TO BUY -->
+      <div class="shot">
+        <h3>12 · To buy <span>if the shopping list is in v1</span></h3>
+        <div class="ph">
+          <div class="sb"><span>18:42</span><span>●●● ▮</span></div>
+          <div class="in">
+            <span class="h" style="font-size:26px;font-weight:300">Kitchen</span>
+            <div class="seg" style="margin-top:14px"><div>We have · 34</div><div class="on">To buy · 3</div></div>
+            <div class="lbl" style="margin-top:22px">For Japanese mirin baked cod · Tuesday</div>
+            <i class="n">1</i>
+            <div class="list" style="gap:12px;margin-top:10px;font-size:16px">
+              <div style="display:flex;gap:12px;align-items:center"><span class="tick">&nbsp;</span>sake</div>
+              <div style="display:flex;gap:12px;align-items:center"><span class="tick on">✓</span><span style="color:var(--mid);text-decoration:line-through">spring onions</span></div>
+            </div>
+            <div class="lbl" style="margin-top:22px">Running low</div>
+            <i class="n">2</i>
+            <div class="list" style="gap:12px;margin-top:10px;font-size:16px">
+              <div style="display:flex;gap:12px;align-items:center"><span class="tick">&nbsp;</span>spinach</div>
+            </div>
+            <div class="meta" style="margin-top:28px;max-width:30ch">Ticked items move into We have, so the Kitchen fills itself as you shop.</div>
+            <i class="n">3</i>
+          </div>
+          <div class="search"><div style="display:flex;gap:10px"><div class="field" style="flex:1">+ <span>Add to buy</span></div><span class="chip" style="height:46px;border-radius:23px">Copy list</span></div></div>
+          <i class="n">4</i>
+          <div class="tabs"><div>Tonight</div><div>Our list</div><div class="on">Kitchen</div><div>Log</div></div>
+        </div>
+        <ul class="notes">
+          <li><i class="n">1</i><span><b>Grouped by the recipe that needs it,</b> filled from "Add to buy" on recipes (5).</span></li>
+          <li><i class="n">2</i><span><b>Running low</b> items from the Kitchen join automatically.</span></li>
+          <li><i class="n">3</i><span><b>Ticked means bought,</b> and the item moves into the Kitchen.</span></li>
+          <li><i class="n">4</i><span><b>Copy list</b> pastes it into Notes or a message. There's no store integration.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MORE ================= -->
+  <section class="part" id="more">
+    <h2>Add a recipe, settings</h2>
+    <div class="row">
+
+      <!-- 13 ADD RECIPE -->
+      <div class="shot">
+        <h3>13 · Add a recipe <span>from Our list, or share a Reel</span></h3>
+        <div class="ph">
+          <div class="sb"><span>18:42</span><span>●●● ▮</span></div>
+          <div class="in">
+            <div style="display:flex;justify-content:space-between;align-items:center"><span class="chip">×</span><span class="meta">Add a recipe</span><span style="width:36px"></span></div>
+            <div class="field" style="margin-top:20px;color:var(--ink)">instagram.com/reel/DXxMMMdJx5t</div>
+            <i class="n">1</i>
+            <div class="meta" style="margin-top:8px">A Reel, a website or a YouTube link. Or paste the recipe as text.</div>
+            <div class="btn" style="margin-top:16px">Add</div>
+            <div class="lbl" style="margin-top:30px">Being added</div>
+            <i class="n">2</i>
+            <div class="li" style="margin-top:10px"><div class="img">cover</div><div><div class="t">Miso butter mushrooms on toast</div><div class="m">Video ✓ · transcript ✓ · writing it up…</div></div><span></span></div>
+            <div class="li" style="margin-top:14px"><div class="img">cover</div><div><div class="t">Roast sweet potatoes with spinach and cannellini cream</div><div class="m">Ready · 2 things to check</div></div><span class="r">›</span></div>
+            <i class="n" data-side="r">3</i>
+            <div class="meta" style="margin-top:26px">New recipes join Our list automatically. Untick that here if you're only saving one for later.</div>
+            <div style="display:flex;gap:10px;align-items:center;margin-top:10px"><span class="tick on">✓</span>Add to our list when ready</div>
+          </div>
+        </div>
+        <ul class="notes">
+          <li><i class="n">1</i><span><b>Paste a link, or share from Instagram</b> to the app, which lands here.</span></li>
+          <li><i class="n">2</i><span><b>Honest progress:</b> it runs the same steps as our pipeline. The home server does the work, so it's minutes, not seconds.</span></li>
+          <li><i class="n">3</i><span><b>"Things to check"</b> shows only the gaps the creator never gave: you confirm or fill each one.</span></li>
+        </ul>
+      </div>
+
+      <!-- 14 SETTINGS -->
+      <div class="shot">
+        <h3>14 · Household <span>from your initial on Tonight</span></h3>
+        <div class="ph">
+          <div class="sb"><span>18:42</span><span>●●● ▮</span></div>
+          <div class="in">
+            <div style="display:flex;justify-content:space-between;align-items:center"><span class="chip">‹</span><span class="meta">Household</span><span style="width:36px"></span></div>
+            <div class="lbl" style="margin-top:22px">People</div>
+            <div class="list" style="gap:12px;margin-top:10px;font-size:15px">
+              <div style="display:flex;justify-content:space-between"><span>Craig <span class="meta">· signed in</span></span><span class="meta">pescatarian with Mary, meat alone ›</span></div>
+              <div style="display:flex;justify-content:space-between"><span>Mary</span><span class="meta">fish and veg ›</span></div>
+            </div>
+            <i class="n">1</i>
+            <div class="lbl" style="margin-top:24px">Usually eating</div>
+            <div class="chips" style="margin-top:8px"><span class="chip on">Both of us</span><span class="chip">Mary</span><span class="chip">Craig alone</span></div>
+            <div class="meta" style="margin-top:6px">Per day if you like: e.g. Thursday, Craig alone</div>
+            <i class="n">2</i>
+            <div class="lbl" style="margin-top:24px">Kitchen</div>
+            <div class="list" style="gap:10px;margin-top:10px;font-size:15px">
+              <div style="display:flex;justify-content:space-between"><span>Oven</span><span class="meta">fan, °C ›</span></div>
+              <div style="display:flex;justify-content:space-between"><span>Hob</span><span class="meta">induction 1–9 ›</span></div>
+              <div style="display:flex;justify-content:space-between"><span>Units</span><span class="meta">grams, ml ›</span></div>
+              <div style="display:flex;justify-content:space-between"><span>Box day</span><span class="meta">Tuesday ›</span></div>
+              <div style="display:flex;justify-content:space-between"><span>Always in (staples)</span><span class="meta">32 ›</span></div>
+            </div>
+            <i class="n">3</i>
+            <div class="lbl" style="margin-top:24px">App</div>
+            <div class="list" style="gap:10px;margin-top:10px;font-size:15px">
+              <div style="display:flex;justify-content:space-between"><span>Sounds</span><span class="meta">on ›</span></div>
+              <div style="display:flex;justify-content:space-between"><span>Season nudge</span><span class="meta">gentle ›</span></div>
+              <div style="display:flex;justify-content:space-between"><span>Light or dark</span><span class="meta">dark ›</span></div>
+            </div>
+          </div>
+        </div>
+        <ul class="notes">
+          <li><i class="n">1</i><span><b>People and what they eat.</b> These drive Who's eating and the meat swaps.</span></li>
+          <li><i class="n">2</i><span><b>The usual diner,</b> optionally per day. Home only shows a chip when tonight is different.</span></li>
+          <li><i class="n">3</i><span><b>Kitchen facts</b> set the units and the weekly rhythm. Staples are edited here.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DECIDE ================= -->
+  <section class="part" id="decide">
+    <h2>Decisions for you</h2>
+    <p class="sub">These change where things live, so they need settling before any more visual design.</p>
+    <div class="decide">
+      <div class="dq">
+        <h3>1 · Navigation model</h3>
+        <p><b>Recommended: four tabs</b> (Tonight · Our list · Kitchen · Log), with search above the tabs on Tonight. Each thing has one obvious home.</p>
+        <p>Alternative: keep only the search bar (round 1 Index), with Our list, Kitchen and Log behind a menu. It's calmer, but the Kitchen gets buried, and you'll need it at the fridge.</p>
+      </div>
+      <div class="dq">
+        <h3>2 · What the Kitchen tracks</h3>
+        <p><b>Recommended: have / running low / out,</b> with staples assumed. No quantities.</p>
+        <p>Quantities ("200 g spinach left") would make "have X of Y" exact, but nobody keeps them up to date.</p>
+      </div>
+      <div class="dq">
+        <h3>3 · Shopping list in v1?</h3>
+        <p>If <b>yes</b>, screen 12 is the To buy view in the Kitchen and recipes get "Add to buy". If <b>no</b>, the Kitchen is a single list, and recipes only show have / need.</p>
+      </div>
+      <div class="dq">
+        <h3>4 · The box</h3>
+        <p><b>For now:</b> a Tuesday prompt with last week's box as a checklist. <b>Later:</b> the Abel &amp; Cole email adds it on its own, once the inbox is connected.</p>
+      </div>
+      <div class="dq">
+        <h3>5 · Where Add a recipe lives</h3>
+        <p><b>Recommended: on Our list,</b> because new saves are usually things you want to cook. The share sheet from Instagram is the main way in anyway.</p>
+      </div>
+    </div>
+  </section>
+</div>
+<script>
+/* Place each numbered marker beside the element just before it, in the phone's left (or right) gutter. */
+function placeMarkers(){
+  document.querySelectorAll('.ph').forEach(ph=>{
+    const pr=ph.getBoundingClientRect(), k=ph.offsetWidth/pr.width;
+    ph.querySelectorAll('i.n').forEach(n=>{
+      const t=n._t||(n._t=n.previousElementSibling); if(!t) return;
+      if(n.parentElement!==ph) ph.appendChild(n);
+      const r=t.getBoundingClientRect();
+      const top=(r.top-pr.top)*k + Math.min(r.height*k/2, 18) - 10;
+      n.style.top=Math.max(48,Math.min(top,ph.offsetHeight-26))+'px';
+      if(n.dataset.side==='r'){ n.style.right='3px'; n.style.left='auto'; } else n.style.left='2px';
+    });
+  });
+}
+addEventListener('load',placeMarkers); addEventListener('resize',placeMarkers);
+</script>
+</body>
+</html>

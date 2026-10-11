@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1 · Cinema</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --page:#0b0b0b; --black:#000; --white:#f3ece4; --yolk:#f2c75c;
+  --w80:rgba(243,236,228,.8); --w62:rgba(243,236,228,.62); --w45:rgba(243,236,228,.45); --w12:rgba(243,236,228,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--page);color:var(--white);font-family:Jost,system-ui,sans-serif;font-weight:300;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.ico{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round;display:block}
+.tab{font-variant-numeric:tabular-nums}
+
+/* ---------------- page ---------------- */
+.page{max-width:1480px;margin:0 auto;padding:64px 32px 96px}
+.head{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px 80px;align-items:end;margin:0 0 72px}
+.eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--w45);font-weight:400}
+.head h1{font-weight:200;font-size:88px;line-height:.95;letter-spacing:-.035em;margin-top:18px}
+.head .idea{font-size:21px;line-height:1.4;color:var(--w80);margin-top:22px;max-width:30ch}
+.head .built{font-size:14px;line-height:1.6;color:var(--w62);margin-top:22px;max-width:52ch}
+.head .built em{font-style:normal;color:var(--w45);letter-spacing:.16em;text-transform:uppercase;font-size:11px;font-weight:400;margin-right:10px}
+.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:36px 48px}
+.choices dt{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--w45);font-weight:400}
+.choices dd{font-size:16px;line-height:1.5;margin-top:10px;color:var(--w80)}
+.choices dd .sw{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:1px}
+
+.frames{display:flex;flex-wrap:wrap;gap:56px 40px;justify-content:center;align-items:flex-start}
+.frame{display:flex;flex-direction:column;gap:18px;width:390px}
+.cap{font-size:13px;color:var(--w45);letter-spacing:.04em;padding-left:4px;display:flex;gap:10px}
+.cap b{font-weight:400;color:var(--white)}
+
+.notes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:56px 96px;margin:96px auto 0;max-width:1100px}
+.notes h2{font-weight:200;font-size:34px;letter-spacing:-.02em;margin-bottom:22px}
+.notes ul{list-style:none;display:grid;gap:16px}
+.notes li{font-size:16px;line-height:1.55;color:var(--w80);max-width:48ch}
+
+/* ---------------- phone ---------------- */
+.phone{position:relative;width:390px;height:844px;border-radius:44px;overflow:hidden;background:#000;isolation:isolate;flex:none;
+  box-shadow:0 0 0 1px rgba(255,255,255,.05),0 50px 90px -40px rgba(0,0,0,.9)}
+.status{position:absolute;inset:0 0 auto 0;height:50px;display:flex;align-items:center;justify-content:space-between;
+  padding:4px 30px 0 36px;font-size:15px;font-weight:400;z-index:50;color:var(--white)}
+.status .r{display:flex;gap:6px;align-items:center}
+.homeind{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:3px;background:rgba(243,236,228,.7);z-index:60}
+.homeind.blend{background:#fff;mix-blend-mode:difference;opacity:.75}
+.media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:#000}
+.lab{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:400;color:var(--w45)}
+
+/* ---------------- 1 · landing ---------------- */
+.ld .media{object-position:50% 46%;filter:brightness(.84) saturate(.96)}
+.ld .shade{position:absolute;inset:0;z-index:1;background:
+  linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,0) 30%,rgba(0,0,0,.5) 44%,rgba(0,0,0,.86) 58%,#000 70%)}
+.ld .strip{position:absolute;inset:0 0 auto 0;height:206px;z-index:5;
+  background:linear-gradient(180deg,rgba(0,0,0,.62),rgba(0,0,0,.34) 70%,rgba(0,0,0,0));
+  backdrop-filter:blur(22px) saturate(1.15);-webkit-backdrop-filter:blur(22px) saturate(1.15);
+  -webkit-mask-image:linear-gradient(180deg,#000 72%,transparent);mask-image:linear-gradient(180deg,#000 72%,transparent)}
+.ld .ctx{position:absolute;top:56px;left:24px;right:24px;z-index:6;font-size:13px;color:var(--w80);letter-spacing:.01em}
+.ld .row{position:absolute;left:0;right:0;z-index:6;height:44px;display:flex;align-items:center}
+.ld .row .lab{flex:none;width:100px;white-space:nowrap;padding-left:24px;color:rgba(243,236,228,.55)}
+.ld .feel{top:84px}
+.ld .with{top:130px}
+.scrollx{display:flex;align-items:center;gap:2px;overflow:hidden;white-space:nowrap;flex:1;
+  -webkit-mask-image:linear-gradient(90deg,#000 82%,transparent);mask-image:linear-gradient(90deg,#000 82%,transparent)}
+.mood{height:44px;padding:0 9px;display:inline-flex;align-items:center;font-size:16px;color:rgba(243,236,228,.6);position:relative;flex:none}
+.mood.on{color:var(--white);font-weight:400}
+.mood.on::after{content:"";position:absolute;left:50%;bottom:6px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--white)}
+.ing{height:44px;display:inline-flex;align-items:center;gap:9px;padding:0 4px 0 6px;font-size:16px;color:var(--white);flex:none}
+.ing i{width:26px;height:26px;background-size:cover;background-position:center;display:block}
+.ing svg{width:14px;height:14px;stroke:rgba(243,236,228,.6);stroke-width:1.4;fill:none;stroke-linecap:round;margin:0 8px 0 0}
+.ing.add{color:rgba(243,236,228,.55);padding-left:8px}
+.ld .pager{position:absolute;right:13px;top:382px;z-index:6;display:grid;gap:5px}
+.ld .pager span{width:2px;height:14px;background:rgba(243,236,228,.28);border-radius:1px}
+.ld .pager span:first-child{background:var(--white);height:22px}
+.ld .lead{position:absolute;left:24px;right:44px;top:376px;z-index:6}
+.ld .lead .lab{color:var(--w62)}
+.ld .lead h2{font-weight:200;font-size:44px;line-height:1.0;letter-spacing:-.03em;margin-top:12px}
+.ld .lead .t{margin-top:14px;font-size:16px;white-space:nowrap}
+.ld .lead .t .why{color:var(--w62);font-size:14px;margin-left:10px}
+.ld .film{position:absolute;left:0;right:0;top:560px;z-index:6}
+.ld .film .hd{display:flex;justify-content:space-between;padding:0 24px;align-items:baseline}
+.ld .film .hd span:last-child{font-size:12px;color:var(--w45)}
+.ld .strip-row{display:flex;gap:12px;padding-left:16px;margin-top:12px;overflow:hidden}
+.fr{flex:none;width:150px}
+.fr .im{position:relative;height:82px;background-size:cover;background-position:center}
+.fr .im::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 45%,rgba(0,0,0,.6))}
+.fr .im b{position:absolute;left:8px;bottom:6px;z-index:2;font-weight:400;font-size:12px;letter-spacing:.02em}
+.fr h4{font-weight:300;font-size:14px;line-height:1.26;margin-top:9px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.fr p{font-size:12px;color:var(--w45);margin-top:4px;line-height:1.3}
+.ld .bar{position:absolute;left:0;right:0;bottom:0;height:92px;z-index:8;display:flex;align-items:flex-start;padding:14px 12px 0 14px;gap:4px;background:linear-gradient(180deg,rgba(0,0,0,0),#000 30%)}
+.ld .bar .s{flex:1;height:48px;display:flex;align-items:center;gap:12px;padding:0 10px;font-size:16px;color:rgba(243,236,228,.55)}
+.ld .bar .s .ico{color:var(--white)}
+.ld .bar .f{width:48px;height:48px;display:grid;place-items:center;position:relative}
+.ld .bar .f::after{content:"";position:absolute;top:11px;right:10px;width:5px;height:5px;border-radius:50%;background:var(--white)}
+
+/* below the fold */
+.fold{width:390px;height:566px;position:relative;overflow:hidden;background:#000;border-radius:0 0 44px 44px;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 40px);mask-image:linear-gradient(180deg,transparent 0,#000 40px)}
+.fold .sh{display:flex;align-items:baseline;justify-content:space-between;padding:0 24px;height:44px}
+.fold .sh h3{font-weight:200;font-size:26px;letter-spacing:-.02em}
+.fold .sh span{font-size:13px;color:var(--w45)}
+.fold .big{display:grid;grid-template-columns:232px 1fr;gap:2px;margin-top:10px;height:268px}
+.tile{position:relative;background-size:cover;background-position:center;overflow:hidden}
+.tile::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 30%,rgba(0,0,0,.55) 58%,rgba(0,0,0,.9))}
+.tile{filter:saturate(.95)}
+.tile .tx{position:absolute;left:14px;right:12px;bottom:12px;z-index:2}
+.tile h4{font-weight:300;font-size:17px;line-height:1.2}
+.tile p{font-size:12px;color:var(--w62);margin-top:4px}
+.fold .stack{display:grid;grid-template-rows:1fr 1fr;gap:2px}
+.fold .q{display:flex;gap:2px;margin-top:10px;height:150px}
+.fold .q .tile{flex:none;width:150px}
+.fold .q .tile h4{font-size:15px}
+
+/* ---------------- 2 · recipe ---------------- */
+.rc .media{object-position:50% 34%;filter:brightness(.8) saturate(.95)}
+.rc .shade{position:absolute;inset:0;z-index:1;background:
+  linear-gradient(180deg,rgba(0,0,0,.86) 0%,rgba(0,0,0,.66) 24%,rgba(0,0,0,.08) 40%,rgba(0,0,0,.1) 46%,rgba(0,0,0,.72) 56%,rgba(0,0,0,.9) 64%,#000 72%)}
+.rc .top{position:absolute;top:52px;left:8px;right:12px;z-index:5;display:flex;justify-content:space-between;align-items:center}
+.rc .top button{height:44px;min-width:44px;display:flex;align-items:center;gap:10px;justify-content:center}
+.rc .top .reel{font-size:15px;padding:0 6px 0 10px;color:var(--white)}
+.rc .ttl{position:absolute;left:24px;right:28px;top:104px;z-index:5}
+.rc .ttl .meta{font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:400;color:var(--w80)}
+.rc .ttl h2{font-weight:200;font-size:38px;line-height:1.0;letter-spacing:-.03em;margin-top:12px}
+.rc .ttl .by{font-size:14px;margin-top:12px;color:var(--w80)}
+.rc .ttl .by span{color:var(--w45);margin-left:6px}
+.rc .ttl .takes{font-size:14px;line-height:1.45;margin-top:12px;color:var(--white)}
+.rc .ttl .takes span{color:var(--w62)}
+.rc .chap{position:absolute;left:24px;right:24px;top:356px;z-index:5;display:flex;gap:3px;height:2px}
+.rc .chap span{height:2px;background:rgba(243,236,228,.22);border-radius:1px;position:relative;overflow:hidden}
+.rc .chap span.done{background:var(--white)}
+.rc .chap span.now::before{content:"";position:absolute;inset:0 55% 0 0;background:var(--white)}
+.rc .cues{position:absolute;left:24px;right:24px;top:372px;z-index:5}
+.cue .ts{font-size:12px;color:var(--w62);letter-spacing:.04em;display:flex;gap:10px;align-items:center}
+.cue .ts b{font-weight:400;color:var(--white)}
+.cue p{font-size:20px;line-height:1.28;margin-top:8px}
+.cue.next{opacity:.6;margin-top:14px}
+.cue.next p{font-size:15px;line-height:1.38;margin-top:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rc .acts{position:absolute;left:16px;right:16px;top:560px;z-index:5;display:flex;align-items:center;gap:6px}
+.pill{height:50px;padding:0 24px 0 20px;border-radius:25px;background:var(--yolk);color:#1a1408;font-size:17px;font-weight:400;display:inline-flex;align-items:center;gap:10px;letter-spacing:.005em;white-space:nowrap}
+.pill .ico{stroke-width:1.6;width:18px;height:18px}
+.rc .acts .heart{width:50px;height:50px;display:grid;place-items:center}
+.rc .acts .tm{margin-left:auto;text-align:right;font-size:13px;line-height:1.35;color:var(--w62);padding-right:8px}
+.rc .acts .tm b{font-weight:300;color:var(--white);font-size:15px;display:block}
+.rc .sheet{position:absolute;left:0;right:0;top:628px;bottom:0;z-index:6;background:rgba(14,13,12,.82);
+  backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px);padding:0 24px}
+.rc .sheet .grab{display:flex;justify-content:space-between;align-items:center;height:48px;margin-top:4px}
+.rc .sheet .grab h3{font-weight:300;font-size:19px;display:flex;align-items:center;gap:10px}
+.rc .sheet .grab h3 .ico{width:18px;height:18px;color:var(--w62)}
+.rc .sheet .grab span{font-size:13px;color:var(--w45)}
+.ings{display:grid;grid-template-columns:64px 1fr;row-gap:7px;font-size:15px;line-height:1.3}
+.ings dt{color:var(--w62);font-variant-numeric:tabular-nums}
+.rc .go{position:absolute;left:0;right:0;bottom:0;height:96px;z-index:7;background:linear-gradient(180deg,rgba(0,0,0,0),#000 26%);
+  display:flex;align-items:flex-start;justify-content:space-between;padding:26px 24px 0}
+.rc .go .b{font-size:21px;font-weight:300;display:flex;align-items:center;gap:12px;height:44px;margin-top:-8px}
+.rc .go .b .ico{width:20px;height:20px}
+.rc .go small{font-size:13px;color:var(--w45);line-height:28px}
+
+/* ---------------- 3 · cook ---------------- */
+.ck{background:#000}
+.ck .media{filter:blur(34px) brightness(.34) saturate(.7);transform:scale(1.3);object-position:50% 40%}
+.ck .shade{position:absolute;inset:0;z-index:1;background:radial-gradient(120% 70% at 50% 35%,rgba(0,0,0,.25),rgba(0,0,0,.8) 80%)}
+.ck .prog{position:absolute;top:0;left:0;right:0;height:3px;z-index:55;background:rgba(243,236,228,.1)}
+.ck .prog i{position:absolute;left:0;top:0;bottom:0;width:87.06%;background:var(--yolk)}
+.ck .top{position:absolute;top:52px;left:8px;right:12px;z-index:5;display:flex;justify-content:space-between;align-items:center}
+.ck .top button{width:44px;height:44px;display:grid;place-items:center}
+.ck .top .st{font-size:14px;color:var(--w62);letter-spacing:.02em}
+.ck .top .st b{font-weight:400;color:var(--white)}
+.ck .clock{position:absolute;left:24px;right:24px;top:108px;z-index:5;display:flex;align-items:flex-end;justify-content:space-between}
+.ck .clock .n{font-weight:200;font-size:96px;line-height:.86;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.ck .clock .m{text-align:right;font-size:13px;line-height:1.45;color:var(--w62);padding-bottom:4px}
+.ck .clock .m b{display:block;font-weight:300;color:var(--white);font-size:15px}
+.ck .step{position:absolute;left:24px;right:22px;top:244px;z-index:5;font-size:29px;line-height:1.24;letter-spacing:-.008em;font-weight:300}
+.ck .aside{position:absolute;left:24px;right:24px;top:488px;z-index:5;display:grid;gap:20px}
+.ck .aside .lab{color:var(--w45)}
+.ck .aside .v{display:flex;align-items:center;gap:12px;font-size:18px;margin-top:8px;line-height:1.35}
+.ck .aside .v i{width:32px;height:32px;background-size:cover;background-position:50% 30%;flex:none}
+.ck .nx{position:absolute;left:24px;right:24px;top:654px;z-index:5;opacity:.6}
+.ck .nx .lab{color:var(--w80)}
+.ck .nx p{font-size:20px;line-height:1.3;margin-top:8px}
+.ck .nav{position:absolute;left:0;right:0;bottom:0;height:84px;z-index:7;display:grid;grid-template-columns:2fr 3fr}
+.ck .nav button{display:flex;align-items:center;gap:10px;padding:0 0 18px;font-size:19px;height:84px}
+.ck .nav .bk{background:rgba(243,236,228,.1);color:var(--white);justify-content:center;
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.ck .nav .nt{background:var(--white);color:#000;justify-content:center;font-weight:400}
+
+@media (max-width:1100px){
+  .head{grid-template-columns:1fr}
+}
+@media (max-width:700px){
+  .page{padding:40px 16px 64px}
+  .head h1{font-size:60px}
+  .choices{grid-template-columns:1fr;gap:24px}
+  .notes{grid-template-columns:1fr;gap:44px;margin-top:64px}
+}
+@media (max-width:429px){
+  .frame{width:auto}
+  .scaler{zoom:.918}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="head">
+    <div>
+      <div class="eyebrow">Round 3 · Route 1</div>
+      <h1>Cinema</h1>
+      <p class="idea">The food moves. A black screen where the Reels themselves are the interface, and cooking is one big line of text in a dark room.</p>
+      <p class="built"><em>Built from</em>5 Reel (its type, full-screen video and key image) · B Full Bleed (the screen-filling picture) · 1 Index (step by step, and the move from atmosphere to focus) · 4 Counter (filters kept out of sight) · Apple News focused steps.</p>
+    </div>
+    <dl class="choices">
+      <div><dt>Colour</dt><dd><span class="sw" style="background:#000;box-shadow:0 0 0 1px rgba(255,255,255,.2)"></span>Pure black and <span class="sw" style="background:#f3ece4"></span>warm white. <span class="sw" style="background:#f2c75c"></span>Yolk appears once per screen, on the one thing that matters.</dd></div>
+      <div><dt>Type</dt><dd>Jost 200 and 300 only. Titles are set large with tight tracking; labels are small, spaced capitals. Nothing heavier than 400.</dd></div>
+      <div><dt>Images</dt><dd>Edge to edge with square corners. The Reel plays behind the landing and the recipe, then blurs into the dark in cook mode.</dd></div>
+      <div><dt>Structure</dt><dd>A vertical pager of five full-screen picks with a filmstrip. The recipe is a captioned film with one pull-up sheet. Cook mode is a single huge step.</dd></div>
+    </dl>
+  </header>
+
+  <section class="frames">
+
+    <!-- ================= 1 · LANDING ================= -->
+    <div class="frame">
+      <div class="cap"><b>1</b>Landing · a pager of five, like Reels</div>
+      <div class="scaler">
+      <div class="phone ld">
+        <div class="status"><span>9:41</span><span class="r"><svg width="18" height="11" viewBox="0 0 18 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="6" rx="1"/><rect x="10" y="2.5" width="3" height="8.5" rx="1"/><rect x="15" y="0" width="3" height="11" rx="1"/></svg><svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><path d="M8 2.2c2.3 0 4.4.9 6 2.4l1.1-1.1A10 10 0 0 0 8 .6 10 10 0 0 0 .9 3.5L2 4.6a8.6 8.6 0 0 1 6-2.4zm0 3.2c1.4 0 2.7.5 3.7 1.4l1.1-1.1A6.9 6.9 0 0 0 8 3.8c-1.8 0-3.5.7-4.8 1.9l1.1 1.1c1-.9 2.3-1.4 3.7-1.4zm0 3.2c-.6 0-1.1.2-1.5.6L8 10.7l1.5-1.5c-.4-.4-.9-.6-1.5-.6z"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="15" height="8" rx="2" fill="currentColor"/><rect x="24" y="4" width="1.6" height="4" rx=".8" fill="currentColor" opacity=".5"/></svg></span></div>
+
+        <video class="media" muted playsinline autoplay loop preload="auto" poster="../../media/C6_FrdiyZjh/hero.jpg" src="../../media/C6_FrdiyZjh/video.mp4" data-t="36"></video>
+        <div class="shade"></div>
+
+        <div class="strip"></div>
+        <div class="ctx">Tuesday evening · mid autumn · the box is in</div>
+        <div class="row feel">
+          <span class="lab">Feel like</span>
+          <div class="scrollx">
+            <button class="mood">comforting</button><button class="mood on">light</button><button class="mood">quick</button><button class="mood">something new</button><button class="mood">for a crowd</button>
+          </div>
+        </div>
+        <div class="row with">
+          <span class="lab">With</span>
+          <div class="scrollx">
+            <button class="ing"><i style="background-image:url(../../media/C6_FrdiyZjh/hero.jpg);background-position:62% 30%"></i>cod<svg viewBox="0 0 14 14"><path d="M3.5 3.5l7 7M10.5 3.5l-7 7"/></svg></button>
+            <button class="ing"><i style="background-image:url(../../media/Cyf04RxIO8c/hero.jpg);background-position:50% 62%"></i>spinach<svg viewBox="0 0 14 14"><path d="M3.5 3.5l7 7M10.5 3.5l-7 7"/></svg></button>
+            <button class="ing add">+ salmon, tofu, eggs…</button>
+          </div>
+        </div>
+
+        <div class="pager" aria-label="1 of 5"><span></span><span></span><span></span><span></span><span></span></div>
+
+        <div class="lead">
+          <div class="lab">1 of 5 for tonight</div>
+          <h2>Japanese mirin baked cod</h2>
+          <div class="t"><span class="tab">1 hr 22 min</span><span class="why">mostly waiting · on our list · uses the cod</span></div>
+        </div>
+
+        <div class="film">
+          <div class="hd"><span class="lab">Then</span><span>swipe up for the next</span></div>
+          <div class="strip-row">
+            <div class="fr"><div class="im" style="background-image:url(../../media/DVbnwhjiExJ/hero.jpg);background-position:50% 55%"><b>25 min</b></div><h4>Cod grenobloise</h4><p>light · uses the cod</p></div>
+            <div class="fr"><div class="im" style="background-image:url(../../media/C8kHapDNLG3/hero.jpg);background-position:50% 50%"><b>30 min</b></div><h4>Creamy pesto orzo with crispy salmon</h4><p>uses the spinach</p></div>
+            <div class="fr"><div class="im" style="background-image:url(../../media/Cyf04RxIO8c/hero.jpg);background-position:50% 55%"><b>50 min</b></div><h4>Roast sweet potatoes with spinach and cannellini cream</h4><p>in season · uses the spinach</p></div>
+            <div class="fr"><div class="im" style="background-image:url(../../media/DPB6Q6SjBh5/hero.jpg)"><b>35 min</b></div><h4>Cod with mustard sauce in paper boats</h4><p></p></div>
+          </div>
+        </div>
+
+        <div class="bar">
+          <button class="s"><svg class="ico" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/></svg>Search 500 recipes</button>
+          <button class="f" aria-label="Filters"><svg class="ico" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button>
+        </div>
+        <div class="homeind"></div>
+      </div>
+      </div>
+
+      <div class="cap" style="margin-top:6px"><b>1b</b>Past the fifth pick: discovery, first rows</div>
+      <div class="scaler">
+      <div class="fold">
+        <div style="height:40px"></div>
+        <div class="sh"><h3>In season</h3><span>12 recipes</span></div>
+        <div class="big">
+          <div class="tile" style="background-image:url(../../media/CwiWc2KId6o/hero.jpg)"><div class="tx"><h4>Late summer minestrone with fennel</h4><p>45 min</p></div></div>
+          <div class="stack">
+            <div class="tile" style="background-image:url(../../media/DDAItEoo_vi/hero.jpg)"><div class="tx"><h4>Creamy kabocha pumpkin soup</h4></div></div>
+            <div class="tile" style="background-image:url(../../media/Cy2_tQfsh6_/hero.jpg);background-position:50% 40%"><div class="tx"><h4>Charred hispi cabbage</h4></div></div>
+          </div>
+        </div>
+        <div class="sh" style="margin-top:28px"><h3>Quick tonight</h3><span>under 25 min</span></div>
+        <div class="q">
+          <div class="tile" style="background-image:url(../../media/DR8J3_njn8m/hero.jpg)"><div class="tx"><h4>Hoisin garlic noodles</h4><p>15 min</p></div></div>
+          <div class="tile" style="background-image:url(../../media/DG004YSIeMK/hero.jpg)"><div class="tx"><h4>Creamy mushroom and miso pasta</h4><p>20 min</p></div></div>
+          <div class="tile" style="background-image:url(../../media/DT5nuU5iPAH/hero.jpg)"><div class="tx"><h4>Tofu dan dan noodles</h4><p>25 min</p></div></div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <!-- ================= 2 · RECIPE ================= -->
+    <div class="frame">
+      <div class="cap"><b>2</b>Recipe · the Reel, captioned by its steps</div>
+      <div class="scaler">
+      <div class="phone rc">
+        <div class="status"><span>9:41</span><span class="r"><svg width="18" height="11" viewBox="0 0 18 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="6" rx="1"/><rect x="10" y="2.5" width="3" height="8.5" rx="1"/><rect x="15" y="0" width="3" height="11" rx="1"/></svg><svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><path d="M8 2.2c2.3 0 4.4.9 6 2.4l1.1-1.1A10 10 0 0 0 8 .6 10 10 0 0 0 .9 3.5L2 4.6a8.6 8.6 0 0 1 6-2.4zm0 3.2c1.4 0 2.7.5 3.7 1.4l1.1-1.1A6.9 6.9 0 0 0 8 3.8c-1.8 0-3.5.7-4.8 1.9l1.1 1.1c1-.9 2.3-1.4 3.7-1.4zm0 3.2c-.6 0-1.1.2-1.5.6L8 10.7l1.5-1.5c-.4-.4-.9-.6-1.5-.6z"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="15" height="8" rx="2" fill="currentColor"/><rect x="24" y="4" width="1.6" height="4" rx=".8" fill="currentColor" opacity=".5"/></svg></span></div>
+
+        <video class="media" muted playsinline autoplay loop preload="auto" poster="../../media/C6_FrdiyZjh/hero.jpg" src="../../media/C6_FrdiyZjh/video.mp4" data-t="13"></video>
+        <div class="shade"></div>
+
+        <div class="top">
+          <button aria-label="Back"><svg class="ico" viewBox="0 0 24 24" style="width:26px;height:26px"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="reel"><svg class="ico" viewBox="0 0 24 24" style="width:20px;height:20px"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 9.5a3.5 3.5 0 0 1 0 5M19 7a7 7 0 0 1 0 10"/></svg>Watch the Reel</button>
+        </div>
+
+        <div class="ttl">
+          <div class="meta">Fish · Japanese · weeknight</div>
+          <h2>Japanese mirin baked cod</h2>
+          <div class="by">Lisa<span>@thelisafeed</span></div>
+          <div class="takes">Takes about 1 hr 22 min (incl. 1 hr marinating)<br><span>Serves: not given</span></div>
+        </div>
+
+        <div class="chap" aria-label="Chapters, one per step">
+          <span class="now" style="flex:5"></span><span style="flex:2"></span><span style="flex:4"></span><span style="flex:5"></span><span style="flex:4"></span><span style="flex:5"></span><span style="flex:6"></span>
+        </div>
+        <div class="cues">
+          <div class="cue"><div class="ts"><b class="tab">▶ 0:12</b><span>Step 1 of 7</span></div>
+            <p>Mix the mirin, soy, sake, sugar and ginger in a shallow dish until the sugar dissolves.</p></div>
+          <div class="cue next"><div class="ts"><b class="tab">▶ 0:17</b><span>Step 2</span></div>
+            <p>Turn the cod in the marinade so every side is coated, then cover and leave to marinate for at least 1 hour.</p></div>
+        </div>
+
+        <div class="acts">
+          <button class="pill"><svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Add to our list</button>
+          <button class="heart" aria-label="Love"><svg class="ico" viewBox="0 0 24 24" style="width:24px;height:24px"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.4a4.3 4.3 0 0 1 7.5 2.4C19.5 15.4 12 20 12 20z"/></svg></button>
+        </div>
+
+        <div class="sheet">
+          <div class="grab"><h3><svg class="ico" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>Ingredients</h3><span>8 things</span></div>
+          <dl class="ings">
+            <dt>4</dt><dd>cod fillets (about 500 g)</dd>
+            <dt>3 tbsp</dt><dd>mirin</dd>
+            <dt>2 tbsp</dt><dd>soy sauce</dd>
+            <dt>1 tbsp</dt><dd>sake</dd>
+          </dl>
+        </div>
+
+        <div class="go">
+          <button class="b">Start cooking<svg class="ico" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          <small>7 steps · 22 min hands-on</small>
+        </div>
+        <div class="homeind"></div>
+      </div>
+      </div>
+    </div>
+
+    <!-- ================= 3 · COOK ================= -->
+    <div class="frame">
+      <div class="cap"><b>3</b>Cook mode · the lights go down</div>
+      <div class="scaler">
+      <div class="phone ck">
+        <div class="prog" aria-label="Timer progress"><i></i></div>
+        <div class="status"><span>9:41</span><span class="r"><svg width="18" height="11" viewBox="0 0 18 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="6" rx="1"/><rect x="10" y="2.5" width="3" height="8.5" rx="1"/><rect x="15" y="0" width="3" height="11" rx="1"/></svg><svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><path d="M8 2.2c2.3 0 4.4.9 6 2.4l1.1-1.1A10 10 0 0 0 8 .6 10 10 0 0 0 .9 3.5L2 4.6a8.6 8.6 0 0 1 6-2.4zm0 3.2c1.4 0 2.7.5 3.7 1.4l1.1-1.1A6.9 6.9 0 0 0 8 3.8c-1.8 0-3.5.7-4.8 1.9l1.1 1.1c1-.9 2.3-1.4 3.7-1.4zm0 3.2c-.6 0-1.1.2-1.5.6L8 10.7l1.5-1.5c-.4-.4-.9-.6-1.5-.6z"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="15" height="8" rx="2" fill="currentColor"/><rect x="24" y="4" width="1.6" height="4" rx=".8" fill="currentColor" opacity=".5"/></svg></span></div>
+
+        <video class="media" muted playsinline autoplay loop preload="auto" poster="../../media/C6_FrdiyZjh/hero.jpg" src="../../media/C6_FrdiyZjh/video.mp4" data-t="17.5"></video>
+        <div class="shade"></div>
+
+        <div class="top">
+          <button aria-label="Close"><svg class="ico" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+          <div class="st"><b>Step 2</b> of 7</div>
+          <button aria-label="Ingredients"><svg class="ico" viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h9"/></svg></button>
+        </div>
+
+        <div class="clock">
+          <div class="n">52:14</div>
+          <div class="m"><b>marinating</b>of 60 min<br>tap to pause</div>
+        </div>
+
+        <p class="step">Turn the cod in the marinade so every side is coated, then cover and leave to marinate for at least 1 hour (the fridge is the safe place).</p>
+
+        <div class="aside">
+          <div><div class="lab">For this step</div><div class="v"><i style="background-image:url(../../media/C6_FrdiyZjh/hero.jpg)"></i>cod</div></div>
+          <div><div class="lab">While you wait</div><div class="v">Heat the oven to 180°C fan near the end.</div></div>
+        </div>
+
+        <div class="nx">
+          <div class="lab">Next · step 3</div>
+          <p>Line a tray with baking paper and lay the cod skin-side down.</p>
+        </div>
+
+        <div class="nav">
+          <button class="bk"><svg class="ico" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Back</button>
+          <button class="nt">Next<svg class="ico" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        </div>
+        <div class="homeind blend"></div>
+      </div>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="notes">
+    <div>
+      <h2>Good at</h2>
+      <ul>
+        <li>The food sells itself. You choose from moving pictures, which is how these recipes were found in the first place.</li>
+        <li>Each screen has one job and one yolk moment, so the eye never has to hunt.</li>
+        <li>The change of room is total: from a bright, moving film to a dark screen with one sentence and a clock you can read from the hob.</li>
+      </ul>
+    </div>
+    <div>
+      <h2>Watch out for</h2>
+      <ul>
+        <li>Video everywhere is heavy on battery and data; the landing should fall back to the still when the phone is on low power.</li>
+        <li>Text over moving images needs strong scrims, and some Reels are bright and busy. Every hero will need a check.</li>
+        <li>A pager shows one dish at a time, which is slower for comparing; the filmstrip and discovery shelves have to carry the browsing.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<script>
+  // start each Reel at the right moment; keep it muted and looping
+  document.querySelectorAll('video[data-t]').forEach(function(v){
+    var t = parseFloat(v.dataset.t);
+    v.muted = true;
+    v.addEventListener('loadedmetadata', function(){ try{ v.currentTime = t; }catch(e){} v.play().catch(function(){}); }, {once:true});
+  });
+  // phones: fit the 390px frames to the screen width
+  function fit(){
+    var w = document.documentElement.clientWidth;
+    var z = w < 430 ? Math.min(1,(w - 32) / 390) : 1;
+    document.querySelectorAll('.scaler').forEach(function(s){ s.style.zoom = z; });
+  }
+  fit(); window.addEventListener('resize', fit);
+</script>
+</body>
+</html>

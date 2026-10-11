@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="dark">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Feature Checklist</title>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --page:#121110; --scr:#1c1a18; --ink:#e8e4de; --mid:#9a948c; --soft:#6f6a63; --chip:#2b2825;
+          --built:#9fbf9a; --designed:#8fb3c4; --decided:#c9a06b; --todo:#f2c75c; --later:#6f6a63; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--page); color:var(--ink); font:16px/1.5 Jost, system-ui, sans-serif; }
+  .wrap { max-width:1180px; margin:0 auto; padding:44px 28px 80px; }
+  h1 { font-weight:300; font-size:42px; margin:0 0 4px; }
+  .lede { color:var(--mid); max-width:780px; margin:0; }
+  .key { display:flex; flex-wrap:wrap; gap:10px 26px; margin:22px 0 8px; font-size:14px; }
+  .key span { display:flex; align-items:center; gap:8px; color:var(--mid); }
+  .dot { width:10px; height:10px; border-radius:50%; flex:none; display:inline-block; }
+  .sum { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:16px; margin:26px 0 10px; }
+  .sum .v { font-size:40px; font-weight:300; line-height:1; } .sum .k { font-size:14px; color:var(--mid); }
+  .meter { display:flex; height:8px; border-radius:4px; overflow:hidden; margin:14px 0 6px; background:var(--chip); }
+  .meter i { display:block; height:100%; }
+  .filters { position:sticky; top:0; z-index:3; background:var(--page); padding:14px 0; display:flex; gap:18px; flex-wrap:wrap; font-size:15px; }
+  .filters button { font:inherit; background:none; border:0; color:var(--mid); cursor:pointer; padding:2px 0; border-bottom:1.5px solid transparent; }
+  .filters button.on { color:var(--ink); border-bottom-color:var(--ink); }
+  section { margin-top:34px; }
+  h2 { font-weight:300; font-size:26px; margin:0 0 4px; display:flex; justify-content:space-between; align-items:baseline; }
+  h2 small { font-size:14px; color:var(--mid); }
+  .item { display:grid; grid-template-columns:22px 1fr 150px; gap:14px; align-items:start; padding:11px 0; }
+  .item + .item { margin-top:0; }
+  .box { width:20px; height:20px; border-radius:6px; margin-top:2px; display:grid; place-items:center; font-size:13px; color:var(--page); }
+  .t { font-size:16.5px; }
+  .d { font-size:13.5px; color:var(--mid); margin-top:1px; }
+  .st { font-size:12.5px; letter-spacing:.06em; text-transform:uppercase; text-align:right; padding-top:3px; }
+  .item.todo { background:linear-gradient(90deg, rgba(242,199,92,.07), transparent 70%); border-radius:10px; padding-left:10px; margin-left:-10px; }
+  .item.todo .t { color:#f6dc9a; }
+  .item.later { opacity:.62; }
+  .open { margin-top:40px; }
+  .open ol { padding-left:20px; color:var(--ink); } .open li { margin:0 0 8px; } .open li span { color:var(--mid); }
+  @media (max-width:640px) { .item { grid-template-columns:22px 1fr; } .st { grid-column:2; text-align:left; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="small" style="font-size:13px;color:var(--mid)">Craig and Mary's recipe app · 4 October 2026</div>
+  <h1>Feature checklist</h1>
+  <p class="lede">Every feature from the original brief, plus everything added since. <b>Built</b> means it works in the test app; <b>designed</b> means wireframed or drawn; <b>decided</b> means the rule is agreed and the data is ready. <b style="color:var(--todo)">Remaining</b> items are highlighted.</p>
+  <div class="key">
+    <span><i class="dot" style="background:var(--built)"></i>Built in the test app</span>
+    <span><i class="dot" style="background:var(--designed)"></i>Designed (wireframe)</span>
+    <span><i class="dot" style="background:var(--decided)"></i>Decided, data ready</span>
+    <span><i class="dot" style="background:var(--todo)"></i>Remaining</span>
+    <span><i class="dot" style="background:var(--later)"></i>Later</span>
+  </div>
+  <div class="sum" id="sum"></div>
+  <div class="meter" id="meter"></div>
+  <div class="filters" id="filters"></div>
+  <div id="list"></div>
+
+  <div class="open">
+    <h2>Open questions</h2>
+    <ol>
+      <li><b>Which import app wins?</b> <span>Answered: neither. Our own pipeline (download, transcript, Sonnet) does more, and shows where every detail came from.</span></li>
+      <li><b>Shopping list in version 1?</b> <span>Still open.</span></li>
+      <li><b>Favourites per person?</b> <span>Answered: yes, as Craig ♥ / Mary ♥ reactions; agreement rises first.</span></li>
+      <li><b>App name?</b> <span>Still open.</span></li>
+      <li><b>Which home machine?</b> <span>Still open: Mac mini, NAS or Raspberry Pi.</span></li>
+    </ol>
+  </div>
+</div>
+
+<script>
+// status: built | designed | decided | todo | later
+const F = [
+ ['Content and data', [
+  ['Collect saved Reels (video, audio, cover)', 'collect.py, polite pacing, one request per post', 'built'],
+  ['Transcripts and frame sheets', 'Whisper on the Mac; frames for on-screen text', 'built'],
+  ['Creator website recipes', '6 found and used; paywalls skipped', 'built'],
+  ['Recipes written in the UK format and Nigel Slater style', 'Grams, fan °C, hob 1–9, swaps for meat', 'built'],
+  ['Labels: mood, larder, course, seasons, served, heft, method', 'On all 37 recipes', 'built'],
+  ['UK seasonality calendar', '167 ingredients, peak months', 'built'],
+  ['"Needs checking" marked honestly', '30 of 37 have a gap the creator never gave', 'built'],
+  ['Full collection', '37 of about 496 recipes; 13 more collecting tomorrow; the rest over about a week', 'todo'],
+  ['One data file per recipe as the master copy', 'Notes and app data generated from it', 'todo'],
+  ['Clean up duplicate ingredient names', 'e.g. miso / white miso; stock / vegetable stock', 'todo'],
+ ]],
+ ['Landing and discovery', [
+  ['Landing option 3: Feel like · With · Best match', 'Chosen; wireframed in dark mode', 'designed'],
+  ['Sections below: In season · Quick · Our list · Something different', 'Wireframed', 'designed'],
+  ['Bottom bar: search + filter sheet', 'Wireframed; the filter sheet is the library', 'designed'],
+  ['Search (names, ingredients, creators)', 'Working in the test app', 'built'],
+  ['Who\'s eating? (pescatarian unless Craig alone)', 'Working in the test app', 'built'],
+  ['Swipe rails of recipe cards', 'Working in the test app (old landing)', 'built'],
+  ['Mood filter ("Feel like")', 'Data ready; not in the test app yet', 'decided'],
+  ['"With": this week\'s ingredients as a filter', 'Designed; needs the pantry', 'designed'],
+  ['Reason line on every suggestion', '"On our list · Mary", "Fennel at its best"', 'designed'],
+  ['Rebuild the test app on option 3', 'Next step, with the 37 real recipes', 'todo'],
+ ]],
+ ['Suggestions engine', [
+  ['Gates: diet by who\'s eating; mains and lunch only', 'Diet gate built; course gate decided', 'decided'],
+  ['Order: our list → favourites → season → week → pantry → speed', 'Agreed', 'decided'],
+  ['Season fit, blended by month (gentle)', 'Model agreed; data ready', 'decided'],
+  ['Weekly rhythm (fresh Tue–Thu, cupboard Sun–Mon)', 'Agreed; data ready', 'decided'],
+  ['Implement the ranking in code', 'Not started', 'todo'],
+  ['Learning from the cook log', '"Lovely" lifts, "not for us" lowers', 'designed'],
+  ['"Something different" slot', 'Another season, or a forgotten save', 'designed'],
+  ['Weather nudge', 'Needs a weather feed on the home server', 'later'],
+ ]],
+ ['Recipe page', [
+  ['Video with poster image; ▶ steps jump the video', 'Working in the test app', 'built'],
+  ['Servings scaler', 'Working', 'built'],
+  ['Ingredients you can tick off', 'Working', 'built'],
+  ['Method with ⏱ timers and "uses" per step', 'Working', 'built'],
+  ['Fan oven and 1–9 hob shown automatically', 'Working', 'built'],
+  ['Source credit and link to the original', 'Working', 'built'],
+  ['Full-screen image or video design', 'Chosen direction (Reel and references)', 'designed'],
+  ['Have / to buy against the pantry', 'Basic version in the test app; staples assumed', 'built'],
+  ['Swap suggestions shown (e.g. salmon for cod)', 'In the data; not shown as a feature yet', 'decided'],
+  ['Version history: "our version" vs the original', 'Designed in the cook log; not built', 'designed'],
+ ]],
+ ['Cook mode', [
+  ['One step at a time, big type', 'Working in the test app', 'built'],
+  ['Several timers at once, always visible', 'Working', 'built'],
+  ['This step\'s ingredients', 'Working', 'built'],
+  ['Big Back / Next, and swipe', 'Working', 'built'],
+  ['Focused view: current step bright, the rest faded', 'Chosen direction (Apple News, Index route)', 'designed'],
+  ['"Then": preview of the next step', 'Designed (three routes did it)', 'designed'],
+  ['Screen stays on (wake lock)', 'In the code; needs HTTPS (the home server)', 'decided'],
+  ['Resume cooking from anywhere', 'Designed; not built', 'designed'],
+  ['Hands-free "next step" by voice', 'Optional, from the brief', 'later'],
+ ]],
+ ['After cooking', [
+  ['Cook-log story (fill in the blanks)', 'Designed; playable prototype with sound', 'designed'],
+  ['"Next time" creates v2 of the recipe', 'Designed in the prototype', 'designed'],
+  ['Cook log as a diary of the dish', 'Designed', 'designed'],
+  ['Basic cook log (stars, tags, notes)', 'Working in the test app (to be replaced by the story)', 'built'],
+  ['Story log built into the real app', 'Not started', 'todo'],
+ ]],
+ ['Together', [
+  ['Our list (shared shortlist)', 'Designed; the test app has a single-device version only', 'designed'],
+  ['Reactions: Craig ♥ / Mary ♥, agreed first', 'Designed', 'designed'],
+  ['Added by / cooked by', 'Designed', 'designed'],
+  ['Notes visible to both', 'Needs the shared server', 'todo'],
+  ['Two logins, synced between phones', 'Needs the home server', 'todo'],
+ ]],
+ ['Getting more in', [
+  ['Add a recipe: paste a link, text or screenshot', 'From the brief; not started', 'todo'],
+  ['"Fill in what\'s missing" from the video', 'The game idea for needs checking; designed as a concept', 'designed'],
+  ['Pantry: tap what we have', 'Basic version in the test app', 'built'],
+  ['Abel & Cole box email → pantry', 'Needs your personal inbox connected', 'later'],
+  ['Receipts and shopping photos → pantry', 'Planned (intake folder ready)', 'later'],
+  ['Shopping list from missing ingredients', 'Open question: version 1 or later?', 'todo'],
+ ]],
+ ['Look and feel', [
+  ['Dark walnut palette from your kitchen (+ light mode)', 'Defined and contrast-checked', 'decided'],
+  ['Type: Jost, fine weights; a serif for titles to test', 'Chosen', 'decided'],
+  ['No divider lines, no boxes in boxes', 'Principle agreed', 'decided'],
+  ['Design system in Figma (components, tokens)', 'Not started', 'todo'],
+  ['Full visual designs of the key screens', 'After the kitchen test', 'todo'],
+  ['App name', 'Open', 'todo'],
+ ]],
+ ['Platform', [
+  ['Home server (Mac mini, NAS or Pi)', 'Choose a machine', 'todo'],
+  ['Database (Postgres), API, installable web app', 'Not started', 'todo'],
+  ['Private access: Tailscale + HTTPS', 'Not started', 'todo'],
+  ['Scheduled collection and processing jobs', 'Scripts ready; scheduling not set up', 'todo'],
+  ['Kitchen screen display mode', 'Later', 'later'],
+  ['Family calendar', 'Later', 'later'],
+ ]],
+];
+const LABEL = { built:'Built', designed:'Designed', decided:'Decided', todo:'Remaining', later:'Later' };
+const COL = { built:'var(--built)', designed:'var(--designed)', decided:'var(--decided)', todo:'var(--todo)', later:'var(--later)' };
+let show = 'all';
+function render() {
+  const all = F.flatMap(([, items]) => items);
+  const c = s => all.filter(i => i[2] === s).length;
+  document.getElementById('sum').innerHTML = ['built','designed','decided','todo','later'].map(s =>
+    `<div><div class="v" style="color:${COL[s]}">${c(s)}</div><div class="k">${LABEL[s]}</div></div>`).join('') +
+    `<div><div class="v">${all.length}</div><div class="k">Features in total</div></div>`;
+  document.getElementById('meter').innerHTML = ['built','designed','decided','todo','later'].map(s => `<i style="width:${c(s)/all.length*100}%;background:${COL[s]}"></i>`).join('');
+  document.getElementById('filters').innerHTML = [['all','Everything'],['todo','Remaining only'],['built','Built'],['designed','Designed'],['decided','Decided'],['later','Later']].map(([k,l]) =>
+    `<button class="${show===k?'on':''}" data-s="${k}">${l}</button>`).join('');
+  document.getElementById('list').innerHTML = F.map(([area, items]) => {
+    const vis = items.filter(i => show === 'all' || i[2] === show); if (!vis.length) return '';
+    const doneN = items.filter(i => i[2] === 'built').length;
+    return `<section><h2>${area}<small>${doneN} of ${items.length} built · ${items.filter(i=>i[2]==='todo').length} remaining</small></h2>` +
+      vis.map(([t, d, s]) => `<div class="item ${s}"><div class="box" style="background:${s==='built'?COL.built:'transparent'};border:1.5px solid ${COL[s]}">${s==='built'?'✓':''}</div><div><div class="t">${t}</div><div class="d">${d}</div></div><div class="st" style="color:${COL[s]}">${LABEL[s]}</div></div>`).join('') + `</section>`;
+  }).join('');
+}
+document.addEventListener('click', e => { const b = e.target.closest('[data-s]'); if (b) { show = b.dataset.s; render(); } });
+render();
+</script>
+</body>
+</html>

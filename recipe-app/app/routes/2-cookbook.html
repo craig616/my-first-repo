@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Route 2 · Cookbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* page (presentation) */
+  --desk:#24201d; --desk-ink:#ebdac6; --desk-ink-2:#b39476; --desk-rule:#3b332d;
+  /* the book: daytime paper, walnut ink */
+  --paper:#efe8de; --paper-2:#e6dccd; --paper-3:#ddd0bd;
+  --ink:#2b1812; --ink-2:#6b5240; --brass-ink:#7a4f1a; --brass:#d4a463;
+  --rule:#d3c4b0; --yolk:#f2c75c;
+  --serif:"Newsreader", Georgia, "Times New Roman", serif;
+  --sans:"Jost", system-ui, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--desk);color:var(--desk-ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+img,video{display:block}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+/* ---------- presentation header ---------- */
+.intro{max-width:1260px;margin:0 auto;padding:56px 24px 40px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:40px;align-items:end;border-bottom:1px solid var(--desk-rule)}
+.intro .kicker{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--desk-ink-2);font-weight:500}
+.intro h1{font-family:var(--serif);font-weight:350;font-size:56px;line-height:1.02;letter-spacing:-.01em;margin-top:10px;font-variation-settings:"opsz" 72}
+.intro h1 em{font-style:italic;font-weight:300;color:var(--brass)}
+.intro .idea{font-family:var(--serif);font-size:21px;line-height:1.4;font-style:italic;font-weight:350;margin-top:14px;max-width:34ch}
+.intro dl{display:grid;grid-template-columns:auto 1fr;gap:10px 18px;font-size:16px;color:var(--desk-ink)}
+.intro dt{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--desk-ink-2);padding-top:3px;font-weight:500}
+
+/* ---------- frames ---------- */
+.frames{max-width:1340px;margin:0 auto;padding:44px 24px 24px;display:flex;flex-wrap:wrap;gap:40px 32px;justify-content:center}
+.frame-wrap{display:flex;flex-direction:column;gap:14px;align-items:center}
+.frame-label{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--desk-ink-2);font-weight:500}
+.frame-label b{color:var(--desk-ink);font-weight:500}
+.phone{width:390px;height:844px;border-radius:46px;overflow:hidden;position:relative;background:var(--paper);color:var(--ink);box-shadow:0 0 0 10px #0f0c0a,0 0 0 11px #3a312a,0 30px 60px -20px rgba(0,0,0,.6);flex:none}
+.screen{position:absolute;inset:0;overflow:hidden}
+.status{height:47px;display:flex;align-items:center;justify-content:space-between;padding:4px 30px 0 34px;font-size:16px;font-weight:600;letter-spacing:.01em;position:relative;z-index:5}
+.status .icons{display:flex;gap:6px;align-items:center}
+.island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:120px;height:34px;border-radius:20px;background:#0f0c0a;z-index:6}
+.homebar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:3px;background:var(--ink);opacity:.85;z-index:20}
+
+/* shared type */
+.caps{font-family:var(--sans);font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;color:var(--ink-2)}
+.serif{font-family:var(--serif)}
+.ital{font-family:var(--serif);font-style:italic}
+.icon{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* ======================= 1. DISCOVER ======================= */
+.d-mast{padding:6px 20px 0}
+.d-mast .row{display:flex;justify-content:space-between;align-items:baseline}
+.d-mast h2{font-family:var(--serif);font-weight:380;font-size:34px;line-height:1.05;letter-spacing:-.012em;margin-top:6px;font-variation-settings:"opsz" 60}
+.d-mast h2 em{font-style:italic;font-weight:320}
+.d-index{display:flex;gap:2px;overflow:hidden;margin:12px 0 0;padding:0 20px;white-space:nowrap;position:relative;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);-webkit-mask-image:linear-gradient(90deg,#000 82%,transparent);mask-image:linear-gradient(90deg,#000 82%,transparent)}
+.d-index a{font-family:var(--serif);font-size:18px;color:var(--ink);text-decoration:none;min-height:46px;display:flex;align-items:center;padding:0 12px 0 0;flex:none}
+.d-index a+a::before{content:"";width:3px;height:3px;border-radius:50%;background:var(--brass);margin-right:12px}
+
+.d-feature{padding:14px 20px 0}
+.d-feature .plate{position:relative;height:172px;overflow:hidden}
+.d-feature .plate img{width:100%;height:100%;object-fit:cover;object-position:50% 46%}
+.d-feature .kick{display:flex;justify-content:space-between;align-items:baseline;margin-top:11px;white-space:nowrap}
+.d-feature h3{font-family:var(--serif);font-weight:400;font-size:26px;line-height:1.1;letter-spacing:-.01em;margin-top:5px;font-variation-settings:"opsz" 48}
+.d-feature p{font-family:var(--serif);font-size:17px;line-height:1.42;color:var(--ink);margin-top:7px;font-weight:350}
+.meta{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:15px;color:var(--ink-2);margin-top:9px;align-items:center}
+.meta span{display:inline-flex;align-items:center;gap:6px}
+.have{display:inline-flex;align-items:center;gap:7px}
+.dots{display:inline-flex;gap:3px}
+.dots i{width:6px;height:6px;border-radius:50%;background:var(--ink);display:block}
+.dots i.n{background:none;box-shadow:inset 0 0 0 1.2px var(--ink-2)}
+
+.d-more{padding:12px 20px 230px}
+.d-more .head{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--ink);padding-top:2px}
+.d-more .filters{display:flex;gap:16px}
+.d-more .filters button{font-size:15px;color:var(--ink);min-height:44px;display:flex;align-items:center;gap:6px;border-bottom:1px solid transparent}
+.d-more .filters button.on{box-shadow:inset 0 -1.5px 0 var(--ink)}
+.entry{display:grid;grid-template-columns:72px 1fr;gap:14px;padding:6px 0 12px;border-bottom:1px solid var(--rule);align-items:start}
+.entry img{width:72px;height:88px;object-fit:cover}
+.entry h4{font-family:var(--serif);font-weight:420;font-size:19px;line-height:1.18;font-variation-settings:"opsz" 30}
+.entry .meta{margin-top:5px;font-size:15px}
+.quick{font-family:var(--sans);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--ink);background:var(--yolk);padding:2px 7px 1px;border-radius:3px}
+
+.dock{position:absolute;left:0;right:0;bottom:0;background:var(--paper);padding:9px 16px 26px;z-index:10;box-shadow:0 -1px 0 var(--rule),0 -18px 22px -6px rgba(239,232,222,.96)}
+.who{display:block}
+.who .caps{display:block;margin:0 0 5px 4px;font-size:12px}
+.seg{flex:1;display:grid;grid-template-columns:1.1fr .8fr 1.15fr;border:1px solid var(--ink);border-radius:24px;padding:3px;gap:2px}
+.seg button{min-height:40px;border-radius:20px;font-size:16px;color:var(--ink)}
+.seg button.on{background:var(--ink);color:var(--paper)}
+.search{margin-top:8px;display:flex;align-items:center;gap:12px;height:50px;border-radius:26px;background:var(--paper-2);padding:0 18px;color:var(--ink-2);font-size:17px}
+.search .icon{width:20px;height:20px;color:var(--ink)}
+.search .ph{flex:1;font-family:var(--serif);font-style:italic;font-size:18px;color:var(--ink-2)}
+
+/* ======================= 2. RECIPE ======================= */
+.r-nav{display:flex;justify-content:space-between;align-items:center;padding:0 12px 0 8px;height:46px}
+.r-nav button{min-height:44px;min-width:44px;display:flex;align-items:center;gap:4px;font-size:16px;color:var(--ink);padding:0 8px}
+.r-nav .icon{width:22px;height:22px}
+.r-body{padding:0 20px 200px}
+.photo{position:relative;height:186px;overflow:hidden;background:var(--paper-3)}
+.photo video{width:100%;height:100%;object-fit:cover;object-position:50% 40%}
+.play{position:absolute;left:12px;bottom:12px;display:flex;align-items:center;gap:8px;height:44px;padding:0 14px 0 6px;border-radius:22px;background:rgba(239,232,222,.94);color:var(--ink);font-size:15px}
+.play .disc{width:32px;height:32px;border-radius:50%;border:1.4px solid var(--ink);display:grid;place-items:center}
+.play .disc svg{width:12px;height:12px;fill:var(--ink);margin-left:2px}
+.plate-cap{display:flex;justify-content:space-between;margin-top:7px;font-family:var(--serif);font-style:italic;font-size:15px;color:var(--ink-2)}
+.r-run{margin-top:14px}
+.r-body h2{font-family:var(--serif);font-weight:400;font-size:30px;line-height:1.06;letter-spacing:-.015em;margin-top:4px;font-variation-settings:"opsz" 60}
+.byline{font-family:var(--serif);font-size:17px;margin-top:7px;color:var(--ink)}
+.byline em{color:var(--ink-2)}
+.facts{display:grid;grid-template-columns:1fr 1fr 1.15fr;margin-top:14px;border-top:1px solid var(--ink);border-bottom:1px solid var(--rule)}
+.facts div{padding:8px 0 9px}
+.facts div+div{padding-left:12px;border-left:1px solid var(--rule)}
+.facts b{display:block;font-family:var(--serif);font-weight:420;font-size:19px;line-height:1.2;margin-top:2px}
+.facts b em{font-weight:350;font-size:16px;color:var(--ink-2)}
+.headnote{font-family:var(--serif);font-size:17px;line-height:1.45;margin-top:12px;font-weight:350}
+.headnote::first-letter{font-size:1em}
+.ing-head{display:flex;justify-content:space-between;align-items:baseline;margin-top:16px}
+.ing-head h3{font-family:var(--serif);font-weight:400;font-size:22px;font-style:italic}
+.ing-head span{font-size:15px;color:var(--ink-2)}
+.ing{list-style:none;margin-top:6px;border-top:1px solid var(--rule)}
+.ing li{display:grid;grid-template-columns:20px 64px 1fr;gap:0 8px;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--rule)}
+.ing .mk{align-self:center;display:grid;place-items:center}
+.ing .mk svg{width:14px;height:14px;stroke:var(--ink);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ing .mk .ring{width:11px;height:11px;border-radius:50%;box-shadow:inset 0 0 0 1.4px var(--ink-2)}
+.ing .amt{font-family:var(--sans);font-size:16px;color:var(--ink);font-variant-numeric:tabular-nums}
+.ing .amt.q{color:var(--ink-2)}
+.ing .it{font-family:var(--serif);font-size:18px;line-height:1.3}
+.ing .it .buy{font-style:italic;font-size:15px;color:var(--brass-ink);margin-left:4px;white-space:nowrap}
+.ing .it .opt{font-style:italic;color:var(--ink-2)}
+.check{grid-column:2 / -1;margin-top:6px;padding:7px 10px 8px 12px;border-left:2px solid var(--brass);background:rgba(242,199,92,.16)}
+.check .caps{font-size:12px;color:var(--brass-ink);display:flex;align-items:center;gap:6px}
+.check .caps svg{width:13px;height:13px;stroke:var(--brass-ink);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.check p{font-family:var(--serif);font-style:italic;font-size:16px;line-height:1.38;margin-top:2px}
+.method{list-style:none;margin-top:8px}
+.method li{display:grid;grid-template-columns:30px 1fr;gap:10px;padding:12px 0;border-bottom:1px solid var(--rule)}
+.method .n{font-family:var(--serif);font-size:24px;line-height:1;color:var(--brass-ink);font-style:italic}
+.method p{font-family:var(--serif);font-size:17px;line-height:1.45}
+.cues{display:flex;gap:8px;margin-top:8px}
+.cue{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 12px;border-radius:18px;border:1px solid var(--ink);font-size:15px}
+.cue svg{width:15px;height:15px}
+.source{margin-top:20px;font-family:var(--serif);font-style:italic;font-size:16px;color:var(--ink-2)}
+.r-dock{position:absolute;left:0;right:0;bottom:0;padding:12px 16px 30px;background:var(--paper);z-index:10;display:flex;gap:10px;box-shadow:0 -1px 0 var(--rule),0 -18px 22px -6px rgba(239,232,222,.96)}
+.btn-yolk{flex:1;height:60px;border-radius:30px;background:var(--yolk);color:var(--ink);font-size:19px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:10px;letter-spacing:.01em}
+.btn-yolk svg{width:20px;height:20px}
+.btn-ghost{width:60px;height:60px;border-radius:50%;border:1px solid var(--ink);display:grid;place-items:center;flex:none}
+.btn-ghost svg{width:22px;height:22px}
+
+/* ======================= 3. COOK ======================= */
+.c-head{padding:2px 20px 0;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.c-head .t{font-family:var(--serif);font-style:italic;font-size:18px;line-height:1.2}
+.c-head button{min-width:64px;min-height:48px;border:1px solid var(--ink);border-radius:24px;font-size:16px;padding:0 16px}
+.c-prog{display:flex;align-items:center;gap:12px;padding:10px 20px 0}
+.c-prog .bars{flex:1;display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.c-prog .bars i{height:4px;background:var(--rule);display:block;border-radius:2px}
+.c-prog .bars i.d{background:var(--ink-2)}
+.c-prog .bars i.c{background:var(--ink)}
+.c-prog .caps{color:var(--ink);font-size:14px;white-space:nowrap}
+.c-page{display:grid;grid-template-columns:58px 1fr;gap:0 14px;padding:22px 20px 0}
+.c-num{font-family:var(--serif);font-size:72px;line-height:.82;font-weight:300;color:var(--brass-ink);font-variation-settings:"opsz" 72;font-style:italic}
+.c-step{font-family:var(--serif);font-size:31px;line-height:1.24;font-weight:400;letter-spacing:-.004em;font-variation-settings:"opsz" 36}
+.c-margin{grid-column:1 / -1;display:grid;grid-template-columns:58px 1fr;gap:0 14px;margin-top:18px;padding-top:12px;border-top:1px solid var(--rule)}
+.c-margin .caps{font-size:12px;line-height:1.35;color:var(--ink-2);padding-top:4px}
+.c-margin p{font-family:var(--serif);font-size:21px;line-height:1.3}
+.c-margin p em{font-size:17px;color:var(--ink-2)}
+.timers{position:absolute;left:0;right:0;bottom:122px;padding:0 16px;display:grid;gap:8px;z-index:9}
+.timer{display:flex;align-items:center;gap:14px;border-radius:18px;padding:0 18px 0 16px;height:74px}
+.timer.main{background:var(--yolk)}
+.timer.alt{background:var(--paper-2);box-shadow:inset 0 0 0 1px var(--rule)}
+.timer .ring{width:40px;height:40px;flex:none}
+.timer .lab{flex:1;line-height:1.2}
+.timer .lab b{display:block;font-family:var(--serif);font-weight:450;font-size:20px}
+.timer .lab span{font-size:14px;color:var(--ink);opacity:1}
+.timer.alt .lab span{color:var(--ink-2)}
+.timer .time{font-family:var(--sans);font-weight:500;font-size:40px;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.c-nav{position:absolute;left:0;right:0;bottom:0;padding:10px 16px 30px;display:grid;grid-template-columns:1fr 1.6fr;gap:10px;background:var(--paper);z-index:10}
+.c-nav button{height:76px;border-radius:22px;font-size:20px;display:flex;align-items:center;justify-content:center;gap:10px}
+.c-nav .back{border:1.5px solid var(--ink)}
+.c-nav .next{background:var(--ink);color:var(--paper)}
+.c-nav .next small{display:block;font-size:14px;opacity:.85;font-family:var(--serif);font-style:italic}
+.c-nav .next .stack{text-align:left;line-height:1.15}
+.c-nav svg{width:22px;height:22px}
+
+/* ---------- rationale ---------- */
+.why{max-width:1260px;margin:0 auto;padding:40px 24px 80px}
+.why h2{font-family:var(--serif);font-weight:350;font-size:32px;font-style:italic;border-top:1px solid var(--desk-rule);padding-top:28px}
+.why .cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:32px;margin-top:22px}
+.why h3{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);font-weight:500;margin-bottom:8px}
+.why p{font-family:var(--serif);font-size:17px;line-height:1.55;color:var(--desk-ink);font-weight:350}
+.why p+p{margin-top:10px}
+@media (max-width:1100px){.why .cols{grid-template-columns:1fr 1fr}.intro{grid-template-columns:1fr}}
+@media (max-width:640px){.why .cols{grid-template-columns:1fr}.intro h1{font-size:40px}.intro{padding:36px 16px 28px}.frames,.why{padding-left:16px;padding-right:16px}}
+@media (max-width:430px){.phone{transform:scale(.86);transform-origin:top center;margin-bottom:-118px}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M14.5 5.5L8 12l6.5 6.5"/></symbol>
+    <symbol id="i-next" viewBox="0 0 24 24"><path d="M9.5 5.5L16 12l-6.5 6.5"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="13" r="7.5"/><path d="M12 9.5V13l2.5 1.6M10 3h4"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M10.3 8.8v6.4l5-3.2z" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M4 20l1-4L16 5l3 3L8 19z"/><path d="M14 7l3 3"/></symbol>
+    <symbol id="i-mark" viewBox="0 0 24 24"><path d="M7 4h10v16l-5-4-5 4z"/></symbol>
+    <symbol id="i-pot" viewBox="0 0 24 24"><path d="M4 10h16v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM2 10h2M20 10h2M9 6c0-1 1-1 1-2M14 6c0-1 1-1 1-2"/></symbol>
+  </defs>
+</svg>
+
+<header class="intro">
+  <div>
+    <div class="kicker">Route 2 of 6 · Design routes for Craig &amp; Mary’s recipes</div>
+    <h1>Cookbook, <em>on paper</em></h1>
+    <p class="idea">A modern printed cookbook you can hold: photographs set on the page, a soft serif, and plenty of space.</p>
+  </div>
+  <dl>
+    <dt>Idea</dt><dd>Editorial and photo-led. Each recipe is a spread: a plate, a title, a short headnote in a quiet voice, ingredients set as a book would set them.</dd>
+    <dt>Video</dt><dd>A still photograph first. The reel sits on the page like a picture with a small play mark; tap it and it plays in place. The ▶ marks in the method open it at that moment.</dd>
+    <dt>Type</dt><dd>Newsreader, a soft text serif with optical sizes, for everything you read. Jost for labels, amounts, times and buttons.</dd>
+  </dl>
+</header>
+
+<main class="frames">
+
+<!-- ================= 1. DISCOVER ================= -->
+<section class="frame-wrap" aria-label="Discover">
+  <div class="frame-label"><b>1</b> · Discover</div>
+  <div class="phone"><div class="screen">
+    <div class="island"></div>
+    <div class="status"><span>18:12</span><span class="icons"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#2b1812"/><rect x="5" y="5" width="3" height="7" rx="1" fill="#2b1812"/><rect x="10" y="2.5" width="3" height="9.5" rx="1" fill="#2b1812"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#2b1812"/></svg><svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="#2b1812" opacity=".45"/><rect x="2" y="2" width="16" height="9" rx="2" fill="#2b1812"/><path d="M25 4.5v4a2 2 0 0 0 0-4z" fill="#2b1812" opacity=".45"/></svg></span></div>
+
+    <div class="d-mast">
+      <div class="row"><span class="caps">Sunday 4 October</span><span class="caps">9 recipes</span></div>
+      <h2>Something <em>for tonight</em></h2>
+    </div>
+
+    <nav class="d-index" aria-label="By main ingredient">
+      <a href="#">Fish</a><a href="#">Veg</a><a href="#">Beans &amp; pulses</a><a href="#">Pasta &amp; noodles</a><a href="#">Eggs</a><a href="#">Rice &amp; grains</a><a href="#">Baking &amp; sweet</a>
+    </nav>
+
+    <article class="d-feature">
+      <div class="plate"><img src="../../media/CwiWc2KId6o/hero.jpg" alt="A white bowl of golden minestrone with courgette, carrot and beans"></div>
+      <div class="kick"><span class="caps">For a cool evening</span><span class="caps">Beans &amp; pulses</span></div>
+      <h3>Late summer minestrone with fennel and saffron</h3>
+      <p>Golden with saffron, for the tail end of summer.</p>
+      <div class="meta">
+        <span class="have"><span class="dots"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="n"></i><i class="n"></i></span>Have 8 of 10</span>
+        <span class="ital" style="font-size:16px">Not cooked yet</span>
+      </div>
+    </article>
+
+    <section class="d-more">
+      <div class="head">
+        <span class="caps" style="color:var(--ink)">Also in the book</span>
+        <div class="filters"><button class="on">Quick</button><button>Not cooked yet</button></div>
+      </div>
+      <div class="entry"><img src="../../media/C8j51_HKkxG/hero.jpg" alt=""><div><h4>Creamy tomato and basil beans</h4><div class="meta"><span class="quick">Quick</span><span>30 min</span><span>Have 11 of 13</span></div></div></div>
+      <div class="entry"><img src="../../media/C6_FrdiyZjh/hero.jpg" alt=""><div><h4>Japanese mirin baked cod</h4><div class="meta"><span>22 min, after an hour’s marinating</span><span>Have 6 of 10</span></div></div></div>
+      <div class="entry"><img src="../../media/Cyf04RxIO8c/hero.jpg" alt=""><div><h4>Roast sweet potatoes with spinach and cannellini cream</h4><div class="meta"><span>40 min</span><span>Have 10 of 13</span></div></div></div>
+      <div class="entry"><img src="../../media/DPB6Q6SjBh5/hero.jpg" alt=""><div><h4>Cod with mustard sauce in paper boats</h4><div class="meta"><span>Have 5 of 8</span></div></div></div>
+      <div class="entry"><img src="../../media/DHdyddgRAs4/hero.jpg" alt=""><div><h4>Broccolini beans with tinned fish</h4><div class="meta"><span>1½ hr</span><span>Have 11 of 15</span></div></div></div>
+      <div class="entry"><img src="../../media/C8kODErKIKh/hero.jpg" alt=""><div><h4>Scarpaccia with pepper and onion</h4><div class="meta"><span>1 hr 20 min</span><span>Have 9 of 10</span></div></div></div>
+      <div class="entry"><img src="../../media/DVbI3SgDMBz/hero.jpg" alt=""><div><h4>Baked curd cheese casserole</h4><div class="meta"><span>1 hr</span><span>Have 4 of 8</span></div></div></div>
+      <div class="entry"><img src="../../media/DO7BUjkEVrQ/hero.jpg" alt=""><div><h4>Upside-down apple tarts</h4><div class="meta"><span>Have 5 of 7</span></div></div></div>
+    </section>
+
+    <div class="dock">
+      <div class="who">
+        <span class="caps">Who’s eating?</span>
+        <div class="seg" role="radiogroup"><button class="on" role="radio" aria-checked="true">Both of us</button><button role="radio" aria-checked="false">Mary</button><button role="radio" aria-checked="false">Craig alone</button></div>
+      </div>
+      <div class="search"><svg class="icon"><use href="#i-search"/></svg><span class="ph">Search, or what’s in the fridge</span></div>
+    </div>
+    <div class="homebar"></div>
+  </div></div>
+</section>
+
+<!-- ================= 2. RECIPE ================= -->
+<section class="frame-wrap" aria-label="Recipe">
+  <div class="frame-label"><b>2</b> · Recipe</div>
+  <div class="phone"><div class="screen">
+    <div class="island"></div>
+    <div class="status"><span>18:12</span><span class="icons"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#2b1812"/><rect x="5" y="5" width="3" height="7" rx="1" fill="#2b1812"/><rect x="10" y="2.5" width="3" height="9.5" rx="1" fill="#2b1812"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#2b1812"/></svg><svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="#2b1812" opacity=".45"/><rect x="2" y="2" width="16" height="9" rx="2" fill="#2b1812"/><path d="M25 4.5v4a2 2 0 0 0 0-4z" fill="#2b1812" opacity=".45"/></svg></span></div>
+
+    <div class="r-nav">
+      <button><svg class="icon"><use href="#i-back"/></svg>Book</button>
+      <button aria-label="Keep for later"><svg class="icon"><use href="#i-mark"/></svg></button>
+    </div>
+
+    <div class="r-body">
+      <figure>
+        <div class="photo">
+          <video src="../../media/C6_FrdiyZjh/video.mp4" poster="../../media/C6_FrdiyZjh/hero.jpg" preload="none" playsinline muted></video>
+          <button class="play"><span class="disc"><svg viewBox="0 0 12 12"><path d="M1 0l10 6-10 6z"/></svg></span>Lisa’s video<span style="color:var(--ink-2);margin-left:2px">0:44</span></button>
+        </div>
+        
+      </figure>
+
+      <div class="r-run caps">Fish · Japanese · Weeknight</div>
+      <h2>Japanese mirin baked cod</h2>
+      <p class="byline">From Lisa, <em>@thelisafeed</em></p>
+
+      <div class="facts">
+        <div><span class="caps">Oven</span><b>22 min</b></div>
+        <div><span class="caps">Marinate</span><b>1 hr <em>or more</em></b></div>
+        <div><span class="caps">Serves</span><b><em>Not stated</em></b></div>
+      </div>
+
+      <p class="headnote">Four things stirred into a marinade, an hour’s wait, and a fillet that comes out lacquered and sticky at the edges. One tray, little to wash up.</p>
+
+      <div class="ing-head"><h3>You will need</h3><span>Have 6 of 10</span></div>
+      <ul class="ing">
+        <li><span class="mk"><span class="ring"></span></span><span class="amt q">—</span><span class="it">Cod, skin on<span class="buy">to buy</span></span>
+          <div class="check"><span class="caps"><svg viewBox="0 0 24 24"><use href="#i-pencil"/></svg>Needs checking</span><p>The amount isn’t given. Two pieces are shown in the video. Salmon works as well.</p></div>
+        </li>
+        <li><span class="mk"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="amt">1 tbsp</span><span class="it">mirin</span></li>
+        <li><span class="mk"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="amt">1 tbsp</span><span class="it">Japanese soy sauce</span></li>
+        <li><span class="mk"><span class="ring"></span></span><span class="amt">1 tsp</span><span class="it">shiro dashi<span class="buy">to buy</span></span></li>
+        <li><span class="mk"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="amt">1 tbsp</span><span class="it">sugar <span class="opt">(about 12 g)</span></span></li>
+        <li><span class="mk"><span class="ring"></span></span><span class="amt q">—</span><span class="it">Bok choy, halved<span class="buy">to buy</span></span></li>
+        <li><span class="mk"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="amt">a little</span><span class="it">oil, and a pinch of salt</span></li>
+        <li><span class="mk"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="amt"></span><span class="it">sesame seeds, to finish</span></li>
+        <li><span class="mk"><span class="ring"></span></span><span class="amt"></span><span class="it">yuzu kosho <span class="opt">(if you like)</span></span></li>
+        <li><span class="mk"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="amt"></span><span class="it">rice, to serve</span></li>
+      </ul>
+
+      <div class="ing-head"><h3>Method</h3><span>7 steps</span></div>
+      <ol class="method">
+        <li><span class="n">1</span><div><p>Stir together the mirin, soy sauce, shiro dashi and sugar.</p></div></li>
+        <li><span class="n">2</span><div><p>Turn the cod in the marinade until glossy all over, then leave it in the fridge for at least an hour.</p><div class="cues"><span class="cue"><svg class="icon"><use href="#i-clock"/></svg>1 hr</span><span class="cue"><svg class="icon"><use href="#i-play"/></svg>Watch 0:17</span></div></div></li>
+        <li><span class="n">3</span><div><p>Heat the oven to 180°C fan.</p></div></li>
+        <li><span class="n">4</span><div><p>Lay the halved bok choy on a baking tray with a little oil and a pinch of salt.</p><div class="cues"><span class="cue"><svg class="icon"><use href="#i-play"/></svg>Watch 0:22</span></div></div></li>
+        <li><span class="n">5</span><div><p>Set the cod on the same tray, skin side up, and bake for 15 minutes, until the marinade is bubbling and the fish has begun to colour.</p><div class="cues"><span class="cue"><svg class="icon"><use href="#i-clock"/></svg>15 min</span></div></div></li>
+        <li><span class="n">6</span><div><p>Lift off the bok choy. Grill the cod at 200°C for 5–7 minutes, until the skin blisters and the glaze turns dark and sticky.</p><div class="cues"><span class="cue"><svg class="icon"><use href="#i-clock"/></svg>7 min</span><span class="cue"><svg class="icon"><use href="#i-play"/></svg>Watch 0:27</span></div></div></li>
+        <li><span class="n">7</span><div><p>Scatter over sesame seeds and eat with rice, with a little yuzu kosho on the side.</p><div class="cues"><span class="cue"><svg class="icon"><use href="#i-play"/></svg>Watch 0:34</span></div></div></li>
+      </ol>
+      <p class="source">From a reel by Lisa (@thelisafeed), May 2024. Amounts in grams and the fan oven are ours.</p>
+    </div>
+
+    <div class="r-dock">
+      <button class="btn-yolk"><svg class="icon"><use href="#i-pot"/></svg>Start cooking</button>
+      <button class="btn-ghost" aria-label="Watch the video"><svg class="icon"><use href="#i-play"/></svg></button>
+    </div>
+    <div class="homebar"></div>
+  </div></div>
+</section>
+
+<!-- ================= 3. COOK MODE ================= -->
+<section class="frame-wrap" aria-label="Cook mode">
+  <div class="frame-label"><b>3</b> · Cook mode</div>
+  <div class="phone"><div class="screen">
+    <div class="island"></div>
+    <div class="status"><span>18:12</span><span class="icons"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#2b1812"/><rect x="5" y="5" width="3" height="7" rx="1" fill="#2b1812"/><rect x="10" y="2.5" width="3" height="9.5" rx="1" fill="#2b1812"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#2b1812"/></svg><svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="#2b1812" opacity=".45"/><rect x="2" y="2" width="16" height="9" rx="2" fill="#2b1812"/><path d="M25 4.5v4a2 2 0 0 0 0-4z" fill="#2b1812" opacity=".45"/></svg></span></div>
+
+    <div class="c-head">
+      <span class="t">Japanese mirin baked cod</span>
+      <button>Close</button>
+    </div>
+    <div class="c-prog">
+      <div class="bars"><i class="d"></i><i class="d"></i><i class="d"></i><i class="d"></i><i class="c"></i><i></i><i></i></div>
+      <span class="caps">Step 5 of 7</span>
+    </div>
+
+    <div class="c-page">
+      <div class="c-num">5</div>
+      <p class="c-step">Set the cod on the same tray, skin side up, and bake for 15 minutes, until the marinade is bubbling and the fish has begun to colour.</p>
+      <div class="c-margin">
+        <span class="caps">For this step</span>
+        <p>The marinated cod <em>(2 pieces?)</em><br>The bok choy, on the tray</p>
+      </div>
+    </div>
+
+    <div class="timers">
+      <div class="timer main">
+        <svg class="ring" viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" fill="none" stroke="#2b1812" stroke-opacity=".22" stroke-width="3.5"/><circle cx="20" cy="20" r="16" fill="none" stroke="#2b1812" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="78.6 100.5" transform="rotate(-90 20 20)"/></svg>
+        <div class="lab"><b>Cod in the oven</b><span>Step 5 · 15 min</span></div>
+        <div class="time">11:42</div>
+      </div>
+      <div class="timer alt">
+        <svg class="ring" viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" fill="none" stroke="#2b1812" stroke-opacity=".18" stroke-width="3.5"/><circle cx="20" cy="20" r="16" fill="none" stroke="#6b5240" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="25.8 100.5" transform="rotate(-90 20 20)"/></svg>
+        <div class="lab"><b>Rice</b><span>On the hob, low (2)</span></div>
+        <div class="time">3:05</div>
+      </div>
+    </div>
+
+    <div class="c-nav">
+      <button class="back"><svg class="icon"><use href="#i-back"/></svg>Back</button>
+      <button class="next"><span class="stack">Next<small>Under the grill</small></span><svg class="icon"><use href="#i-next"/></svg></button>
+    </div>
+    <div class="homebar"></div>
+  </div></div>
+</section>
+
+</main>
+
+<section class="why">
+  <h2>Why this route</h2>
+  <div class="cols">
+    <div>
+      <h3>UX</h3>
+      <p><strong>Fridge:</strong> who’s eating and search sit together in the bottom dock, under the thumb. “Have 8 of 10” is a row of small dots you can read at a glance, and each ingredient carries a tick or an empty ring.</p>
+      <p><strong>Propped up:</strong> cook mode keeps one step to a page in 31px serif, the timers stacked low and wide, and Back/Next as 76px slabs. <strong>Sofa:</strong> Discover reads like a book you leaf through, one feature and then quieter entries.</p>
+    </div>
+    <div>
+      <h3>UI</h3>
+      <p>Daytime paper (#efe8de) with walnut ink, a deliberate move away from the dark default so the photographs sit on the page as they would in print. Hairline rules, generous margins, nothing in cards.</p>
+      <p>Newsreader, a soft text serif with optical sizes, sets titles, headnotes and steps. Jost handles the working parts: amounts, labels, times, buttons. Yolk marks only the things that need action: Start cooking, Quick, and the timer that matters.</p>
+    </div>
+    <div>
+      <h3>Content</h3>
+      <p>Headnotes are cut to two or three sentences in a plain, warm voice. Ingredients are set as a book sets them: amount in a narrow column, the thing itself in serif. Grams, 180°C fan and hob numbers throughout.</p>
+      <p>“Needs checking” is a pencilled margin note, not a warning: it says what’s missing and what the video shows. Swaps, like salmon for cod, live in the same note.</p>
+    </div>
+    <div>
+      <h3>Risks</h3>
+      <p>Paper is bright in a dim kitchen at night; it needs a walnut evening edition. A big feature photo costs space, so Discover shows only one or two other recipes above the fold.</p>
+      <p>Not every reel has a good still, and low-resolution heroes will look soft at this size. Serif step text has to be tested at real distance, not just at 31px on screen.</p>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

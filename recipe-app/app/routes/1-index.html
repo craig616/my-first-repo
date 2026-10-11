@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Route 1 · Index</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* page (neutral, outside the phones) */
+    --page: #dcd8d1;
+    --page-ink: #2a2522;
+    --page-soft: #5c544d;
+    --page-line: #bdb6ac;
+
+    /* paper: the daytime light, used for reading */
+    --paper: #efe8de;
+    --ink: #2b1812;
+    --ink-2: #6b5242;      /* 5.9:1 on paper */
+    --accent: #7d521c;     /* brass, darkened for paper: 5.6:1 */
+    --rule: #cdbfae;       /* hairlines, decorative */
+    --rule-soft: #ddd2c4;
+
+    /* walnut: the kitchen at night, used for cook mode */
+    --walnut: #17100c;
+    --w-card: #2b1d17;
+    --w-line: #4a3225;
+    --w-text: #ebdac6;
+    --w-text-2: #b39476;
+    --brass: #d4a463;
+    --steel: #ada396;
+    --yolk: #f2c75c;
+
+    --sans: "Jost", system-ui, sans-serif;
+    --serif: "Newsreader", Georgia, serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--page);
+    color: var(--page-ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  .num { font-variant-numeric: tabular-nums lining-nums; font-feature-settings: "tnum" 1, "lnum" 1; }
+
+  /* ---------- page header ---------- */
+  .route-head {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 56px 16px 40px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 16px 64px;
+    align-items: end;
+    border-bottom: 1px solid var(--page-line);
+  }
+  .route-head .kicker {
+    font-size: 13px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--page-soft); margin-bottom: 10px;
+  }
+  .route-head h1 {
+    font-family: var(--serif); font-weight: 400; font-size: 56px; line-height: 1;
+    letter-spacing: -0.01em;
+  }
+  .route-head h1 span { font-style: italic; }
+  .route-head dl { display: grid; grid-template-columns: 7.5em 1fr; gap: 8px 16px; font-size: 16px; }
+  .route-head dt { font-size: 13px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--page-soft); padding-top: 3px; }
+  .route-head dd { color: var(--page-ink); }
+
+  /* ---------- frames ---------- */
+  .frames {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 48px 16px 24px;
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 40px;
+  }
+  figure.frame { width: 390px; max-width: 100%; }
+  figure.frame figcaption {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-size: 13px; letter-spacing: .14em; text-transform: uppercase; font-weight: 500;
+    color: var(--page-soft); padding: 0 6px 12px;
+  }
+  figure.frame figcaption b { color: var(--page-ink); font-weight: 500; }
+
+  .phone {
+    position: relative;
+    width: 390px; height: 844px; max-width: 100%;
+    border-radius: 46px;
+    overflow: hidden;
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: 0 0 0 1px rgba(43,24,18,.18), 0 30px 60px -30px rgba(43,24,18,.45), 0 8px 18px -10px rgba(43,24,18,.25);
+    display: flex; flex-direction: column;
+  }
+  .phone.dark { background: var(--walnut); color: var(--w-text); box-shadow: 0 0 0 1px rgba(0,0,0,.4), 0 30px 60px -30px rgba(0,0,0,.6), 0 8px 18px -10px rgba(0,0,0,.35); }
+
+  .status {
+    flex: none; height: 50px; padding: 16px 30px 0 34px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 16px; font-weight: 500; letter-spacing: .01em;
+  }
+  .status svg { display: block; }
+  .status .icons { display: flex; gap: 6px; align-items: center; }
+  .home-bar { position: absolute; bottom: 8px; left: 50%; width: 134px; height: 5px; margin-left: -67px; border-radius: 3px; background: var(--ink); opacity: .85; }
+  .dark .home-bar { background: var(--w-text); }
+
+  .smallcaps { font-size: 13px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; }
+
+  /* ================= 1 · DISCOVER ================= */
+  .d-head { padding: 14px 24px 0; flex: none; }
+  .d-head .date { color: var(--ink-2); }
+  .d-head h2 {
+    font-family: var(--serif); font-weight: 400; font-size: 34px; line-height: 1.1; letter-spacing: -0.01em;
+    margin: 6px 0 14px;
+  }
+  .contents {
+    display: flex; flex-wrap: wrap; gap: 2px 11px;
+    font-size: 15px; line-height: 1.6;
+    padding-bottom: 12px; border-bottom: 1px solid var(--ink);
+  }
+  .contents a { color: var(--ink); text-decoration: none; white-space: nowrap; }
+  .contents sup { font-size: 11px; font-weight: 500; color: var(--accent); margin-left: 1px; vertical-align: 5px; }
+  .contents a.empty { color: var(--ink-2); }
+  .contents a.empty sup { color: var(--ink-2); }
+
+  .filters { display: flex; gap: 0; padding: 0 24px; border-bottom: 1px solid var(--rule); flex: none; }
+  .filters { justify-content: space-between; }
+  .filters a {
+    min-height: 44px; display: flex; align-items: center; gap: 6px;
+    font-size: 15px; color: var(--ink-2); text-decoration: none;
+  }
+  .filters a b { font-weight: 500; color: var(--ink); }
+
+  .index { flex: 1; overflow: hidden; padding: 4px 24px 0; }
+  .sec { margin-top: 18px; }
+  .sec-h { display: flex; align-items: baseline; gap: 12px; color: var(--accent); margin-bottom: 2px; }
+  .sec-h::after { content: ""; flex: 1; border-top: 1px solid var(--rule); transform: translateY(-4px); }
+  .sec-h .n { color: var(--ink-2); letter-spacing: .06em; order: 2; }
+
+  .entry { display: block; padding: 8px 0 9px; text-decoration: none; color: inherit; border-bottom: 1px solid var(--rule-soft); }
+  .entry:last-child { border-bottom: 0; }
+  .entry .line { display: flex; align-items: last baseline; gap: 6px; }
+  .entry .t { font-family: var(--serif); font-size: 20px; line-height: 1.22; font-weight: 400; max-width: 260px; }
+  .entry .lead { flex: 1; min-width: 16px; height: 1px; border-bottom: 1px dotted var(--ink-2); opacity: .55; align-self: last baseline; transform: translateY(-5px); }
+  .entry .time { font-size: 17px; font-weight: 400; white-space: nowrap; }
+  .entry .time small { font-size: 13px; color: var(--ink-2); margin-left: 2px; }
+  .entry .time.na { color: var(--ink-2); }
+  .entry .meta { font-size: 15px; color: var(--ink-2); margin-top: 2px; }
+  .entry .meta .sep { margin: 0 6px; opacity: .7; }
+  .xref { font-family: var(--serif); font-style: italic; font-size: 17px; color: var(--ink-2); padding: 6px 0 2px; }
+  .xref em { font-style: normal; font-family: var(--sans); font-size: 15px; color: var(--ink); }
+
+  .dock {
+    flex: none; padding: 10px 16px 30px; background: var(--paper);
+    border-top: 1px solid var(--ink);
+    box-shadow: 0 -18px 18px -6px var(--paper);
+    position: relative; z-index: 2;
+  }
+  .who { display: flex; align-items: center; gap: 4px; margin-bottom: 8px; }
+  .who .lbl { color: var(--ink-2); font-size: 15px; padding: 0 8px; white-space: nowrap; }
+  .who a {
+    min-height: 44px; display: flex; align-items: center; padding: 0 12px;
+    font-size: 16px; color: var(--ink); text-decoration: none; white-space: nowrap; border-radius: 22px;
+  }
+  .who a.on { background: var(--ink); color: var(--paper); font-weight: 500; }
+  .search {
+    height: 52px; border: 1px solid var(--ink-2); border-radius: 26px;
+    display: flex; align-items: center; gap: 12px; padding: 0 18px;
+    font-size: 16px; color: var(--ink-2);
+  }
+  .search svg { flex: none; }
+
+  /* ================= 2 · RECIPE ================= */
+  .topnav { flex: none; height: 48px; padding: 0 12px 0 10px; display: flex; justify-content: space-between; align-items: center; }
+  .topnav a { min-height: 44px; min-width: 44px; display: flex; align-items: center; gap: 4px; color: var(--ink); text-decoration: none; font-size: 16px; padding: 0 8px; }
+  .topnav .run { color: var(--accent); }
+
+  .r-body { flex: 1; overflow: hidden; padding: 4px 28px 0; }
+  .r-body h2 { font-family: var(--serif); font-weight: 400; font-size: 31px; line-height: 1.1; letter-spacing: -0.015em; white-space: nowrap; }
+  .byline { font-size: 16px; color: var(--ink-2); margin-top: 4px; }
+  .byline b { font-weight: 400; color: var(--ink); }
+
+  .facts { display: grid; grid-template-columns: 1fr 1fr 1fr; margin-top: 12px; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--rule); }
+  .facts div { padding: 5px 0 6px; border-right: 1px solid var(--rule-soft); padding-left: 12px; }
+  .facts div:first-child { padding-left: 0; }
+  .facts div:last-child { border-right: 0; }
+  .facts .k { display: block; font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-2); }
+  .facts .v { font-size: 18px; }
+  .facts .v small { font-size: 14px; color: var(--ink-2); }
+  .facts .v.q { font-family: var(--serif); font-style: italic; font-size: 17px; color: var(--ink-2); }
+
+  .watch { display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 6px 0; border-bottom: 1px solid var(--rule); text-decoration: none; color: var(--ink); }
+  .watch video { width: 27px; height: 36px; object-fit: cover; object-position: 50% 25%; border-radius: 2px; display: block; flex: none; filter: saturate(.85); }
+  .watch .w { flex: 1; font-size: 16px; }
+  .watch .w span { color: var(--ink-2); }
+  .watch .d { font-size: 15px; color: var(--ink-2); }
+
+  .r-sec { display: flex; justify-content: space-between; align-items: baseline; margin: 14px 0 2px; }
+  .r-sec .smallcaps { color: var(--accent); }
+  .r-sec .aside { font-size: 15px; color: var(--ink-2); }
+
+  .ing { list-style: none; }
+  .ing li { display: grid; grid-template-columns: 58px 1fr auto; gap: 0 8px; align-items: baseline; padding: 3px 0; font-size: 16px; line-height: 1.3; }
+  .ing .amt { color: var(--ink); }
+  .ing .amt.na { color: var(--ink-2); }
+  .ing .st { font-size: 12px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+  .ing .st svg { display: block; transform: translateY(2px); }
+  .ing .note { grid-column: 2 / 4; font-family: var(--serif); font-style: italic; font-size: 16px; color: var(--ink-2); line-height: 1.3; margin-top: 2px; }
+  .ing .note u { text-decoration: none; border-bottom: 1px dotted var(--accent); color: var(--accent); }
+  .ing .opt { color: var(--ink-2); }
+  .ing .amt.chk { color: var(--accent); font-style: italic; font-family: var(--serif); font-size: 16px; text-decoration: underline dotted; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+
+  .steps { list-style: none; }
+  .steps li { display: grid; grid-template-columns: 26px 1fr; gap: 0 8px; padding: 4px 0 6px; font-size: 16px; line-height: 1.4; }
+  .steps .sn { font-size: 15px; color: var(--accent); font-weight: 500; padding-top: 1px; }
+  .steps .cues { display: flex; gap: 18px; margin-top: 2px; font-size: 15px; color: var(--ink-2); }
+  .steps .cues span { display: inline-flex; align-items: center; gap: 5px; }
+
+  .r-dock { flex: none; padding: 8px 16px 28px; background: var(--paper); position: relative; z-index: 2; box-shadow: 0 -10px 12px -2px var(--paper); }
+  .r-dock .start {
+    height: 58px; border-radius: 29px; background: var(--ink); color: var(--paper);
+    display: flex; align-items: center; justify-content: space-between; padding: 0 26px;
+    font-size: 18px; font-weight: 500; text-decoration: none;
+  }
+  .r-dock .start small { font-size: 15px; font-weight: 400; color: #d8c9b6; }
+
+  /* ================= 3 · COOK ================= */
+  .c-top { flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 16px 0 10px; height: 52px; }
+  .c-top a { min-width: 52px; min-height: 52px; display: flex; align-items: center; justify-content: center; color: var(--w-text); }
+  .c-top .of { font-size: 18px; color: var(--w-text-2); padding-right: 6px; }
+  .c-top .of b { color: var(--w-text); font-weight: 500; }
+
+  .prog { flex: none; display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; padding: 0 24px; }
+  .prog i { display: block; height: 2px; background: var(--w-line); }
+  .prog i.done { background: var(--steel); }
+  .prog i.now { background: var(--yolk); height: 3px; margin-top: -0.5px; }
+
+  .c-body { flex: 1; padding: 22px 24px 0; overflow: hidden; }
+  .c-body .recipe { font-size: 15px; color: var(--w-text-2); margin-bottom: 10px; }
+  .c-step { font-size: 33px; line-height: 1.24; font-weight: 400; letter-spacing: -0.003em; }
+  .c-step mark { background: none; color: var(--yolk); }
+
+  .c-uses { margin-top: 18px; padding-top: 10px; border-top: 1px solid var(--w-line); }
+  .c-uses .smallcaps { color: var(--w-text-2); }
+  .c-uses p { font-size: 20px; margin-top: 2px; }
+  .c-uses p.smallcaps { font-size: 13px; margin: 0; }
+  .c-uses p span { color: var(--w-text-2); font-size: 17px; }
+
+  .timers { flex: none; padding: 0 24px; }
+  .timer { padding: 10px 0 12px; }
+  .timer.second { padding-top: 16px; }
+  .timer .row { display: flex; justify-content: space-between; align-items: baseline; }
+  .timer .lbl { font-size: 17px; color: var(--w-text-2); }
+  .timer .lbl b { color: var(--w-text); font-weight: 500; }
+  .timer .clock { font-weight: 300; letter-spacing: -0.01em; line-height: 1; }
+  .timer.main .clock { font-size: 64px; color: var(--yolk); }
+  .timer.second .clock { font-size: 34px; color: var(--w-text); }
+  .track { position: relative; height: 1px; background: var(--w-line); margin-top: 10px; }
+  .track b { position: absolute; left: 0; top: -0.5px; height: 2px; background: var(--brass); }
+  .timer.main .track b { background: var(--yolk); }
+  .track .ends { display: flex; justify-content: space-between; font-size: 13px; color: var(--w-text-2); padding-top: 6px; }
+
+  .c-nav { flex: none; display: grid; grid-template-columns: 1fr 1.5fr; gap: 10px; padding: 8px 16px 32px; }
+  .c-nav a {
+    height: 84px; border-radius: 22px; display: flex; flex-direction: column; justify-content: center; padding: 0 22px;
+    text-decoration: none; font-size: 22px; font-weight: 500;
+  }
+  .c-nav a small { font-size: 15px; font-weight: 400; margin-top: 2px; }
+  .c-nav .back { border: 1px solid var(--w-line); color: var(--w-text); }
+  .c-nav .back small { color: var(--w-text-2); }
+  .c-nav .next { background: var(--brass); color: var(--walnut); }
+  .c-nav .next small { color: #3a2618; }
+
+  /* ---------- rationale ---------- */
+  .rationale { max-width: 1300px; margin: 0 auto; padding: 40px 16px 80px; }
+  .rationale h3 { font-family: var(--serif); font-weight: 400; font-size: 30px; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--page-line); }
+  .rat { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; }
+  .rat h4 { font-size: 13px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--page-soft); margin-bottom: 8px; }
+  .rat p { font-size: 16px; line-height: 1.55; margin-bottom: 10px; max-width: 34em; }
+  .rat p:last-child { margin-bottom: 0; }
+
+  @media (max-width: 1000px) {
+    .route-head { grid-template-columns: 1fr; padding-top: 36px; }
+    .route-head h1 { font-size: 44px; }
+    .rat { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 600px) {
+    .rat { grid-template-columns: 1fr; }
+    .route-head dl { grid-template-columns: 1fr; gap: 2px; }
+    .route-head dd { margin-bottom: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="route-head">
+  <div>
+    <p class="kicker">Design routes · Route 1 of 6</p>
+    <h1>Index, <span>set in type</span></h1>
+  </div>
+  <dl>
+    <dt>Idea</dt><dd>A cookbook index you can cook from. Words do the work: titles, times and what you have, set like the back pages of a good book.</dd>
+    <dt>Video</dt><dd>No pictures while choosing. On the recipe, one quiet “Watch the video” line with a thumbnail-sized still; the video plays only when tapped.</dd>
+  </dl>
+</header>
+
+<main class="frames">
+
+  <!-- ===================== 1 · DISCOVER ===================== -->
+  <figure class="frame">
+    <figcaption><b>1 · Discover</b><span>The index</span></figcaption>
+    <div class="phone">
+      <div class="status num">
+        <span>18:40</span>
+        <span class="icons" aria-hidden="true">
+          <svg width="18" height="11" viewBox="0 0 18 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="6" rx="1"/><rect x="10" y="2.5" width="3" height="8.5" rx="1"/><rect x="15" y="0" width="3" height="11" rx="1"/></svg>
+          <svg width="16" height="11" viewBox="0 0 16 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1 3.8a10 10 0 0 1 14 0"/><path d="M3.5 6.4a6.4 6.4 0 0 1 9 0"/><circle cx="8" cy="9.3" r=".9" fill="currentColor" stroke="none"/></svg>
+          <svg width="26" height="12" viewBox="0 0 26 12" fill="none"><rect x=".5" y=".5" width="22" height="11" rx="3" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="15" height="8" rx="1.6" fill="currentColor"/><rect x="24" y="4" width="1.6" height="4" rx=".8" fill="currentColor" opacity=".45"/></svg>
+        </span>
+      </div>
+
+      <div class="d-head">
+        <p class="smallcaps date">Sunday 4 October</p>
+        <h2>Something for tonight</h2>
+        <nav class="contents" aria-label="Main ingredient">
+          <a href="#">Fish<sup class="num">2</sup></a>
+          <a href="#">Veg<sup class="num">1</sup></a>
+          <a href="#">Beans &amp; pulses<sup class="num">4</sup></a>
+          <a href="#" class="empty">Pasta &amp; noodles<sup class="num">0</sup></a>
+          <a href="#">Eggs<sup class="num">1</sup></a>
+          <a href="#" class="empty">Rice &amp; grains<sup class="num">0</sup></a>
+          <a href="#">Baking &amp; sweet<sup class="num">2</sup></a>
+        </nav>
+      </div>
+
+      <nav class="filters" aria-label="Show">
+        <a href="#">Quick <b class="num">2</b></a>
+        <a href="#">Not cooked yet <b class="num">9</b></a>
+        <a href="#">Have most <b class="num">3</b></a>
+      </nav>
+
+      <div class="index">
+        <section class="sec">
+          <h3 class="sec-h smallcaps">Fish <span class="n num">2</span></h3>
+          <a class="entry" href="#">
+            <div class="line"><span class="t">Cod with mustard sauce in paper boats</span><span class="lead"></span><span class="time na num">–</span></div>
+            <p class="meta">Artur<span class="sep">·</span>have <span class="num">6</span> of <span class="num">8</span><span class="sep">·</span>time not given</p>
+          </a>
+          <a class="entry" href="#">
+            <div class="line"><span class="t">Japanese mirin baked cod</span><span class="lead"></span><span class="time num">22<small>min</small></span></div>
+            <p class="meta">Lisa<span class="sep">·</span>have <span class="num">8</span> of <span class="num">10</span><span class="sep">·</span>marinate <span class="num">1</span> hr first</p>
+          </a>
+          <p class="xref">Tinned fish, <em>see</em> Broccolini beans</p>
+        </section>
+
+        <section class="sec">
+          <h3 class="sec-h smallcaps">Veg <span class="n num">1</span></h3>
+          <a class="entry" href="#">
+            <div class="line"><span class="t">Scarpaccia with pepper and onion</span><span class="lead"></span><span class="time num">80<small>min</small></span></div>
+            <p class="meta">Francesca<span class="sep">·</span>have <span class="num">9</span> of <span class="num">10</span></p>
+          </a>
+        </section>
+
+        <section class="sec">
+          <h3 class="sec-h smallcaps">Beans &amp; pulses <span class="n num">4</span></h3>
+          <a class="entry" href="#">
+            <div class="line"><span class="t">Broccolini beans with tinned fish</span><span class="lead"></span><span class="time num">90<small>min</small></span></div>
+            <p class="meta">Justine<span class="sep">·</span>have <span class="num">11</span> of <span class="num">15</span><span class="sep">·</span>serves <span class="num">4</span></p>
+          </a>
+          <a class="entry" href="#">
+            <div class="line"><span class="t">Creamy tomato and basil beans</span><span class="lead"></span><span class="time num">30<small>min</small></span></div>
+            <p class="meta">Sophie<span class="sep">·</span>have <span class="num">11</span> of <span class="num">13</span><span class="sep">·</span>serves <span class="num">2</span></p>
+          </a>
+          <a class="entry" href="#">
+            <div class="line"><span class="t">Late summer minestrone with fennel and saffron</span><span class="lead"></span><span class="time na num">–</span></div>
+            <p class="meta">Simone<span class="sep">·</span>have <span class="num">6</span> of <span class="num">10</span></p>
+          </a>
+          <a class="entry" href="#">
+            <div class="line"><span class="t">Roast sweet potatoes with spinach and cannellini cream</span><span class="lead"></span><span class="time num">40<small>min</small></span></div>
+            <p class="meta">Tirmagno<span class="sep">·</span>have <span class="num">10</span> of <span class="num">13</span></p>
+          </a>
+        </section>
+
+
+        <section class="sec">
+          <h3 class="sec-h smallcaps">Eggs <span class="n num">1</span></h3>
+          <p class="xref">Curd cheese, <em>see</em> Baked curd cheese casserole</p>
+        </section>
+
+        <section class="sec">
+          <h3 class="sec-h smallcaps">Baking &amp; sweet <span class="n num">2</span></h3>
+          <a class="entry" href="#">
+            <div class="line"><span class="t">Baked curd cheese casserole</span><span class="lead"></span><span class="time num">60<small>min</small></span></div>
+            <p class="meta">Kristina<span class="sep">·</span>have <span class="num">4</span> of <span class="num">8</span></p>
+          </a>
+          <a class="entry" href="#">
+            <div class="line"><span class="t">Upside-down apple tarts</span><span class="lead"></span><span class="time na num">–</span></div>
+            <p class="meta">Jeff &amp; Lauren<span class="sep">·</span>have <span class="num">5</span> of <span class="num">7</span></p>
+          </a>
+        </section>
+      </div>
+
+      <div class="dock">
+        <div class="who" role="radiogroup" aria-label="Who’s eating?">
+          <span class="lbl">Who’s eating?</span>
+          <a href="#" class="on" role="radio" aria-checked="true">Both of us</a>
+          <a href="#" role="radio" aria-checked="false">Mary</a>
+          <a href="#" role="radio" aria-checked="false">Craig alone</a>
+        </div>
+        <div class="search" role="search">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="7.5" cy="7.5" r="6"/><path d="M12 12l5 5" stroke-linecap="round"/></svg>
+          <span>Search, or name what’s in the fridge</span>
+        </div>
+      </div>
+      <div class="home-bar"></div>
+    </div>
+  </figure>
+
+  <!-- ===================== 2 · RECIPE ===================== -->
+  <figure class="frame">
+    <figcaption><b>2 · Recipe</b><span>Text first</span></figcaption>
+    <div class="phone">
+      <div class="status num">
+        <span>18:41</span>
+        <span class="icons" aria-hidden="true">
+          <svg width="18" height="11" viewBox="0 0 18 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="6" rx="1"/><rect x="10" y="2.5" width="3" height="8.5" rx="1"/><rect x="15" y="0" width="3" height="11" rx="1"/></svg>
+          <svg width="16" height="11" viewBox="0 0 16 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1 3.8a10 10 0 0 1 14 0"/><path d="M3.5 6.4a6.4 6.4 0 0 1 9 0"/><circle cx="8" cy="9.3" r=".9" fill="currentColor" stroke="none"/></svg>
+          <svg width="26" height="12" viewBox="0 0 26 12" fill="none"><rect x=".5" y=".5" width="22" height="11" rx="3" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="15" height="8" rx="1.6" fill="currentColor"/><rect x="24" y="4" width="1.6" height="4" rx=".8" fill="currentColor" opacity=".45"/></svg>
+        </span>
+      </div>
+
+      <nav class="topnav">
+        <a href="#"><svg width="10" height="16" viewBox="0 0 10 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2L2 8l6 6"/></svg> Index</a>
+        <span class="smallcaps run">Fish</span>
+      </nav>
+
+      <article class="r-body">
+        <h2>Japanese mirin baked cod</h2>
+        <p class="byline">From <b>Lisa</b>, @thelisafeed</p>
+
+        <div class="facts">
+          <div><span class="k">Cooking</span><span class="v num">22 <small>min</small></span></div>
+          <div><span class="k">Marinate</span><span class="v num">1 <small>hr +</small></span></div>
+          <div><span class="k">Serves</span><span class="v q">not given</span></div>
+        </div>
+
+        <a class="watch" href="#">
+          <video src="../../media/C6_FrdiyZjh/video.mp4" poster="../../media/C6_FrdiyZjh/hero.jpg" preload="none" muted playsinline aria-label="Lisa’s video"></video>
+          <span class="w">Watch the video <span>on Instagram</span></span>
+          <span class="d num">0:44</span>
+        </a>
+
+        <div class="r-sec"><span class="smallcaps">Ingredients</span><span class="aside">have <span class="num">8</span> of <span class="num">10</span></span></div>
+        <ul class="ing">
+          <li><span class="amt chk">Check</span><span>Cod, skin on <span class="opt">or salmon</span></span><span class="st">To buy</span>
+            <span class="note">Amount not given; two pieces in the video.</span></li>
+          <li><span class="amt num">1 tbsp</span><span>Mirin</span><span class="st"><svg width="14" height="12" viewBox="0 0 14 12" fill="none" stroke="#6b5242" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-label="have"><path d="M1.5 6.5l3.5 3.5 7.5-8.5"/></svg></span></li>
+          <li><span class="amt num">1 tbsp</span><span>Soy sauce</span><span class="st"><svg width="14" height="12" viewBox="0 0 14 12" fill="none" stroke="#6b5242" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-label="have"><path d="M1.5 6.5l3.5 3.5 7.5-8.5"/></svg></span></li>
+          <li><span class="amt num">1 tsp</span><span>Shiro dashi</span><span class="st"><svg width="14" height="12" viewBox="0 0 14 12" fill="none" stroke="#6b5242" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-label="have"><path d="M1.5 6.5l3.5 3.5 7.5-8.5"/></svg></span></li>
+          <li><span class="amt num">1 tbsp</span><span>Sugar <span class="opt num">(about 12 g)</span></span><span class="st"><svg width="14" height="12" viewBox="0 0 14 12" fill="none" stroke="#6b5242" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-label="have"><path d="M1.5 6.5l3.5 3.5 7.5-8.5"/></svg></span></li>
+          <li><span class="amt na">–</span><span>Bok choy, halved lengthways</span><span class="st">To buy</span></li>
+          <li><span class="amt">A little</span><span>Oil, and a pinch of salt</span><span class="st"><svg width="14" height="12" viewBox="0 0 14 12" fill="none" stroke="#6b5242" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-label="have"><path d="M1.5 6.5l3.5 3.5 7.5-8.5"/></svg></span></li>
+          <li><span class="amt">To serve</span><span>Sesame seeds and rice; yuzu kosho <span class="opt">if you have it</span></span><span class="st"><svg width="14" height="12" viewBox="0 0 14 12" fill="none" stroke="#6b5242" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-label="have"><path d="M1.5 6.5l3.5 3.5 7.5-8.5"/></svg></span></li>
+        </ul>
+
+        <div class="r-sec"><span class="smallcaps">Method</span><span class="aside"><span class="num">7</span> steps</span></div>
+        <ol class="steps">
+          <li><span class="sn num">1</span><div>Stir the four marinade ingredients together.</div></li>
+          <li><span class="sn num">2</span><div>Turn the cod in the marinade, then leave it in the fridge for at least an hour.
+            <p class="cues num"><span><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><circle cx="7" cy="7.8" r="5.4"/><path d="M7 5v3l2 1.3M5.5 1h3" stroke-linecap="round"/></svg>1 hr</span><span><svg width="10" height="12" viewBox="0 0 10 12" fill="currentColor" aria-hidden="true"><path d="M1 1.2v9.6L9 6z"/></svg>Watch from 0:17</span></p></div></li>
+          <li><span class="sn num">3</span><div>Heat the oven to 180°C fan.</div></li>
+          <li><span class="sn num">4</span><div>Halve the bok choy lengthways and lay it on a baking tray with a little oil and a pinch of salt.
+            <p class="cues num"><span><svg width="10" height="12" viewBox="0 0 10 12" fill="currentColor" aria-hidden="true"><path d="M1 1.2v9.6L9 6z"/></svg>Watch from 0:22</span></p></div></li>
+          <li><span class="sn num">5</span><div>Set the cod on the same tray, skin side up, and bake for 15 minutes, until the marinade is bubbling and the fish has begun to colour.
+            <p class="cues num"><span><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><circle cx="7" cy="7.8" r="5.4"/><path d="M7 5v3l2 1.3M5.5 1h3" stroke-linecap="round"/></svg>15 min</span></p></div></li>
+          <li><span class="sn num">6</span><div>Lift off the bok choy. Switch to the grill at 200°C and give the cod another 5–7 minutes, until the skin blisters and the glaze turns dark and sticky.
+            <p class="cues num"><span><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><circle cx="7" cy="7.8" r="5.4"/><path d="M7 5v3l2 1.3M5.5 1h3" stroke-linecap="round"/></svg>7 min</span><span><svg width="10" height="12" viewBox="0 0 10 12" fill="currentColor" aria-hidden="true"><path d="M1 1.2v9.6L9 6z"/></svg>Watch from 0:27</span></p></div></li>
+          <li><span class="sn num">7</span><div>Scatter over sesame seeds and eat with rice, with a little yuzu kosho on the side.
+            <p class="cues num"><span><svg width="10" height="12" viewBox="0 0 10 12" fill="currentColor" aria-hidden="true"><path d="M1 1.2v9.6L9 6z"/></svg>Watch from 0:34</span></p></div></li>
+        </ol>
+        <p class="byline">Recipe from Lisa (@thelisafeed) on Instagram, May 2024. Salmon works just as well, she says.</p>
+      </article>
+
+      <div class="r-dock">
+        <a class="start" href="#">Start cooking <small class="num">7 steps · 180°C fan</small></a>
+      </div>
+      <div class="home-bar"></div>
+    </div>
+  </figure>
+
+  <!-- ===================== 3 · COOK MODE ===================== -->
+  <figure class="frame">
+    <figcaption><b>3 · Cook mode</b><span>Just the step</span></figcaption>
+    <div class="phone dark">
+      <div class="status num">
+        <span>19:58</span>
+        <span class="icons" aria-hidden="true">
+          <svg width="18" height="11" viewBox="0 0 18 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="6" rx="1"/><rect x="10" y="2.5" width="3" height="8.5" rx="1"/><rect x="15" y="0" width="3" height="11" rx="1"/></svg>
+          <svg width="16" height="11" viewBox="0 0 16 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1 3.8a10 10 0 0 1 14 0"/><path d="M3.5 6.4a6.4 6.4 0 0 1 9 0"/><circle cx="8" cy="9.3" r=".9" fill="currentColor" stroke="none"/></svg>
+          <svg width="26" height="12" viewBox="0 0 26 12" fill="none"><rect x=".5" y=".5" width="22" height="11" rx="3" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="13" height="8" rx="1.6" fill="currentColor"/><rect x="24" y="4" width="1.6" height="4" rx=".8" fill="currentColor" opacity=".45"/></svg>
+        </span>
+      </div>
+
+      <div class="c-top">
+        <a href="#" aria-label="Leave cook mode"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 3l12 12M15 3L3 15"/></svg></a>
+        <span class="of num">Step <b>5</b> of 7</span>
+      </div>
+      <div class="prog" aria-hidden="true"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="now"></i><i></i><i></i></div>
+
+      <div class="c-body">
+        <p class="recipe">Japanese mirin baked cod</p>
+        <p class="c-step">Set the cod on the same tray, skin side up, and bake for <mark>15 minutes</mark>, until the marinade is bubbling and the fish has begun to colour.</p>
+        <div class="c-uses">
+          <p class="smallcaps">For this step</p>
+          <p>Cod, skin on <span>· the marinated pieces</span></p>
+        </div>
+      </div>
+
+      <div class="timers">
+        <div class="timer main">
+          <div class="row"><span class="lbl"><b>Cod</b> · baking</span><span class="clock num">11:42</span></div>
+          <div class="track"><b style="width:22%"></b><div class="ends num"><span></span><span>of 15:00</span></div></div>
+        </div>
+        <div class="timer second">
+          <div class="row"><span class="lbl"><b>Rice</b> · on the hob</span><span class="clock num">3:05</span></div>
+          <div class="track"><b style="width:79%"></b></div>
+        </div>
+      </div>
+
+      <nav class="c-nav">
+        <a href="#" class="back">Back <small>Step 4</small></a>
+        <a href="#" class="next">Next <small>Step 6 · to the grill</small></a>
+      </nav>
+      <div class="home-bar"></div>
+    </div>
+  </figure>
+
+</main>
+
+<section class="rationale">
+  <h3>Why this route</h3>
+  <div class="rat">
+    <div>
+      <h4>UX</h4>
+      <p><b>Fridge:</b> who’s eating and search sit at the bottom, within thumb reach. Every entry already says “have 8 of 10”, so the answer to “do we have it?” comes before any tap.</p>
+      <p><b>Propped up:</b> cook mode goes dark and shows only the step at 33&nbsp;px, timers you can read across the kitchen, and Back and Next buttons 84&nbsp;px tall.</p>
+      <p><b>Sofa:</b> the index scans like a book. With no pictures to load, it’s quick to scroll and easy on the eyes.</p>
+    </div>
+    <div>
+      <h4>UI</h4>
+      <p>Newsreader sets the titles and anything you read for pleasure. Jost does the working parts: labels, times and buttons. All numbers are tabular, so times line up down the right edge like page numbers.</p>
+      <p>Choosing and reading happen on daytime paper (#efe8de). Cook mode switches to the walnut palette, with the yolk colour saved for the step’s key time and the running timer. Thin rules do the job that photos and cards do on the other routes.</p>
+    </div>
+    <div>
+      <h4>Content</h4>
+      <p>The tone is quiet: “Something for tonight”, “Check”, “if you have it”. Missing facts are left out, not guessed at. A time that isn’t given shows as a dash, and the serving count says “not given”.</p>
+      <p>Where the cod’s amount would be, the amount column just says <i>Check</i>, with one italic line underneath and no warning colours. Swaps (“or salmon”) and optional items (“if you have it”) are set in the secondary colour next to the ingredient. Cross-references (“Tinned fish, <i>see</i> Broccolini beans”) work as they would in a printed index.</p>
+    </div>
+    <div>
+      <h4>Risks</h4>
+      <p>Without photos, dishes nobody has cooked yet may feel abstract, so appetite depends on the titles. At 500 recipes the index gets long, and headings and cross-references will need care to stay useful.</p>
+      <p>Switching from light to dark for cook mode could feel abrupt. The dash for missing times is honest but could look like a gap in the data.</p>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,967 @@
+<title>Supper Wireframe Prototype</title>
+<style>
+  /* Layout: one phone-width column; a tab bar at the bottom, a context bar above it (search on Tonight, add in the Kitchen), and full-screen layers for the focused flow (recipe, cook, story) and for sheets. Deliberately neutral greyscale: this locks behaviour, not looks. */
+  :root {
+    --bg:#141414; --scr:#1b1b1b; --raise:#2a2a2a; --fill:#3a3a3a; --hi:#dcdcdc; --ink:#e8e8e8; --mid:#a0a0a0; --soft:#707070;
+    --people:#cfcfcf; --feel:#cfcfcf; --yolk:#ffffff; --dish:#ffffff;
+    --font: system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    color-scheme:dark;
+  }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html, body { height:100%; }
+  body { margin:0; background:#0c0c0c; color:var(--ink); font:16px/1.45 var(--font); }
+  button { font:inherit; color:inherit; background:none; border:0; padding:0; cursor:pointer; text-align:left; }
+  input, textarea { font:inherit; color:var(--ink); }
+  img { display:block; max-width:100%; }
+  .ph { filter:grayscale(1) contrast(.95); background:var(--fill); object-fit:cover; }
+  :focus-visible { outline:2px solid var(--hi); outline-offset:2px; border-radius:6px; }
+  #app { max-width:440px; margin:0 auto; min-height:100%; background:var(--bg); position:relative; }
+  main { padding:14px 18px 190px; }
+  .meta { font-size:13px; color:var(--mid); }
+  .lab { font-size:12.5px; color:var(--mid); margin:18px 0 6px; }
+  h1 { font-weight:400; font-size:26px; line-height:1.2; margin:0; text-wrap:balance; }
+  .top { display:flex; justify-content:space-between; align-items:center; gap:10px; min-height:44px; }
+  .sec { display:flex; justify-content:space-between; align-items:baseline; margin:26px 0 10px; }
+  .sec h2 { font-weight:400; font-size:19px; margin:0; }
+  .sec span, .sec button { font-size:13px; color:var(--mid); }
+  .chip { min-height:38px; padding:0 14px; border-radius:19px; background:var(--raise); display:inline-flex; align-items:center; gap:6px; font-size:14.5px; white-space:nowrap; flex:none; }
+  .chip.on { background:var(--hi); color:#111; }
+  .chip.ghost { background:none; color:var(--mid); padding:0 8px; }
+  .chip.dash { background:none; box-shadow:inset 0 0 0 1px var(--fill); color:var(--mid); }
+  .chips { display:flex; gap:8px; flex-wrap:wrap; }
+  .scrollx { display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; margin-right:-18px; padding-right:18px; }
+  .scrollx::-webkit-scrollbar { display:none; }
+  .words { display:flex; gap:18px; overflow-x:auto; scrollbar-width:none; margin-right:-18px; padding-right:18px; }
+  .words::-webkit-scrollbar { display:none; }
+  .words button { min-height:44px; font-size:16.5px; color:var(--mid); white-space:nowrap; flex:none; }
+  .words button[aria-checked="true"], .words button[aria-pressed="true"] { color:var(--ink); text-decoration:underline; text-underline-offset:7px; }
+  .init { width:40px; height:40px; border-radius:50%; background:var(--raise); display:grid; place-items:center; flex:none; text-align:center; }
+  /* rows of cards */
+  .picks { display:flex; gap:12px; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; margin-right:-18px; padding-right:18px; align-items:flex-start; }
+  .picks::-webkit-scrollbar { display:none; }
+  .pick { flex:0 0 31%; scroll-snap-align:start; }
+  .pick img { width:100%; aspect-ratio:3/4; border-radius:6px; }
+  .pick .t { font-size:14px; margin-top:7px; line-height:1.3; }
+  .pick .m { font-size:12px; color:var(--mid); margin-top:2px; line-height:1.35; }
+  .row { display:grid; grid-template-columns:60px 1fr auto; gap:12px; align-items:center; width:100%; min-height:64px; padding:6px 0; }
+  .row img { width:60px; height:60px; border-radius:6px; }
+  .row .t { font-size:15.5px; line-height:1.3; }
+  .row .m { font-size:12.5px; color:var(--mid); margin-top:1px; }
+  .row .r { color:var(--mid); min-width:44px; min-height:44px; display:grid; place-items:center; }
+  .empty { color:var(--mid); padding:12px 0; font-size:14.5px; }
+  .btn { min-height:52px; border-radius:26px; background:var(--hi); color:#111; display:flex; align-items:center; justify-content:center; gap:8px; font-size:16px; width:100%; text-align:center; padding:0 18px; }
+  .btn.sec { background:var(--raise); color:var(--ink); }
+  .btn[aria-disabled="true"] { opacity:.45; }
+  .seg { display:grid; grid-template-columns:1fr 1fr; background:var(--raise); border-radius:22px; padding:3px; min-height:44px; margin-top:12px; }
+  .seg button { border-radius:19px; font-size:14.5px; color:var(--mid); text-align:center; }
+  .seg button[aria-pressed="true"] { background:var(--hi); color:#111; }
+  .banner { background:var(--raise); border-radius:12px; padding:12px 14px; display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:16px; }
+  .note { margin-top:34px; font-size:12.5px; color:var(--soft); }
+  /* bottom bars */
+  #dock { position:fixed; left:50%; transform:translateX(-50%); bottom:0; width:100%; max-width:440px; z-index:20; background:linear-gradient(transparent, var(--bg) 22%); padding-top:22px; }
+  #carry:empty, #ctxbar:empty { display:none; }
+  #carry { margin:0 12px 8px; }
+  #carry .c { display:flex; align-items:center; gap:10px; background:var(--hi); color:#111; border-radius:14px; min-height:52px; padding:0 6px 0 14px; }
+  #carry .c > button:first-child { flex:1; min-height:52px; font-size:14.5px; }
+  #ctxbar { padding:0 12px 8px; display:flex; gap:8px; }
+  .field { flex:1; min-height:48px; border-radius:24px; background:var(--raise); display:flex; align-items:center; gap:10px; padding:0 8px 0 16px; color:var(--mid); font-size:15px; }
+  .field input { flex:1; min-width:0; background:none; border:0; outline:none; min-height:46px; font-size:16px; }
+  .field .ic { min-width:40px; min-height:40px; display:grid; place-items:center; color:var(--ink); position:relative; }
+  .field .ic i { position:absolute; top:8px; right:8px; width:7px; height:7px; border-radius:50%; background:var(--hi); }
+  nav#tabs { display:grid; grid-template-columns:repeat(4,1fr); background:#181818; padding:6px 4px calc(10px + env(safe-area-inset-bottom, 0px)); }
+  nav#tabs button { min-height:52px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; font-size:11.5px; color:var(--soft); position:relative; text-align:center; }
+  nav#tabs button::before { content:""; width:22px; height:18px; border-radius:5px; background:var(--fill); }
+  nav#tabs button[aria-current="page"] { color:var(--ink); }
+  nav#tabs button[aria-current="page"]::before { background:var(--hi); }
+  nav#tabs b { position:absolute; top:4px; left:calc(50% + 8px); font-size:10.5px; font-weight:500; background:var(--hi); color:#111; border-radius:9px; min-width:18px; height:18px; display:grid; place-items:center; padding:0 5px; }
+  /* layers */
+  #layer:empty { display:none; }
+  .view { position:fixed; inset:0; z-index:40; background:var(--bg); overflow-y:auto; }
+  .view .inner { max-width:440px; margin:0 auto; padding:0 18px 130px; position:relative; }
+  .hero { position:relative; margin:0 -18px; }
+  .hero img { width:100%; aspect-ratio:4/3.3; }
+  .hero .bar { position:absolute; top:calc(10px + env(safe-area-inset-top, 0px)); left:12px; right:12px; display:flex; justify-content:space-between; }
+  a.round { color:var(--ink); text-decoration:none; font-size:14px; }
+  .round { min-width:44px; min-height:44px; border-radius:22px; background:rgba(20,20,20,.75); display:grid; place-items:center; padding:0 14px; }
+  .acts { display:flex; gap:8px; align-items:center; margin-top:16px; }
+  .acts .btn { flex:1; }
+  .il { display:flex; justify-content:space-between; gap:12px; padding:8px 0; font-size:15px; align-items:center; }
+  .il .s { flex:none; font-size:12.5px; color:var(--mid); text-align:right; }
+  .il .s button { min-height:36px; padding:0 12px; border-radius:18px; background:var(--raise); color:var(--ink); font-size:13px; }
+  .il .s.need { color:var(--ink); }
+  .step { display:grid; grid-template-columns:26px 1fr; gap:8px; padding:8px 0; font-size:15px; }
+  .step b { font-weight:400; color:var(--mid); }
+  .pin { position:fixed; left:50%; transform:translateX(-50%); bottom:0; width:100%; max-width:440px; padding:14px 18px calc(18px + env(safe-area-inset-bottom, 0px)); background:linear-gradient(transparent, var(--bg) 30%); z-index:45; }
+  .scrim { position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:50; }
+  .sheet { position:fixed; left:0; right:0; margin:0 auto; bottom:0; width:100%; max-width:440px; max-height:88vh; overflow-y:auto; background:#232323; border-radius:22px 22px 0 0; z-index:51; padding:10px 20px 110px; }
+  .sheet .grab { width:40px; height:5px; border-radius:3px; background:var(--fill); margin:0 auto 12px; }
+  .sheet .foot { position:fixed; left:0; right:0; margin:0 auto; bottom:0; width:100%; max-width:440px; padding:12px 20px calc(18px + env(safe-area-inset-bottom, 0px)); background:linear-gradient(transparent, #232323 30%); display:flex; gap:8px; z-index:52; }
+  .sheet .foot .btn { flex:1; }
+  .sheet input.box { width:100%; min-height:46px; border-radius:23px; background:var(--raise); border:0; padding:0 16px; outline:none; }
+  /* cook */
+  .cook { background:#101010; }
+  .prog { display:flex; gap:5px; margin-top:6px; }
+  .prog i { flex:1; height:4px; border-radius:2px; background:var(--fill); }
+  .prog i.on { background:var(--hi); }
+  .timers { display:grid; gap:8px; margin-top:14px; }
+  .timer { display:flex; align-items:center; justify-content:space-between; background:var(--raise); border-radius:12px; padding:8px 8px 8px 14px; min-height:56px; width:100%; }
+  .timer .big { font-size:30px; font-weight:300; font-variant-numeric:tabular-nums; }
+  .timer.done { background:var(--hi); color:#111; }
+  .cx { font-size:26px; line-height:1.32; font-weight:300; margin-top:24px; }
+  .nextp { opacity:.6; margin-top:28px; }
+  .nav2 { position:fixed; left:50%; transform:translateX(-50%); bottom:0; width:100%; max-width:440px; display:grid; grid-template-columns:1fr 1.6fr; z-index:45; }
+  .nav2 button { min-height:84px; padding-bottom:env(safe-area-inset-bottom, 0px); text-align:center; font-size:18px; background:var(--raise); }
+  .nav2 button:last-child { background:var(--hi); color:#111; }
+  .nav2 button:only-child { grid-column:1 / -1; }
+  /* story */
+  .story { font-size:24px; line-height:1.7; font-weight:300; margin-top:20px; }
+  .story .w { text-decoration:underline; text-underline-offset:6px; text-decoration-color:var(--soft); cursor:pointer; }
+  .story .w.dish { text-decoration:none; cursor:default; }
+  .story .blank { display:inline-block; min-width:84px; height:1.05em; vertical-align:-3px; border-bottom:2px solid var(--mid); cursor:pointer; }
+  .story .blank.active { border-bottom-color:var(--hi); background:rgba(255,255,255,.06); }
+  .story .placed { animation:pop .32s ease; }
+  .story.done { animation:glow 1.4s ease; }
+  @keyframes pop { 0% { opacity:.2; } 100% { opacity:1; } }
+  @keyframes glow { 0%,100% { opacity:1; } 30% { opacity:.65; } }
+  .wbank { position:fixed; left:50%; bottom:0; width:100%; max-width:440px; transform:translate(-50%, 105%); transition:transform .28s ease; background:#262626; border-radius:22px 22px 0 0; padding:10px 20px 120px; z-index:55; }
+  .wbank.open { transform:translate(-50%, 0); }
+  .wbank .opts { display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; }
+  .wbank .opts button { min-height:42px; padding:0 15px; border-radius:21px; background:var(--raise); }
+  .toast { position:fixed; left:50%; transform:translateX(-50%); bottom:220px; background:var(--hi); color:#111; padding:10px 16px; border-radius:20px; z-index:90; font-size:14.5px; max-width:90vw; text-align:center; }
+  .q { display:grid; grid-template-columns:auto 1fr auto; gap:10px; align-items:center; min-height:48px; }
+  .q .mv { display:flex; gap:2px; }
+  .q .mv button { min-width:36px; min-height:44px; color:var(--mid); text-align:center; }
+  .kit { display:flex; align-items:center; justify-content:space-between; gap:8px; min-height:46px; }
+  .kit .nm { flex:1; font-size:15.5px; }
+  .kit .st { min-height:34px; padding:0 12px; border-radius:17px; background:var(--raise); font-size:12.5px; color:var(--mid); text-align:center; min-width:96px; }
+  .kit .st.low { color:var(--ink); box-shadow:inset 0 0 0 1px var(--mid); }
+  .kit .st.out { color:var(--soft); }
+  .kit .x { min-width:40px; min-height:44px; color:var(--soft); text-align:center; }
+  .tick { display:flex; gap:12px; align-items:center; min-height:46px; width:100%; font-size:15.5px; }
+  .tick i { width:24px; height:24px; border-radius:6px; background:var(--raise); display:grid; place-items:center; font-style:normal; font-size:14px; flex:none; }
+  .tick[aria-pressed="true"] i { background:var(--hi); color:#111; }
+  .tick[aria-pressed="true"].strike span { text-decoration:line-through; color:var(--mid); }
+  .set { display:flex; justify-content:space-between; align-items:center; min-height:48px; font-size:15.5px; gap:10px; }
+  .set .meta { text-align:right; }
+  .proto { font-size:11.5px; color:var(--soft); letter-spacing:.06em; text-transform:uppercase; }
+  @media (prefers-reduced-motion: reduce) { * { animation:none !important; transition:none !important; } }
+</style>
+
+<div id="app">
+  <main id="view"></main>
+  <div id="dock"><div id="carry"></div><div id="ctxbar"></div>
+    <nav id="tabs" aria-label="Main">
+      <button data-a="tab" data-v="tonight">Tonight</button>
+      <button data-a="tab" data-v="list">Ours</button>
+      <button data-a="tab" data-v="kitchen">Kitchen</button>
+      <button data-a="tab" data-v="log">Log</button>
+    </nav>
+  </div>
+</div>
+<div id="layer"></div>
+<div id="live" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></div>
+
+<script>
+__SOUND__
+const R = __DATA__;
+const IMG = c => `img/${c}.jpg`;
+const K = 'sw2_';
+const S = { get(k, d) { try { const v = localStorage.getItem(K + k); return v ? JSON.parse(v) : d; } catch { return d; } }, set(k, v) { try { localStorage.setItem(K + k, JSON.stringify(v)); } catch {} } };
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]));
+const $ = id => document.getElementById(id);
+const cap = s => s ? s[0].toUpperCase() + s.slice(1) : s;
+const byId = id => R.find(r => r.id === id);
+
+/* ---------- context ---------- */
+const now = new Date(), dow = now.getDay(), mon = now.getMonth() + 1, hr = now.getHours();
+const DAY = now.toLocaleDateString('en-GB', { weekday:'long' });
+const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const PART = hr < 11 ? 'morning' : hr < 17 ? 'afternoon' : 'evening';
+const SEASON = mon <= 2 || mon === 12 ? 'winter' : mon <= 5 ? 'spring' : mon <= 8 ? 'summer' : 'autumn';
+const EDGE = { 3:'winter', 6:'spring', 9:'summer', 12:'autumn' }[mon];
+const PHASE = ({ 9:'early ', 10:'mid ', 11:'late ', 12:'early ', 1:'mid ', 2:'late ', 3:'early ', 4:'mid ', 5:'late ', 6:'early ', 7:'high ', 8:'late ' })[mon] + SEASON;
+const RHYTHM = [2,3,4].includes(dow) ? 'fresh' : [0,1].includes(dow) ? 'cupboard' : null;
+const daysAgo = n => new Date(Date.now() - n * 864e5).toISOString();
+const dayName = iso => { const d = new Date(iso), diff = Math.floor((Date.now() - d) / 864e5); return diff < 1 ? 'today' : diff < 2 ? 'yesterday' : diff < 7 ? DAYS[d.getDay()] : 'last week'; };
+const weekKey = () => { const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate() - ((d.getDay() + 5) % 7)); return d.toISOString().slice(0, 10); }; // weeks run from Tuesday (box day)
+
+/* ---------- the Kitchen: have / running low / out, no quantities ---------- */
+const STAPLES = ['salt','black pepper','olive oil','vegetable oil','water','garlic','onion','sugar','plain flour','butter','eggs'];
+const FRESH = new Set(['cod','salmon','tinned fish','anchovies','spinach','bok choy','mushrooms','enoki mushrooms','leek','spring onion','firm tofu','silken tofu','feta','lemon','lime','parsley','dill','chives','basil','coriander','thyme','rosemary','sage','courgette','greek yoghurt','cream cheese','single cream','whipping cream','sour cream','halloumi','brie','quark','parmesan','cabbage','carrot','aubergine','broccolini','broccoli','cauliflower','tomatoes','cherry tomatoes','cucumber','avocado','pear','potatoes','sweet potato','kabocha squash','squash','fennel','celery','beetroot','red pepper','red onion','green beans','edamame','kimchi','ginger','chillies','jalapeno','beef','mayonnaise','gnocchi','pickles']);
+const BOX = ['cod','spinach','leek','mushrooms','courgette','bok choy','lemon','potatoes','kabocha squash'];
+const SEED_K = [
+  ['cod','fridge',2], ['salmon','fridge',2], ['spinach','fridge',2,'low'], ['bok choy','fridge',2], ['mushrooms','fridge',3], ['spring onion','fridge',4],
+  ['firm tofu','fridge',5], ['feta','fridge',6], ['lemon','fridge',3], ['parsley','fridge',4], ['greek yoghurt','fridge',5], ['courgette','fridge',2],
+  ['soy sauce','cupboard',30], ['mirin','cupboard',30], ['rice','cupboard',30], ['pasta','cupboard',30], ['chickpeas','cupboard',30], ['sesame seeds','cupboard',30],
+  ['sesame oil','cupboard',30], ['honey','cupboard',30], ['orzo','cupboard',30], ['tinned tomatoes','cupboard',30], ['butter beans','cupboard',30], ['white miso','cupboard',30],
+  ['chilli oil','cupboard',30], ['peanut butter','cupboard',30], ['vegetable stock','cupboard',30], ['sake','cupboard',30,'out'], ['tahini','cupboard',30], ['rice wine vinegar','cupboard',30]
+].map(([name, place, ago, state]) => ({ name, place, state: state || 'have', added: daysAgo(ago) }));
+
+let me = S.get('me', 'Craig');
+const other = () => me === 'Craig' ? 'Mary' : 'Craig';
+let kitchen = S.get('kitchen', SEED_K);
+let toBuy = S.get('toBuy', [{ name:'sake', for:'japanese-mirin-baked-cod' }]);
+let recentOut = S.get('recentOut', ['sake','spring onion','lime']);
+let boxWeek = S.get('boxWeek', null);
+let list = S.get('list', [
+  { id:'cod-grenobloise', by:'Mary', at:daysAgo(1) },
+  { id:'chilli-peanut-crispy-rice-salad-with-honey-soy-salmon', by:'Craig', at:daysAgo(4) },
+  { id:'charred-hispi-cabbage-with-whipped-miso-tofu', by:'Mary', at:daysAgo(3) },
+  { id:'tofu-okonomiyaki', by:'Craig', at:daysAgo(8) }]);
+let hist = S.get('hist', { 'pasta-e-ceci':{ n:5, last:daysAgo(16) }, 'japanese-mirin-baked-cod':{ n:3, last:daysAgo(24) }, 'hoisin-garlic-noodles':{ n:6, last:daysAgo(6) }, 'sukiyaki':{ n:1, last:daysAgo(9) }, 'creamy-tomato-and-basil-beans':{ n:4, last:daysAgo(35) }, 'spaghetti-alla-nerano':{ n:2, last:daysAgo(70) } });
+let prefs = S.get('prefs', { Craig:['more chilli'], Mary:['no coriander','less sugar'] });
+let favs = S.get('favs', { Craig:['japanese-mirin-baked-cod','pasta-e-ceci','hoisin-garlic-noodles','spaghetti-alla-nerano'], Mary:['japanese-mirin-baked-cod','pasta-e-ceci','creamy-tomato-and-basil-beans'] });
+let logs = S.get('logs', [
+  { id:'pasta-e-ceci', iso:daysAgo(2), cook:'Mary', was:'lovely', but:'was perfect as is', next:'change nothing', again:'make it again soon', ex:true },
+  { id:'sukiyaki', iso:daysAgo(9), cook:'we both', was:'really good', but:'was a bit much work', next:'make it ahead', again:'keep it for a weekend', ex:true }]);
+let cooking = S.get('cooking', null);     // { id, step }
+let usual = S.get('usual', 'both');
+const save = () => { S.set('kitchen', kitchen); S.set('toBuy', toBuy); S.set('recentOut', recentOut); S.set('boxWeek', boxWeek); S.set('list', list); S.set('favs', favs); S.set('logs', logs); S.set('cooking', cooking); S.set('me', me); S.set('usual', usual); S.set('hist', hist); S.set('prefs', prefs); S.set('moodMode', moodMode); };
+
+const norm = s => s.toLowerCase().trim();
+const same = (a, b) => { a = norm(a); b = norm(b); return a === b || (a.length > 3 && b.length > 3 && (a.includes(b) || b.includes(a))); };
+const kItem = n => kitchen.find(k => same(k.name, n));
+const isStaple = n => STAPLES.some(s => same(s, n));
+const inKitchen = n => isStaple(n) || (kItem(n) && kItem(n).state !== 'out');
+const placeOf = n => FRESH.has(norm(n)) || [...FRESH].some(f => same(f, n)) ? 'fridge' : 'cupboard';
+const VOCAB = [...new Set(R.flatMap(r => r.ingredients_canonical || []).concat(BOX, kitchen.map(k => k.name)))].sort();
+function addToKitchen(n, quiet) {
+  const k = kItem(n);
+  if (k) { k.state = 'have'; k.added = new Date().toISOString(); }
+  else kitchen.push({ name:norm(n), place:placeOf(n), state:'have', added:new Date().toISOString() });
+  recentOut = recentOut.filter(x => !same(x, n));
+  save(); if (!quiet) toast(`${cap(n)} added to the Kitchen`);
+}
+function needs(r) { return (r.ingredients_canonical || []).filter(n => !isStaple(n)); }
+function haveTxt(r) { const n = needs(r); return n.length ? `have ${n.filter(inKitchen).length} of ${n.length}` : ''; }
+
+/* ---------- recipes: time, labels, ranking ---------- */
+function minutes(r) { if (r.total_min) return r.total_min; const s = (r.steps || []).reduce((a, x) => a + (x.timer_min || 0), 0); return s || null; }
+function waitStep(r) { return (r.steps || []).find(s => s.timer_min >= 30 && /marinat|chill|rest|soak|prove|leave/i.test(s.text)); }
+// Hands-off = timed steps where the food looks after itself (oven, simmer, marinate…). Hands-on = the rest. Both are estimates unless the creator gave them.
+const OFF = /oven|bake|roast|simmer|marina|steam|rest|chill|leave|soak|prove|boil|slow cook|air fry|in the fridge/i;
+const fm = m => m >= 60 ? `${Math.floor(m / 60)} hr${m % 60 ? ' ' + m % 60 + ' min' : ''}` : `${m} min`;
+function timing(r) {
+  const steps = r.steps || [];
+  const off = steps.reduce((a, s) => a + (s.timer_min && OFF.test(s.text) ? s.timer_min : 0), 0);
+  let total = r.total_min, est = false;
+  if (!total) { total = Math.round((steps.reduce((a, s) => a + (s.timer_min && !OFF.test(s.text) ? s.timer_min : 3), 0) + off) / 5) * 5; est = true; }
+  const busy = steps.filter(s => !(s.timer_min && OFF.test(s.text))).length * 2;
+  const on = Math.max(5, Math.round(Math.max(busy, total - Math.min(off, total - 5)) / 5) * 5);
+  const w = waitStep(r);
+  return { total, on: Math.min(on, total), off: Math.max(0, total - on), est, wait: w ? (/marina/i.test(w.text) ? 'marinating' : /chill|fridge/i.test(w.text) ? 'chilling' : /soak/i.test(w.text) ? 'soaking' : /prove/i.test(w.text) ? 'proving' : 'waiting') : (off >= 15 ? 'in the oven or pan' : '') };
+}
+function timeTxt(r, long) {
+  const t = timing(r); if (!t.total) return '';
+  if (long) return '';
+  return `${t.est ? 'about ' : ''}${fm(t.total)}` + (t.off >= 10 ? `, ${t.on} hands-on` : '');
+}
+const FISH = ['cod','salmon','tinned fish','anchovies','tuna','prawns','mackerel','haddock'];
+function metaLine(r) {
+  const c = r.ingredients_canonical || [];
+  const what = r.contains_meat ? 'Meat' : c.some(i => FISH.some(f => i.includes(f))) ? 'Fish' : c.some(i => i.includes('tofu')) ? 'Tofu' : c.includes('eggs') && r.course !== 'dessert' ? 'Eggs' : r.course === 'dessert' ? 'Sweet' : 'Veg';
+  const m = minutes(r);
+  const when = r.course === 'side' ? 'a side' : r.course === 'breakfast' ? 'breakfast' : r.course === 'lunch' ? 'lunch' : r.course === 'dessert' ? 'baking' : m && m > 90 ? 'weekend' : 'weeknight';
+  return [what, cap((r.cuisine || [])[0] || ''), when].filter(Boolean).join(' · ');
+}
+const MOODS = ['comforting','light','quick fix','warming','spicy','fresh & green','something special'];
+let moodMode = S.get('moodMode', 'one');   // 'one' | 'many': exploring both
+let st = { moods:[], withs:[], eater:usual };
+let lib = { q:'', meal:'all', time:'any', hands:'any', show:'', sort:'best' };
+const suits = r => st.eater === 'craig' || !r.contains_meat;
+const isMain = r => ['main','lunch'].includes(r.course);
+const uses = (r, n) => (r.ingredients_canonical || []).some(i => same(i, n));
+const inSeason = r => (r.seasons || []).includes(SEASON) || (EDGE && (r.seasons || []).includes(EDGE));
+const onList = id => list.some(x => x.id === id);
+// Favourites are the dishes we go back to. Made-count and last-made come from the log (seeded with example history).
+const isFav = id => favs.Craig.includes(id) || favs.Mary.includes(id);
+function made(id) { const ls = logs.filter(l => l.id === id); const h = hist[id] || { n:0, last:null }; const last = [h.last, ...ls.map(l => l.iso)].filter(Boolean).sort().at(-1); return { n: h.n + ls.length, last, days: last ? Math.floor((Date.now() - new Date(last)) / 864e5) : null }; }
+const ago = d => d == null ? 'not made yet' : d < 1 ? 'made today' : d < 2 ? 'made yesterday' : d < 14 ? `made ${d} days ago` : d < 60 ? `not had for ${Math.round(d / 7)} weeks` : 'not had for months';
+// A favourite is "due" when it hasn't been made for a while, scaled by how often we make it.
+function due(id) { const m = made(id); if (!m.days && m.days !== 0) return 1; const gap = m.n >= 4 ? 10 : m.n >= 2 ? 18 : 28; return Math.min(2, m.days / gap); }
+const cooked = id => logs.some(l => l.id === id && !l.ex) || logs.some(l => l.id === id);
+function score(r) {
+  let s = 0; const why = [];
+  const L = list.find(x => x.id === r.id);
+  if (L) { s += 100; why.push(`Want to try · ${L.by} added`); }
+  if (isFav(r.id)) { const both = favs.Craig.includes(r.id) && favs.Mary.includes(r.id), d = due(r.id); s += (both ? 40 : 20) * d; if (d >= 1) why.push(`A favourite · ${ago(made(r.id).days)}`); }
+  const w = st.withs.filter(n => uses(r, n));
+  if (w.length) { s += 40 * w.length; why.unshift('Uses the ' + w.join(' and ')); }
+  const mm = (r.mood || []).filter(m => st.moods.includes(m)).length; if (mm) s += 20 * mm;
+  if ((r.seasons || []).includes(SEASON)) { s += 10; why.push(`Good for ${SEASON}`); } else if (inSeason(r)) s += 5;
+  const fridgeUse = needs(r).filter(n => kItem(n) && kItem(n).place === 'fridge' && kItem(n).state !== 'out');
+  if (fridgeUse.length) { s += 6 * fridgeUse.length; if (!why.length) why.push('Uses the ' + fridgeUse[0]); }
+  if (RHYTHM === 'cupboard' && r.larder !== 'fresh') s += 6;
+  const n = needs(r); if (n.length) s += 8 * n.filter(inKitchen).length / n.length;
+  const m = minutes(r); if (m && m <= 30) s += 3;
+  return { r, s, why: why[0] || '' };
+}
+const ranked = arr => arr.map(score).sort((a, b) => b.s - a.s);
+function tonightPool() {
+  return R.filter(r => suits(r) && isMain(r) && (!st.moods.length || (r.mood || []).some(m => st.moods.includes(m))) && st.withs.every(n => uses(r, n)));
+}
+
+/* ---------- small bits ---------- */
+function toast(t) { document.querySelectorAll('.toast').forEach(x => x.remove()); const el = document.createElement('div'); el.className = 'toast'; el.textContent = t; el.setAttribute('role', 'status'); document.body.appendChild(el); setTimeout(() => el.remove(), 2000); }
+const pick = x => { const r = x.r || x, t = timeTxt(r); return `<button class="pick" data-a="open" data-v="${r.id}"><img class="ph" src="${IMG(r.code)}" alt="" loading="lazy"><div class="t">${esc(r.title)}</div><div class="m">${[t, x.why].filter(Boolean).map(esc).join('<br>')}</div></button>`; };
+const rowHTML = (r, sub, right = '') => `<div class="row"><button data-a="open" data-v="${r.id}" style="display:contents"><img class="ph" src="${IMG(r.code)}" alt="" loading="lazy"><div><div class="t">${esc(r.title)}</div><div class="m">${esc(sub)}</div></div></button>${right}</div>`;
+const heart = r => `<button class="r" data-a="fav" data-v="${r.id}" aria-pressed="${favs[me].includes(r.id)}" aria-label="Favourite">${favs[me].includes(r.id) ? '♥' : '♡'}</button>`;
+
+/* ---------- navigation ---------- */
+let tab = 'tonight', sub = null, kseg = 'have', logSeg = 'date';
+function go(t, s = null) { tab = t; sub = s; render(); scrollTo(0, 0); }
+function render() {
+  document.querySelectorAll('#tabs button').forEach(b => b.setAttribute('aria-current', b.dataset.v === tab ? 'page' : 'false'));
+  const lt = document.querySelector('#tabs [data-v="list"]'); lt.querySelector('b')?.remove();
+  const fresh = list.filter(x => x.by !== me && Date.now() - new Date(x.at) < 3 * 864e5).length; if (fresh) lt.insertAdjacentHTML('beforeend', `<b>${fresh}</b>`);
+  ({ tonight: sub === 'library' ? libraryView : tonightView, list: listView, kitchen: kitchenView, log: logView })[tab]();
+  const c = cooking && byId(cooking.id);
+  $('carry').innerHTML = c ? `<div class="c"><button data-a="cook" data-v="${c.id}">Carry on cooking${cooking.who === 'both' ? ' together · ' + (cooking.done || []).length + ' of ' + c.steps.length + ' done' : ' · step ' + (cooking.step + 1) + ' of ' + c.steps.length}<br><span style="font-size:12.5px;opacity:.7">${esc(c.title)}</span></button><button class="round" style="background:none;color:#111" data-a="stopcook" aria-label="Stop cooking">×</button></div>` : '';
+}
+
+/* ---------- 1 · Tonight ---------- */
+function tonightView() {
+  const pool = tonightPool(), best = ranked(pool), choosing = st.moods.length || st.withs.length;
+  const top = best.slice(0, choosing ? 24 : 10), used = new Set(top.map(x => x.r.id));
+  const base = R.filter(r => suits(r) && isMain(r)), keep = r => choosing || !used.has(r.id);
+  // In season reacts to the Kitchen: most-of-it-in-the-house first, with the reason shown.
+  const frac = r => { const n = needs(r); return n.length ? n.filter(inKitchen).length / n.length : 0; };
+  const seasonal = base.filter(r => (r.seasons || []).includes(SEASON) && keep(r)).sort((a, b) => frac(b) - frac(a)).slice(0, 8);
+  const quick = base.filter(r => { const t = timing(r); return t.total <= 30 && keep(r); }).slice(0, 8);
+  const lazy = base.filter(r => { const t = timing(r); return t.total > 30 && t.on <= 20 && t.off >= 15 && keep(r); }).slice(0, 8);
+  const tryList = list.map(x => byId(x.id)).filter(Boolean).filter(suits);
+  const gotos = R.filter(r => isFav(r.id) && suits(r)).sort((a, b) => due(b.id) - due(a.id));
+  const others = base.filter(r => !inSeason(r) && !(r.seasons || []).includes('all'));
+  const diff = others[now.getDate() % Math.max(others.length, 1)];
+  const soon = kitchen.filter(k => k.place === 'fridge' && k.state !== 'out' && !st.withs.includes(k.name)).sort((a, b) => new Date(a.added) - new Date(b.added)).slice(0, 2);
+  const boxIn = boxWeek === weekKey();
+  const many = moodMode === 'many';
+  $('view').innerHTML = `
+    <div class="top"><span class="meta">${DAY} ${PART} · ${PHASE}${boxIn ? ' · the box is in' : RHYTHM === 'cupboard' ? ' · cupboard days' : ''}</span>
+      <button class="init" data-a="settings" aria-label="Household and settings">${me[0]}</button></div>
+    ${st.eater !== usual ? `<div class="chips" style="margin-top:6px"><button class="chip on" data-a="eater" data-v="${usual}">${st.eater === 'craig' ? 'Craig alone' : st.eater === 'mary' ? 'Just Mary' : 'Both of us'} ×</button></div>` : ''}
+    <div class="sec" style="margin:14px 0 0"><span class="lab" id="lf" style="margin:0">Feel like</span>
+      <span class="meta">try: <button class="chip ghost" style="min-height:32px;padding:0 4px;${!many ? 'color:var(--ink);text-decoration:underline' : ''}" data-a="moodmode" data-v="one">one</button>·<button class="chip ghost" style="min-height:32px;padding:0 4px;${many ? 'color:var(--ink);text-decoration:underline' : ''}" data-a="moodmode" data-v="many">several</button></span></div>
+    <div class="words" role="${many ? 'group' : 'radiogroup'}" aria-labelledby="lf">${MOODS.map(m => `<button ${many ? `aria-pressed="${st.moods.includes(m)}"` : `role="radio" aria-checked="${st.moods.includes(m)}"`} data-a="mood" data-v="${m}">${m}</button>`).join('')}</div>
+    ${many && st.moods.length > 1 ? `<div class="meta">Showing dishes that are ${st.moods.join(' or ')}; ones that are both come first.</div>` : ''}
+    <div class="lab">With</div>
+    <div class="scrollx">${st.withs.map(n => `<button class="chip on" data-a="unwith" data-v="${esc(n)}" aria-label="Remove ${esc(n)}">${esc(n)} ×</button>`).join('')}
+      ${soon.map(k => `<button class="chip dash" data-a="with" data-v="${esc(k.name)}">${esc(k.name)}?</button>`).join('')}
+      <button class="chip ghost" data-a="picker">+ add</button></div>
+    <div class="sec"><h2>For ${PART === 'evening' ? 'tonight' : 'today'}</h2><span>${choosing ? `${pool.length} idea${pool.length === 1 ? '' : 's'}` : `${top.length} ideas`}</span></div>
+    ${top.length ? `<div class="picks">${top.map(pick).join('')}</div>` : `<div class="empty">Nothing matches all of that. <button class="chip" data-a="clearchoice">Start again</button>${st.withs.length > 1 ? ` <button class="chip" data-a="unwith" data-v="${esc(st.withs.at(-1))}">Drop ${esc(st.withs.at(-1))}</button>` : ''}</div>`}
+    <div class="sec"><h2>Our favourites</h2><button data-a="ours" data-v="fav">${gotos.length} · see all</button></div>
+    ${gotos.length ? `<div class="picks">${gotos.slice(0, 8).map(r => pick({ r, why: ago(made(r.id).days) })).join('')}</div>` : '<div class="empty">Tap ♥ on a dish you love and it comes round again.</div>'}
+    <div class="sec"><h2>In season</h2><span>most of it in the Kitchen first</span></div>
+    ${seasonal.length ? `<div class="picks">${seasonal.map(r => pick({ r, why: haveTxt(r) })).join('')}</div>` : '<div class="empty">Nothing in season yet.</div>'}
+    <div class="sec"><h2>On the table in 30</h2><span>ready in 30 min or less</span></div>
+    ${quick.length ? `<div class="picks">${quick.map(r => pick({ r, why: '' })).join('')}</div>` : '<div class="empty">Nothing quick yet.</div>'}
+    <div class="sec"><h2>Little effort, then wait</h2><span>20 min hands-on or less</span></div>
+    ${lazy.length ? `<div class="picks">${lazy.map(r => pick({ r, why: timing(r).wait ? 'then ' + timing(r).wait : '' })).join('')}</div>` : '<div class="empty">Nothing like that yet.</div>'}
+    <div class="sec"><h2>Want to try</h2><button data-a="ours" data-v="try">${tryList.length} · see all</button></div>
+    ${tryList.length ? `<div class="picks">${tryList.map(r => pick({ r, why: `${list.find(x => x.id === r.id).by} added` })).join('')}</div>` : '<div class="empty">Nothing queued. Tap "Want to try" on any recipe.</div>'}
+    <div class="sec"><h2>Something different</h2><span>another season</span></div>
+    ${diff ? rowHTML(diff, `Best in ${(diff.seasons || [])[0] || 'another season'} · ${timeTxt(diff)}`) : ''}
+    <p class="note">Wireframe prototype · 37 of our recipes · everything saves on this phone only.</p>`;
+  const filt = lib.meal !== 'all' || lib.time !== 'any' || lib.hands !== 'any' || lib.show || st.eater !== usual;
+  $('ctxbar').innerHTML = `<button class="field" data-a="library"><span aria-hidden="true">⌕</span><span>Search recipes, ingredients, people</span><span class="ic" data-a="filters" aria-label="Filters">☰${filt ? '<i></i>' : ''}</span></button>`;
+}
+
+/* ---------- 2 · With picker ---------- */
+let pk = { q:'', alsoAdd:new Set() };
+function picker() {
+  pk.q = ''; drawPicker(true);
+}
+function drawPicker(first) {
+  const q = norm(pk.q);
+  const sel = n => st.withs.includes(n);
+  const chip = n => `<button class="chip ${sel(n) ? 'on' : ''}" data-a="pkt" data-v="${esc(n)}" aria-pressed="${sel(n)}">${esc(n)}${sel(n) ? ' ✓' : ''}</button>`;
+  const fridge = kitchen.filter(k => k.place === 'fridge' && k.state !== 'out').sort((a, b) => new Date(a.added) - new Date(b.added));
+  const cup = kitchen.filter(k => k.place === 'cupboard' && k.state !== 'out');
+  const hits = q ? VOCAB.filter(v => v.includes(q)).slice(0, 8) : [];
+  const outside = st.withs.filter(n => !inKitchen(n));
+  const n = tonightPool().length;
+  const body = `
+    <div class="top"><b style="font-weight:400;font-size:19px">Cook with…</b><button class="chip ghost" data-a="pkclear">Clear</button></div>
+    <input class="box" id="pkq" placeholder="Find an ingredient" value="${esc(pk.q)}" autocomplete="off" aria-label="Find an ingredient" style="margin-top:10px">
+    ${q ? `<div class="lab">Matches</div><div class="chips">${hits.map(chip).join('') || '<span class="meta">No ingredient called that in our recipes.</span>'}</div>` : ''}
+    <div class="lab">Use soon · from the Kitchen, oldest first</div><div class="chips">${fridge.map(k => chip(k.name)).join('')}</div>
+    <div class="lab">In the cupboard</div><div class="chips">${cup.map(k => chip(k.name)).join('')}</div>
+    ${outside.length ? `<div class="lab">Not in the Kitchen</div>${outside.map(o => `<div class="kit"><span class="nm">${esc(o)} <span class="meta">· just for tonight</span></span><button class="chip ${pk.alsoAdd.has(o) ? 'on' : ''}" data-a="pkadd" data-v="${esc(o)}" aria-pressed="${pk.alsoAdd.has(o)}">${pk.alsoAdd.has(o) ? '✓ Add to Kitchen too' : 'Add to Kitchen too'}</button></div>`).join('')}` : ''}`;
+  if (first) {
+    $('layer').innerHTML = `<div class="scrim" data-a="pkdone"></div><div class="sheet" role="dialog" aria-modal="true" aria-label="Cook with"><div class="grab"></div><div id="pkb">${body}</div><div class="foot"><button class="btn" id="pkgo" data-a="pkdone"></button></div></div>`;
+  } else {
+    const had = document.activeElement?.id === 'pkq', pos = had ? $('pkq').selectionStart : 0;
+    $('pkb').innerHTML = body;
+    if (had) { $('pkq').focus(); $('pkq').setSelectionRange(pos, pos); }
+  }
+  $('pkgo').textContent = n ? `Show ${n} idea${n === 1 ? '' : 's'}` : 'Nothing uses all of these';
+  $('pkq').oninput = e => { pk.q = e.target.value; drawPicker(); };
+}
+
+/* ---------- 3 · Library, 4 · Filters ---------- */
+function libPool() {
+  return R.filter(r => {
+    if (!suits(r)) return false;
+    if (lib.meal !== 'all' && (lib.meal === 'main' ? !isMain(r) : r.course !== lib.meal)) return false;
+    if (lib.time !== 'any' && timing(r).total > +lib.time) return false;
+    if (lib.hands !== 'any' && timing(r).on > +lib.hands) return false;
+    if (lib.show === 'list' && !onList(r.id)) return false;
+    if (lib.show === 'notlist' && onList(r.id)) return false;
+    if (lib.show === 'fav' && !(favs.Craig.includes(r.id) || favs.Mary.includes(r.id))) return false;
+    if (lib.show === 'new' && cooked(r.id)) return false;
+    if (lib.show === 'cooked' && !cooked(r.id)) return false;
+    if (lib.show === 'check' && r.status !== 'needs_checking') return false;
+    if (lib.q) { const hay = [r.title, r.creator, r.creator_name, ...(r.ingredients_canonical || []), ...(r.cuisine || []), ...(r.mood || [])].join(' ').toLowerCase();
+      if (!norm(lib.q).split(/[\s,]+/).filter(Boolean).every(w => hay.includes(w))) return false; }
+    return true;
+  });
+}
+function libSorted() {
+  const p = libPool();
+  if (lib.sort === 'quick') return p.sort((a, b) => timing(a).total - timing(b).total);
+  if (lib.sort === 'easy') return p.sort((a, b) => timing(a).on - timing(b).on);
+  if (lib.sort === 'due') return p.sort((a, b) => (isFav(b.id) ? due(b.id) : -1) - (isFav(a.id) ? due(a.id) : -1));
+  if (lib.sort === 'have') { const f = r => { const n = needs(r); return n.length ? n.filter(inKitchen).length / n.length : 0; }; return p.sort((a, b) => f(b) - f(a)); }
+  if (lib.sort === 'recent') return p.reverse();
+  return ranked(p).map(x => x.r);
+}
+const SHOW = { list:'Want to try', notlist:'Not on the try list', fav:'Favourites', new:'New to us', cooked:'Cooked before', check:'Needs checking' };
+const MEAL = { main:'Supper', lunch:'Lunch', side:'Sides', dessert:'Baking and sweet', breakfast:'Breakfast' };
+const SORT = { best:'Best for now', quick:'Ready soonest', easy:'Least hands-on', have:'Most we have', due:'Favourites due a return', recent:'Recently saved' };
+function libraryView() {
+  const rs = libSorted();
+  const chips = [`<button class="chip on" data-a="filters">${st.eater === 'craig' ? 'Craig alone' : st.eater === 'mary' ? 'Mary' : 'Both of us'}</button>`];
+  if (lib.meal !== 'all') chips.push(`<button class="chip on" data-a="libf" data-k="meal" data-v="all">${MEAL[lib.meal]} ×</button>`);
+  if (lib.time !== 'any') chips.push(`<button class="chip on" data-a="libf" data-k="time" data-v="any">Ready in ${lib.time} min ×</button>`);
+  if (lib.hands !== 'any') chips.push(`<button class="chip on" data-a="libf" data-k="hands" data-v="any">${lib.hands} min hands-on ×</button>`);
+  if (lib.show) chips.push(`<button class="chip on" data-a="libf" data-k="show" data-v="">${SHOW[lib.show]} ×</button>`);
+  if (lib.q) chips.push(`<button class="chip on" data-a="libq">"${esc(lib.q)}" ×</button>`);
+  $('view').innerHTML = `
+    <div class="top"><button class="chip ghost" data-a="tab" data-v="tonight" style="padding-left:0">‹ Tonight</button><span class="meta">${R.length} saved · ${rs.length} match</span></div>
+    <h1 style="margin-top:6px">All recipes</h1>
+    <div class="scrollx" style="margin-top:12px">${chips.join('')}<button class="chip ghost" data-a="filters">${SORT[lib.sort]} ▾</button></div>
+    <div style="margin-top:10px">${rs.map(r => rowHTML(r, [timeTxt(r), metaLine(r), haveTxt(r)].filter(Boolean).join(' · '), heart(r))).join('') || '<div class="empty">Nothing matches. Remove a filter above.</div>'}</div>`;
+  const filt = lib.meal !== 'all' || lib.time !== 'any' || lib.hands !== 'any' || lib.show;
+  $('ctxbar').innerHTML = `<label class="field"><span aria-hidden="true">⌕</span><input id="libq" placeholder="Search recipes, ingredients, people" value="${esc(lib.q)}" autocomplete="off" aria-label="Search recipes"><button class="ic" data-a="filters" aria-label="Filters">☰${filt ? '<i></i>' : ''}</button></label>`;
+  const inp = $('libq'); inp.oninput = e => { lib.q = e.target.value; const pos = inp.selectionStart; libraryView(); $('libq').focus(); $('libq').setSelectionRange(pos, pos); };
+}
+function filters() {
+  const g = (lab, key, opts, obj = lib) => `<div class="lab">${lab}</div><div class="chips">${opts.map(([v, t]) => `<button class="chip ${String(obj[key]) === String(v) ? 'on' : ''}" data-a="${obj === st ? 'eaterf' : 'libf'}" data-k="${key}" data-v="${v}" aria-pressed="${String(obj[key]) === String(v)}">${t}</button>`).join('')}</div>`;
+  const n = libPool().length;
+  $('layer').innerHTML = `<div class="scrim" data-a="filtersdone"></div><div class="sheet" role="dialog" aria-modal="true" aria-label="Filters"><div class="grab"></div>
+    <div class="top"><b style="font-weight:400;font-size:19px">Narrow it down</b><button class="chip ghost" data-a="libclear">Clear all</button></div>
+    ${g("Who's eating", 'eater', [['both','Both of us'],['mary','Mary'],['craig','Craig alone']], st)}
+    ${g('Meal', 'meal', [['all','Everything'],['main','Supper'],['lunch','Lunch'],['side','Sides'],['dessert','Baking and sweet'],['breakfast','Breakfast']])}
+    ${g('Ready in', 'time', [['any','Any'],['20','20 min'],['30','30 min'],['60','An hour'],['120','Two hours']])}
+    ${g('Hands-on', 'hands', [['any','Any'],['10','10 min or less'],['20','20 min or less'],['30','30 min or less']])}
+    <p class="meta" style="margin:6px 0 0">Hands-on is the chopping and stirring. The rest is oven, simmering or marinating, when you can walk away.</p>
+    ${g('Show', 'show', [['','All'],['list','Want to try'],['fav','Favourites'],['new','New to us'],['cooked','Cooked before'],['check','Needs checking']])}
+    ${g('Order by', 'sort', Object.entries(SORT))}
+    <div class="foot"><button class="btn" data-a="filtersdone">Show ${n} recipe${n === 1 ? '' : 's'}</button></div></div>`;
+}
+
+/* ---------- 5 · Recipe ---------- */
+let rid = null, returnTo = null, who = null;
+let jobsBy = S.get('jobs', {});
+// Older saves stored jobs as arrays with 'either'; drop those so they can't block cooking together.
+Object.keys(jobsBy).forEach(k => { if (Array.isArray(jobsBy[k])) delete jobsBy[k]; });
+// Cooking together on one phone: steps fall into stations (prep board, hob, oven, finish together).
+// Each station has an owner; any single step can be handed over as you go.
+let stationsBy = S.get('stations', {});
+const STATIONS = { board:'Prep board', hob:'Hob', oven:'Oven', finish:'Finish together' };
+const ST_RE = {
+  finish: /^(serve|to serve|scatter|garnish|plate|eat|lay it over|spoon .* over .* (rice|plate)|finish with|divide)/i,
+  oven: /\b(oven|bake|roast|grill|air fry)\b/i,
+  hob: /\b(pan|fry|frying|sear|simmer|boil|wok|hob|saucepan|pot|steam|toast|melt|reduce|heat (?:the|a|1|2) .*oil)\b/i,
+  board: /\b(chop|slice|dice|grate|peel|mince|cut|halve|mix|whisk|blend|stir together|combine|beat|knead|roll|shape|fold|marinate|season|pat|rinse|drain|toss|sieve|line)\b/i };
+const stationOf = s => ST_RE.finish.test(s.text.trim()) ? 'finish' : ST_RE.oven.test(s.text) ? 'oven' : ST_RE.hob.test(s.text) ? 'hob' : 'board';
+function owners(r) { return stationsBy[r.id] || { board: other(), hob: me, oven: me }; }
+function jobsFor(r) {
+  const o = owners(r), over = jobsBy[r.id] || {};
+  const valid = v => ['Craig','Mary','both'].includes(v);
+  let j = (r.steps || []).map((s, k) => valid(over[k]) ? over[k] : (stationOf(s) === 'finish' ? 'both' : o[stationOf(s)]));
+  // If one person would get everything, share the prep board out.
+  if (!jobsBy[r.id] && !stationsBy[r.id] && (j.filter(x => x === me).length === 0 || j.filter(x => x === other()).length === 0)) {
+    let flip = false; j = j.map((x, k) => (r.steps[k] && stationOf(r.steps[k]) === 'board' && !over[k]) ? ((flip = !flip) ? other() : me) : x);
+  }
+  return j;
+}
+const PREFS = ['more chilli','extra garlic','less sugar','less salt','no coriander','extra herbs'];
+// Turn each person's tastes into a concrete tweak for this recipe (only when the recipe uses the thing).
+function tweaks(r, people) {
+  const c = r.ingredients_canonical || [], hit = re => c.find(i => re.test(i)), out = [];
+  people.forEach(p => (prefs[p] || []).forEach(pr => {
+    let t = null, x;
+    if (pr === 'more chilli') t = (x = hit(/chilli|gochugaru|sriracha|harissa|jalapeno/)) ? `more ${x}, or extra at the table` : `a pinch of chilli flakes on ${p}'s plate`;
+    if (pr === 'extra garlic' && (x = hit(/garlic/))) t = 'an extra clove of garlic';
+    if (pr === 'less sugar' && (x = hit(/sugar|honey|maple|agave|mirin|syrup/))) t = `go easy on the ${x}`;
+    if (pr === 'less salt' && (x = hit(/soy|fish sauce|miso|salt|anchov/))) t = `go easy on the ${x}; season at the table`;
+    if (pr === 'no coriander' && hit(/coriander/)) t = `leave the coriander off ${p}'s plate (parsley works)`;
+    if (pr === 'extra herbs' && (x = hit(/parsley|basil|dill|chives|coriander|thyme|sage/))) t = `double the ${x}`;
+    if (t) out.push({ p, pr, t, ing: x });
+  }));
+  return out;
+}
+function lineName(r, text) { const t = text.toLowerCase(); return (r.ingredients_canonical || []).filter(n => t.includes(n) || t.includes(n.split(' ').at(-1))).sort((a, b) => b.length - a.length)[0]; }
+function recipe(id, keepScroll) {
+  const r = byId(id); if (!r) return; rid = id;
+  const y = keepScroll ? $('rv')?.scrollTop : 0;
+  const L = list.find(x => x.id === id), mine = favs[me].includes(id), theirs = favs[other()].includes(id);
+  const n = needs(r), t = timing(r), mk = made(id);
+  if (!who) who = me;
+  const jobs = jobsFor(r), together = who === 'both';
+  const eaters = st.eater === 'both' ? ['Craig','Mary'] : st.eater === 'mary' ? ['Mary'] : ['Craig'];
+  const tw = tweaks(r, [...new Set([...(together ? ['Craig','Mary'] : [who]), ...eaters])]);
+  const owner = k => together ? `<span class="meta">${STATIONS[stationOf(r.steps[k])]}</span> <button class="chip ${jobs[k] === 'both' ? 'ghost' : ''}" style="min-height:32px;margin-left:4px" data-a="job" data-v="${k}" aria-label="Step ${k + 1}: ${jobs[k]}. Tap to hand it over">${jobs[k] === 'both' ? 'both of you' : jobs[k]} ⇄</button>` : '';
+  const stCount = {}; (r.steps || []).forEach((x, k) => { const st2 = stationOf(x); stCount[st2] = (stCount[st2] || 0) + 1; });
+  const ow = owners(r);
+  const ing = (r.ingredients || []).map(i => {
+    if (i.heading) return `<div class="lab">${esc(i.heading)}</div>`;
+    const nm = lineName(r, i.text);
+    let s = '';
+    if (nm) {
+      if (isStaple(nm)) s = `<span class="s">always in</span>`;
+      else if (inKitchen(nm)) s = `<span class="s">${kItem(nm)?.state === 'low' ? 'running low' : 'have'}</span>`;
+      else if (toBuy.some(b => same(b.name, nm))) s = `<span class="s">on to buy</span>`;
+      else s = `<span class="s need"><button data-a="needmenu" data-v="${esc(nm)}">need ▾</button></span>`;
+    }
+    return `<div class="il"><span>${esc(i.text)}</span>${s}</div>`;
+  }).join('');
+  const resume = cooking && cooking.id === id;
+  $('layer').innerHTML = `<div class="view" id="rv" role="dialog" aria-modal="true" aria-labelledby="rt"><div class="inner">
+    <div class="hero"><img class="ph" src="${IMG(r.code)}" alt=""><div class="bar"><button class="round" data-a="close" aria-label="Back">‹</button><a class="round" href="${esc(r.source_url)}" target="_blank" rel="noopener">▶ Watch the Reel</a></div></div>
+    <div class="meta" style="margin-top:16px">${esc(metaLine(r))}</div>
+    <h1 id="rt" style="margin-top:4px">${esc(r.title)}</h1>
+    <div class="meta" style="margin-top:4px">${esc(r.creator_name || '')} ${esc(r.creator || '')}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:12px;margin-top:16px;align-items:end">
+      <div><div class="meta">Hands-on</div><div style="font-size:20px">about ${fm(t.on)}</div></div>
+      <div><div class="meta">Ready in</div><div style="font-size:20px">${t.est ? 'about ' : ''}${fm(t.total)}</div></div>
+      <div style="text-align:right"><div class="meta">Serves</div><div>${r.servings || '<span class="meta">not given</span>'}</div></div></div>
+    <div style="display:flex;height:6px;border-radius:3px;overflow:hidden;margin-top:10px;background:var(--raise)"><i style="width:${Math.round(100 * t.on / t.total)}%;background:var(--hi)"></i></div>
+    <div class="meta" style="margin-top:6px">${t.off >= 5 ? `Then about ${fm(Math.round(t.off / 5) * 5)} ${t.wait || 'hands-off'}, when you can walk away. ` : 'Hands-on nearly all the way. '}${t.est ? 'Times are our estimate from the steps.' : 'Hands-on is our estimate from the steps.'}</div>
+    <div class="acts"><button class="btn ${L ? 'sec' : ''}" data-a="list" data-v="${id}">${L ? `✓ Want to try · ${L.by === me ? 'you' : L.by} added` : mk.n ? '+ Want to make again' : '+ Want to try'}</button>
+      <button class="chip ${mine ? 'on' : ''}" data-a="fav" data-v="${id}" aria-pressed="${mine}" aria-label="${me}'s favourite">${mine ? '♥' : '♡'} ${me[0]}</button>
+      <span class="chip ghost" aria-label="${other()} ${theirs ? 'loves this' : "hasn't marked this a favourite"}">${theirs ? '♥' : '♡'} ${other()[0]}</span></div>
+    <div class="meta" style="margin-top:8px">${mk.n ? `Made ${mk.n} time${mk.n === 1 ? '' : 's'} · ${ago(mk.days)}` : 'Not made yet'}${isFav(id) ? ' · a favourite: it comes back round' : ' · ♥ makes it a favourite we go back to'}</div>
+    <div class="lab" style="margin-top:22px">Who's cooking?</div>
+    <div class="chips">${['Craig','Mary','both'].map(p => `<button class="chip ${who === p ? 'on' : ''}" data-a="who" data-v="${p}" aria-pressed="${who === p}">${p === 'both' ? 'Together' : p}</button>`).join('')}</div>
+    ${together ? `<div class="banner" style="display:block"><div class="meta" style="margin-bottom:6px">How you'll split it · one phone, propped up</div>
+      ${['board','hob','oven','finish'].filter(k => stCount[k]).map(k => `<div class="kit"><span class="nm">${STATIONS[k]} <span class="meta">· ${stCount[k]} step${stCount[k] === 1 ? '' : 's'}</span></span>${k === 'finish' ? '<span class="meta">both of you</span>' : `<button class="chip" data-a="station" data-v="${k}" aria-label="${STATIONS[k]}: ${ow[k]}. Tap to swap">${ow[k]} ⇄</button>`}</div>`).join('')}
+      <div class="meta" style="margin-top:4px">Swap a whole station here, or hand over a single step in the method or while you cook.</div></div>` : ''}
+    ${tw.length ? `<div class="banner" style="display:block"><div class="meta" style="margin-bottom:4px">Made your way</div>${tw.map(x => `<div style="font-size:14.5px;margin:3px 0">For ${x.p}: ${esc(x.t)}</div>`).join('')}</div>` : ''}
+    ${r.intro ? `<p style="color:var(--mid);font-size:15px;margin-top:18px">${esc(r.intro)}</p>` : ''}
+    <div class="sec"><h2>Ingredients</h2><span>${n.length ? `have ${n.filter(inKitchen).length} of ${n.length}` : ''}</span></div>
+    ${ing}
+    <div class="sec"><h2>Method</h2><span>${(r.steps || []).length} steps</span></div>
+    ${(r.steps || []).map((s, k) => `<div class="step"><b>${k + 1}</b><div>${owner(k)}${together ? '<br>' : ''}${esc(s.text)}${s.timer_min ? ` <span class="meta">· ${s.timer_min} min</span>` : ''}${s.video_s != null ? ` <a class="meta" href="${esc(r.source_url)}" target="_blank" rel="noopener">▶ ${Math.floor(s.video_s / 60)}:${String(s.video_s % 60).padStart(2, '0')}</a>` : ''}</div></div>`).join('')}
+    ${logs.filter(l => l.id === id).length ? `<div class="sec"><h2>Our log</h2></div>${logs.filter(l => l.id === id).map(l => `<p style="font-size:15px;margin:6px 0">${esc(storyText(l))}</p>`).join('')}` : ''}
+    ${(r.to_check || []).length ? `<div class="sec"><h2>Not given in the original</h2></div>${r.to_check.map(x => `<p class="meta" style="font-size:14px">${esc(x)}</p>`).join('')}` : ''}
+  </div></div>
+  <div class="pin"><button class="btn" data-a="cook" data-v="${id}">${resume ? `Carry on: step ${cooking.step + 1} of ${r.steps.length}` : together ? 'Start cooking together' : `Start cooking · ${who}`}</button></div>`;
+  $('rv').scrollTop = y || 0;
+}
+function needMenu(nm) {
+  sheet(`<b style="font-weight:400;font-size:19px">${esc(cap(nm))}</b><p class="meta">Not in the Kitchen.</p>
+    <div style="display:grid;gap:8px;margin-top:10px"><button class="btn sec" data-a="havethis" data-v="${esc(nm)}">We have it · add to the Kitchen</button><button class="btn sec" data-a="buythis" data-v="${esc(nm)}">Add to buy</button></div>`, 'needsheet');
+}
+function sheet(html, id) {
+  document.getElementById(id)?.remove();
+  const d = document.createElement('div'); d.id = id;
+  d.innerHTML = `<div class="scrim" data-a="closesheet" data-v="${id}"></div><div class="sheet" role="dialog" aria-modal="true" style="padding-bottom:30px"><div class="grab"></div>${html}</div>`;
+  document.body.appendChild(d); d.querySelector('button')?.focus({ preventScroll:true });
+}
+
+/* ---------- 6 · Cook mode ---------- */
+let timers = S.get('timers', []), tick = null;
+const fmt = s => { s = Math.max(0, Math.round(s)); const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60); return (h ? h + ':' + String(m).padStart(2, '0') : m) + ':' + String(s % 60).padStart(2, '0'); };
+function drawTimers() {
+  const el = $('tm'); if (el) el.innerHTML = timers.map((t, k) => { const left = (t.end - Date.now()) / 1000;
+    return `<button class="timer ${left <= 0 ? 'done' : ''}" data-a="dropt" data-v="${k}" aria-label="${esc(t.label)}: ${left <= 0 ? 'done, tap to clear' : fmt(left) + ' left'}"><span>${esc(t.label)}<br><span class="meta" style="color:inherit;opacity:.7">${left <= 0 ? 'done · tap to clear' : `of ${t.min} min`}</span></span><span class="big">${left <= 0 ? '0:00' : fmt(left)}</span></button>`; }).join('');
+  timers.forEach(t => { if (!t.rang && t.end <= Date.now()) { t.rang = true; sfx.ready(); try { navigator.vibrate && navigator.vibrate([200, 100, 200]); } catch {} $('live').textContent = `${t.label} done`; } });
+}
+/* ---------- 6b · Cooking together: two lanes on one phone ---------- */
+function lanes(r) {
+  const jobs = jobsFor(r), done = new Set(cooking.done || []), steps = r.steps;
+  const gate = steps.findIndex((s, k) => !done.has(k) && jobs[k] === 'both');      // next finish-together step
+  const pick = p => steps.findIndex((s, k) => !done.has(k) && jobs[k] === p && (gate < 0 || k < gate));
+  const after = (p, k) => steps.findIndex((s, j) => j > k && !done.has(j) && jobs[j] === p);
+  const allBeforeGate = gate >= 0 && steps.every((s, k) => k >= gate || done.has(k));
+  if (pick('Craig') < 0 && pick('Mary') < 0 && !allBeforeGate) { const k = steps.findIndex((s, j) => !done.has(j)); if (k >= 0) return { jobs, done, gate: k, cur: { Craig:-1, Mary:-1 }, after }; }
+  return { jobs, done, gate: allBeforeGate ? gate : -1, cur: { Craig: pick('Craig'), Mary: pick('Mary') }, after };
+}
+function cookTogether(id) {
+  const r = byId(id), steps = r.steps;
+  if (!cooking || cooking.id !== id || cooking.who !== 'both') cooking = { id, who:'both', step:0, done:[] };
+  const L = lanes(r);
+  cooking.step = L.done.size; save();
+  const left = steps.length - L.done.size;
+  const lane = p => {
+    const k = L.cur[p], o = p === 'Craig' ? 'Mary' : 'Craig';
+    if (k < 0) {
+      const ok = L.cur[o];
+      return `<div class="banner" style="display:block;margin-top:12px"><div class="meta">${p}</div><div style="font-size:17px;margin-top:4px">${L.gate >= 0 ? 'Ready to finish together.' : ok >= 0 ? `Nothing for you right now.` : 'All done.'}</div>
+        ${ok >= 0 ? `<button class="chip" style="margin-top:8px" data-a="takeover" data-v="${ok}" data-p="${p}">Take ${o}'s next step (${STATIONS[stationOf(steps[ok])].toLowerCase()})</button>` : ''}</div>`;
+    }
+    const s = steps[k], nk = L.after(p, k), tw = tweaks(r, [p]).filter(x => x.ing && (s.uses || []).some(u => same(u, x.ing)));
+    return `<div style="margin-top:14px;padding:14px;border-radius:14px;background:var(--scr)">
+      <div class="top" style="min-height:0"><span><span style="font-size:16px">${p}</span> <span class="meta">· ${STATIONS[stationOf(s)]} · step ${k + 1}</span></span><button class="chip ghost" style="min-height:36px" data-a="handover" data-v="${k}" data-p="${o}">Give to ${o} ⇄</button></div>
+      <div style="font-size:20px;line-height:1.35;font-weight:300;margin-top:6px">${esc(s.text)}</div>
+      ${(s.uses || []).length ? `<div class="meta" style="margin-top:6px">For this step: ${esc(s.uses.join(', '))}</div>` : ''}
+      ${tw.map(x => `<div class="meta" style="color:var(--ink);margin-top:4px">For ${x.p}: ${esc(x.t)}</div>`).join('')}
+      <div style="display:flex;gap:8px;margin-top:10px">${s.timer_min && !timers.some(t => t.step === k && t.id === id) ? `<button class="btn sec" style="flex:1" data-a="startt2" data-v="${k}">Start ${s.timer_min} min timer</button>` : ''}<button class="btn" style="flex:1" data-a="lanedone" data-v="${k}">Done ✓</button></div>
+      ${nk >= 0 ? `<div class="meta" style="opacity:.75;margin-top:8px">Then: ${esc(steps[nk].text.split('. ')[0])}.</div>` : ''}</div>`;
+  };
+  const fin = L.gate >= 0 ? `<div style="margin-top:14px;padding:14px;border-radius:14px;background:var(--raise)"><div class="meta">Both of you · ${STATIONS.finish} · step ${L.gate + 1}</div><div style="font-size:20px;line-height:1.35;font-weight:300;margin-top:6px">${esc(steps[L.gate].text)}</div><button class="btn" style="margin-top:10px" data-a="lanedone" data-v="${L.gate}">Done ✓</button></div>` : '';
+  $('layer').innerHTML = `<div class="view cook" id="cv" role="dialog" aria-modal="true" aria-label="Cooking ${esc(r.title)} together"><div class="inner" style="padding-top:calc(10px + env(safe-area-inset-top, 0px));padding-bottom:120px">
+    <div class="top"><button class="round" style="background:var(--raise)" data-a="leavecook" aria-label="Leave cooking, keep my place">×</button><span class="meta">Together · ${L.done.size} of ${steps.length} done</span><button class="chip" data-a="cookings">Ingredients</button></div>
+    <div class="prog">${steps.map((_, k) => `<i class="${L.done.has(k) ? 'on' : ''}"></i>`).join('')}</div>
+    <div class="timers" id="tm"></div>
+    ${fin}${L.gate < 0 ? lane('Craig') + lane('Mary') : ''}
+    <p class="meta" style="margin-top:14px">Each of you works through your own steps. "Give to" hands one over; it's remembered for next time.</p>
+  </div></div>
+  <div class="nav2">${L.done.size ? `<button data-a="undolane">‹ Undo last</button>` : ''}<button data-a="${left ? 'leavecook' : 'done'}">${left ? 'Pause' : 'Finish'}</button></div>`;
+  drawTimers(); clearInterval(tick); tick = setInterval(drawTimers, 1000);
+  try { navigator.wakeLock && navigator.wakeLock.request('screen').catch(() => {}); } catch {}
+}
+
+function cook(id, i) {
+  const r = byId(id); const steps = r.steps || []; if (!steps.length) return;
+  if (((cooking && cooking.id === id && cooking.who) || who) === 'both') return cookTogether(id);
+  if (i == null) i = cooking && cooking.id === id ? cooking.step : 0;
+  i = Math.max(0, Math.min(i, steps.length - 1));
+  const cw = (cooking && cooking.id === id && cooking.who) || who || me;
+  cooking = { id, step:i, who:cw }; save();
+  const jobs = jobsFor(r), together = cw === 'both';
+  const meanwhile = together && jobs[i] !== 'either' ? steps.map((x, k) => ({ x, k })).find(o => o.k > i && jobs[o.k] !== jobs[i] && jobs[o.k] !== 'either') : null;
+  const tw = tweaks(r, together ? ['Craig','Mary'] : [cw]).filter(x => x.ing && (s => (s.uses || []).some(u => same(u, x.ing)))(steps[i]));
+  const s = steps[i], nx = steps[i + 1];
+  const w = s.timer_min >= 30 && /marinat|chill|rest|soak|prove|leave/i.test(s.text);
+  const ahead = w ? steps.slice(i + 1).find(x => /heat the oven|preheat|bring .* to the boil/i.test(x.text)) : null;
+  $('layer').innerHTML = `<div class="view cook" id="cv" role="dialog" aria-modal="true" aria-label="Cooking ${esc(r.title)}"><div class="inner" style="padding-top:calc(10px + env(safe-area-inset-top, 0px));padding-bottom:120px">
+    <div class="top"><button class="round" style="background:var(--raise)" data-a="leavecook" aria-label="Leave cooking, keep my place">×</button><span class="meta">Step ${i + 1} of ${steps.length}</span><button class="chip" data-a="cookings">Ingredients</button></div>
+    <div class="prog">${steps.map((_, k) => `<i class="${k <= i ? 'on' : ''}"></i>`).join('')}</div>
+    <div class="timers" id="tm"></div>
+    ${together ? `<div class="lab" style="margin-top:20px;color:var(--ink)">${jobs[i] === 'either' ? 'Either of you' : jobs[i] + "'s job"}</div>` : ''}
+    <div class="cx" style="${together ? 'margin-top:4px' : ''}">${esc(s.text)}</div>
+    ${tw.map(x => `<div class="banner" style="margin-top:12px;display:block;font-size:14.5px">For ${x.p}: ${esc(x.t)}</div>`).join('')}
+    ${meanwhile ? `<div class="banner" style="margin-top:14px;display:block"><span class="meta">Meanwhile, ${jobs[meanwhile.k]} · step ${meanwhile.k + 1}</span><div style="font-size:15px;margin-top:2px">${esc(meanwhile.x.text.split('. ')[0])}.</div></div>` : ''}
+    ${s.timer_min && !timers.some(t => t.step === i && t.id === id) ? `<button class="btn sec" style="margin-top:16px" data-a="startt" data-v="${s.timer_min}">Start ${s.timer_min} min timer</button>` : ''}
+    ${(s.uses || []).length ? `<div class="lab">For this step</div><div>${esc(s.uses.join(', '))}</div>` : ''}
+    ${w ? `<div class="lab">While you wait</div><div>${ahead ? esc(ahead.text.split('.')[0]) + ', near the end.' : 'Nothing to do. Read ahead, or put the kettle on.'}</div>` : ''}
+    ${nx ? `<div class="nextp"><div class="lab">Next · step ${i + 2}</div><div style="font-size:18px">${esc(nx.text)}</div></div>` : `<div class="nextp"><div class="lab">That's the last step</div></div>`}
+  </div></div>
+  <div class="nav2">${i > 0 ? `<button data-a="step" data-v="${i - 1}">‹ Back</button>` : ''}<button data-a="${nx ? 'step' : 'done'}" data-v="${i + 1}">${nx ? 'Next ›' : 'Done'}</button></div>`;
+  drawTimers(); clearInterval(tick); tick = setInterval(drawTimers, 1000);
+  try { navigator.wakeLock && navigator.wakeLock.request('screen').catch(() => {}); } catch {}
+  let x0 = null; $('cv').ontouchstart = e => x0 = e.touches[0].clientX;
+  $('cv').ontouchend = e => { if (x0 == null) return; const dx = e.changedTouches[0].clientX - x0; x0 = null; if (Math.abs(dx) > 70) { if (dx < 0 && nx) cook(id, i + 1); else if (dx > 0 && i > 0) cook(id, i - 1); } };
+}
+
+/* ---------- 7 · Story ---------- */
+const TYPES = { day:'time', cook:'people', was:'feel', but:'feel', next:'time', again:'feel' };
+const BANKS = {
+  day:['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'], cook:['Mary','Craig','we both'], was:['lovely','really good','fine','not for us'],
+  but:['was perfect as is','needed more seasoning','needed longer','was a bit salty','was a bit sweet','needed more sauce','was a bit much work'],
+  next:['change nothing','double it','add more garlic','add more chilli','use less sugar','make it ahead'], again:['make it again soon','keep it for a weekend','not make it again'] };
+const LABS = { day:'On…', cook:'Who cooked…', was:'It was…', but:'But it…', next:'Next time…', again:"We'll…" };
+const ORDER = ['was','but','next','again'];
+const shortName = r => r.title.length > 34 ? r.title.split(/ with | and /)[0] : r.title;
+function storyText(l) { const r = byId(l.id); return `On ${DAYS[new Date(l.iso).getDay()]}, ${l.cook} made the ${shortName(r)}. It was ${l.was}, but it ${l.but}. Next time, ${l.next}. We'll ${l.again}.`; }
+let sto = null, sact = null, bankReady = 0;
+function storyHTML(placed) {
+  const slot = k => sto[k] ? `<span class="w${placed === k ? ' placed' : ''}" role="button" tabindex="0" data-sk="${k}">${esc(sto[k])}</span>` : `<span class="blank${sact === k ? ' active' : ''}" role="button" tabindex="0" aria-label="${LABS[k]} choose" data-sk="${k}"></span>`;
+  return `On ${slot('day')}, ${slot('cook')} made the <span class="w dish">${esc(shortName(sto.r))}</span>. It was ${slot('was')}, but it ${slot('but')}. Next time, ${slot('next')}. We'll ${slot('again')}.`;
+}
+const complete = () => ORDER.every(k => sto[k]);
+function story(id) {
+  const r = byId(id); clearInterval(tick); timers = timers.filter(t => t.id !== id); S.set('timers', timers);
+  const fresh = needs(r).filter(n => kItem(n) && kItem(n).place === 'fridge' && kItem(n).state !== 'out');
+  const cw = cooking?.who === 'both' ? 'we both' : cooking?.who || me;
+  sto = { r, day:DAY, cook:cw, makeFav:false, was:null, but:null, next:null, again:null, used:new Set(), offList:onList(id), fresh }; sact = null;
+  $('layer').innerHTML = `<div class="view" id="sv" role="dialog" aria-modal="true" aria-label="How did it go?"><div class="inner" style="padding-top:calc(14px + env(safe-area-inset-top, 0px))">
+    <div class="top"><button class="chip ghost" style="padding-left:0" data-a="cook" data-v="${id}">‹ Steps</button><button class="chip ghost" data-a="snd" aria-pressed="${on}">Sound ${on ? 'on' : 'off'}</button></div>
+    <div class="meta">How did it go?</div>
+    <div class="story" id="story">${storyHTML()}</div>
+    <div class="meta" id="shint" style="margin-top:10px">Tap a gap to fill it in. Tap a word to change it.</div>
+    <div id="sx"></div>
+  </div></div>
+  <div class="nav2"><button data-a="skipstory">Not now</button><button data-a="savestory" aria-disabled="true">Save to our log</button></div>
+  <div class="wbank" id="wb" role="dialog" aria-label="Choose a word"><div class="grab" style="width:40px;height:5px;border-radius:3px;background:var(--fill);margin:0 auto 12px"></div><div class="lab" id="wbl" style="margin-top:0"></div><div class="opts" id="wbc"></div></div>`;
+  drawExtras();
+  setTimeout(() => openGap(ORDER.find(k => !sto[k])), 450);
+}
+function drawExtras() {
+  $('sx').innerHTML = `${sto.fresh.length ? `<div class="banner" style="display:block;margin-top:24px">Used up anything?<div class="chips" style="margin-top:8px">${sto.fresh.map(n => `<button class="chip ${sto.used.has(n) ? 'on' : ''}" data-a="usedup" data-v="${esc(n)}" aria-pressed="${sto.used.has(n)}">${esc(n)}${sto.used.has(n) ? ' ✓' : ''}</button>`).join('')}</div><div class="meta" style="margin-top:6px">Ticked items are marked as out in the Kitchen.</div></div>` : ''}
+    ${onList(sto.r.id) ? `<button class="tick" style="margin-top:12px" data-a="offlist" aria-pressed="${sto.offList}"><i>${sto.offList ? '✓' : ''}</i><span>Take it off Want to try (we've tried it now)</span></button>` : ''}
+    ${!favs[me].includes(sto.r.id) && ['lovely','really good'].includes(sto.was) ? `<button class="tick" data-a="makefav" aria-pressed="${sto.makeFav}"><i>${sto.makeFav ? '✓' : ''}</i><span>Make it one of my favourites ♥</span></button>` : ''}`;
+}
+function openGap(k) {
+  if (!k) return; sact = k; $('wbl').textContent = LABS[k];
+  $('wbc').innerHTML = BANKS[k].map(w => `<button data-sw="${esc(w)}">${esc(w)}</button>`).join('');
+  $('wb').classList.add('open'); $('story').innerHTML = storyHTML(); sfx.open(); bankReady = Date.now() + 320;
+  setTimeout(() => $('wbc').querySelector('button')?.focus({ preventScroll:true }), 330);
+}
+function placeWord(w) {
+  if (Date.now() < bankReady) return;
+  const k = sact, was = complete(); sto[k] = w; sact = null; sfx.place();
+  if (k === 'again') sto.offList = w !== 'make it again soon' ? sto.offList : false;
+  $('wb').classList.remove('open'); $('story').innerHTML = storyHTML(k); drawExtras();
+  const btn = document.querySelector('[data-a="savestory"]'); btn.setAttribute('aria-disabled', String(!complete()));
+  if (complete() && !was) { $('shint').textContent = 'All filled in. Save it, or tap a word to change it.'; setTimeout(() => { sfx.ready(); $('story').classList.add('done'); }, 220); }
+  else { const nx = ORDER.find(x => !sto[x]); if (nx) setTimeout(() => openGap(nx), 380); }
+}
+function saveStory() {
+  if (!complete()) { $('shint').textContent = 'Fill in the gaps first.'; return openGap(ORDER.find(x => !sto[x])); }
+  sfx.save();
+  const r = sto.r;
+  logs.unshift({ id:r.id, iso:new Date().toISOString(), cook:sto.cook, was:sto.was, but:sto.but, next:sto.next, again:sto.again });
+  sto.used.forEach(n => { const k = kItem(n); if (k) { k.state = 'out'; recentOut = [n, ...recentOut.filter(x => !same(x, n))].slice(0, 8); } });
+  if (sto.offList) list = list.filter(x => x.id !== r.id);
+  if (sto.makeFav && !favs[me].includes(r.id)) favs[me].push(r.id);
+  if (sto.was === 'not for us') { favs.Craig = favs.Craig.filter(x => x !== r.id); favs.Mary = favs.Mary.filter(x => x !== r.id); }
+  cooking = null; save();
+  $('layer').innerHTML = ''; go(returnTo || 'log'); toast(`Saved to our log${sto.used.size ? ` · ${sto.used.size} marked out in the Kitchen` : ''}`);
+}
+
+/* ---------- 8 · Ours: Want to try (a queue) and Favourites (go-tos) ---------- */
+let oseg = 'try';
+function listView() {
+  const items = list.map(x => ({ ...x, r: byId(x.id) })).filter(x => x.r);
+  const reacts = id => ['Craig','Mary'].map(p => favs[p].includes(id) ? `♥ ${p}` : '').filter(Boolean).join(' · ');
+  const fav = R.filter(r => isFav(r.id)).sort((a, b) => due(b.id) - due(a.id));
+  const seg = `<div class="seg"><button data-a="oseg" data-v="try" aria-pressed="${oseg === 'try'}">Want to try · ${items.length}</button><button data-a="oseg" data-v="fav" aria-pressed="${oseg === 'fav'}">Favourites · ${fav.length}</button></div>`;
+  let body;
+  if (oseg === 'try') {
+    const [first, ...rest] = items;
+    body = `<p class="meta" style="margin-top:12px">Dishes we'd like to try. A queue we order together; a dish leaves once we've made it.</p>
+    ${first ? `<div class="lab">Next up</div>
+      <button data-a="open" data-v="${first.r.id}" style="display:grid;grid-template-columns:110px 1fr;gap:14px;width:100%;align-items:start"><img class="ph" src="${IMG(first.r.code)}" alt="" style="width:110px;height:140px;border-radius:6px"><span><span style="font-size:19px;display:block;line-height:1.25">${esc(first.r.title)}</span><span class="meta" style="display:block;margin-top:4px">${first.by === me ? 'You' : first.by} added ${dayName(first.at)} · ${timeTxt(first.r)}</span><span class="meta" style="display:block;margin-top:2px">${haveTxt(first.r)}</span></span></button>
+      ${rest.length ? `<div class="lab" style="margin-top:22px">Then</div>` : ''}
+      ${rest.map((x, k) => `<div class="q"><button data-a="open" data-v="${x.r.id}" style="display:contents"><img class="ph" src="${IMG(x.r.code)}" alt="" style="width:56px;height:56px;border-radius:6px"><span><span style="display:block;font-size:15px;line-height:1.3">${esc(x.r.title)}</span><span class="meta">${x.by === me ? 'You' : x.by} · ${dayName(x.at)}</span></span></button>
+        <span class="mv"><button data-a="mv" data-v="${k + 1}" aria-label="Move up">↑</button><button data-a="unlist" data-v="${x.r.id}" aria-label="Remove">×</button></span></div>`).join('')}
+      <p class="meta" style="margin-top:14px">Use ↑ to move something up the queue (drag in the real app). Changes show on both phones.</p>`
+    : `<div class="empty" style="margin-top:20px">Nothing queued. Tap "+ Want to try" on any recipe, or add a new one.</div>`}
+    <div class="sec"><h2>Saved, never tried</h2><button data-a="browse" data-v="new">browse</button></div>`;
+  } else {
+    body = `<p class="meta" style="margin-top:12px">The dishes we go back to. They stay put and come round again: the ones we haven't had for a while rise to the top.</p>
+    ${fav.map(r => { const m = made(r.id), d = due(r.id); return `<div class="row"><button data-a="open" data-v="${r.id}" style="display:contents"><img class="ph" src="${IMG(r.code)}" alt="" loading="lazy"><div><div class="t">${esc(r.title)}</div><div class="m">${reacts(r.id)} · made ${m.n}×</div><div class="m" style="color:${d >= 1 ? 'var(--ink)' : 'var(--mid)'}">${ago(m.days)}${d >= 1 ? ' · due a return' : ''}</div></div></button></div>`; }).join('') || '<div class="empty">No favourites yet. Tap ♥ on a recipe you love.</div>'}`;
+  }
+  $('view').innerHTML = `<div class="top"><h1>Ours</h1><button class="chip" data-a="addrecipe">+ Add a recipe</button></div>${seg}${body}`;
+  $('ctxbar').innerHTML = '';
+}
+
+/* ---------- 9 · Log ---------- */
+function logView() {
+  const entry = l => { const r = byId(l.id); return `<button data-a="open" data-v="${l.id}" style="display:grid;grid-template-columns:56px 1fr;gap:12px;width:100%;align-items:start;padding:8px 0"><img class="ph" src="${IMG(r.code)}" alt="" style="width:56px;height:56px;border-radius:6px"><span style="font-size:15px;line-height:1.45">${esc(storyText(l))}${l.ex ? ' <span class="meta">(example)</span>' : ''}</span></button>`; };
+  let body = '';
+  if (logSeg === 'date') {
+    const groups = {}; logs.forEach(l => { const d = new Date(l.iso), diff = (Date.now() - d) / 864e5; const g = diff < 7 ? 'This week' : d.toLocaleDateString('en-GB', { month:'long' }); (groups[g] = groups[g] || []).push(l); });
+    body = Object.entries(groups).map(([g, ls]) => `<div class="lab">${g}</div>${ls.map(entry).join('')}`).join('');
+  } else {
+    const ids = [...new Set(logs.map(l => l.id))];
+    body = ids.map(id => { const r = byId(id), ls = logs.filter(l => l.id === id); return `<div class="lab">${esc(r.title)} · made ${ls.length} time${ls.length === 1 ? '' : 's'}</div>${ls.map(l => `<p style="font-size:15px;margin:4px 0 8px">${esc(storyText(l))}</p>`).join('')}<button class="chip" data-a="open" data-v="${id}">Open the recipe</button>`; }).join('');
+  }
+  $('view').innerHTML = `<h1 style="margin-top:8px">Our log</h1>
+    <div class="seg"><button data-a="logseg" data-v="date" aria-pressed="${logSeg === 'date'}">By date</button><button data-a="logseg" data-v="dish" aria-pressed="${logSeg === 'dish'}">By dish</button></div>
+    ${logs.length ? body : '<div class="empty">Nothing cooked yet. Finish a recipe in cook mode and tell the story.</div>'}`;
+  $('ctxbar').innerHTML = '';
+}
+
+/* ---------- 10 · Kitchen, 12 · To buy ---------- */
+const STATE_TXT = { have:'have', low:'running low', out:'out' };
+function kitchenView() {
+  const boxIn = boxWeek === weekKey();
+  if (kseg === 'have') {
+    const fridge = kitchen.filter(k => k.place === 'fridge').sort((a, b) => (a.state === 'out') - (b.state === 'out') || new Date(a.added) - new Date(b.added));
+    const cup = kitchen.filter(k => k.place === 'cupboard').sort((a, b) => (a.state === 'out') - (b.state === 'out') || a.name.localeCompare(b.name));
+    const item = k => `<div class="kit"><span class="nm">${esc(k.name)}${k.place === 'fridge' ? ` <span class="meta">· ${dayName(k.added)}</span>` : ''}</span><button class="st ${k.state}" data-a="cycle" data-v="${esc(k.name)}" aria-label="${esc(k.name)}: ${STATE_TXT[k.state]}. Tap to change">${STATE_TXT[k.state]}</button><button class="x" data-a="rmk" data-v="${esc(k.name)}" aria-label="Remove ${esc(k.name)}">×</button></div>`;
+    $('view').innerHTML = `<h1 style="margin-top:8px">Kitchen</h1>
+      <div class="seg"><button data-a="kseg" data-v="have" aria-pressed="true">We have · ${kitchen.filter(k => k.state !== 'out').length}</button><button data-a="kseg" data-v="buy" aria-pressed="false">To buy · ${buyList().length}</button></div>
+      ${boxIn ? `<div class="banner"><span>The box is in<br><span class="meta">${BOX.length} things added this week</span></span><button class="chip" data-a="unbox">Undo</button></div>`
+              : `<div class="banner"><span>Is the box in?<br><span class="meta">Box day is Tuesday · ${BOX.length} things</span></span><button class="chip on" data-a="box">Add the box</button></div>`}
+      <div class="sec"><h2>Use soon</h2><span>fridge · oldest first</span></div>${fridge.map(item).join('')}
+      <div class="sec"><h2>Cupboard</h2><span>${cup.length}</span></div>${cup.map(item).join('')}
+      <div class="sec"><h2>Always in</h2><button data-a="settings">${STAPLES.length} staples · edit</button></div>
+      <p class="meta">${STAPLES.join(', ')}. Assumed, never asked about.</p>
+      <p class="meta" style="margin-top:14px">Tap a state to cycle have → running low → out.</p>`;
+    $('ctxbar').innerHTML = `<button class="field" data-a="addk"><span aria-hidden="true">+</span><span>Add to the Kitchen</span></button><button class="chip" style="min-height:48px;border-radius:24px" data-a="cookwith">Cook with…</button>`;
+  } else {
+    const groups = {}; toBuy.forEach(b => { const g = b.for ? `For ${byId(b.for)?.title || 'a recipe'}` : 'Added by hand'; (groups[g] = groups[g] || []).push(b); });
+    const low = kitchen.filter(k => k.state === 'low' && !toBuy.some(b => same(b.name, k.name)));
+    const tick = (n, a) => `<button class="tick strike" data-a="${a}" data-v="${esc(n)}" aria-pressed="false"><i></i><span>${esc(n)}</span></button>`;
+    $('view').innerHTML = `<h1 style="margin-top:8px">Kitchen</h1>
+      <div class="seg"><button data-a="kseg" data-v="have" aria-pressed="false">We have · ${kitchen.filter(k => k.state !== 'out').length}</button><button data-a="kseg" data-v="buy" aria-pressed="true">To buy · ${buyList().length}</button></div>
+      ${Object.entries(groups).map(([g, bs]) => `<div class="lab">${esc(g)}</div>${bs.map(b => tick(b.name, 'bought')).join('')}`).join('')}
+      ${low.length ? `<div class="lab">Running low</div>${low.map(k => tick(k.name, 'bought')).join('')}` : ''}
+      ${!buyList().length ? '<div class="empty">Nothing to buy. "Add to buy" on a recipe, or add below.</div>' : ''}
+      <p class="meta" style="margin-top:18px">Tick what you've bought: it moves into We have.</p>`;
+    $('ctxbar').innerHTML = `<label class="field"><span aria-hidden="true">+</span><input id="buyq" placeholder="Add to buy" autocomplete="off" aria-label="Add to buy" enterkeyhint="done"></label><button class="chip" style="min-height:48px;border-radius:24px" data-a="copylist">Copy list</button>`;
+    $('buyq').onkeydown = e => { if (e.key === 'Enter' && e.target.value.trim()) { toBuy.push({ name:norm(e.target.value), for:null }); save(); render(); $('buyq').focus(); } };
+  }
+}
+const buyList = () => toBuy.concat(kitchen.filter(k => k.state === 'low' && !toBuy.some(b => same(b.name, k.name))));
+
+/* ---------- 11 · Add to the Kitchen ---------- */
+let ak = { q:'', pend:new Set(), paste:false };
+function addKitchen() { ak = { q:'', pend:new Set(), paste:false }; drawAddK(true); }
+function drawAddK(first) {
+  const q = norm(ak.q), boxIn = boxWeek === weekKey();
+  const hits = q ? VOCAB.filter(v => v.includes(q) && !(kItem(v) && kItem(v).state !== 'out')).slice(0, 6) : [];
+  const t = n => `<button class="tick" data-a="akt" data-v="${esc(n)}" aria-pressed="${ak.pend.has(n)}"><i>${ak.pend.has(n) ? '✓' : ''}</i><span>${esc(n)} <span class="meta">· ${placeOf(n)}${inKitchen(n) ? ', already in' : ''}</span></span></button>`;
+  const body = `<div class="top"><b style="font-weight:400;font-size:19px">Add to the Kitchen</b><button class="chip ghost" data-a="akclose">Cancel</button></div>
+    <input class="box" id="akq" placeholder="Type an ingredient" value="${esc(ak.q)}" autocomplete="off" aria-label="Type an ingredient" style="margin-top:10px">
+    ${q ? (hits.length ? hits.map(t).join('') : `<button class="tick" data-a="akt" data-v="${esc(q)}" aria-pressed="${ak.pend.has(q)}"><i>${ak.pend.has(q) ? '✓' : ''}</i><span>Add "${esc(q)}" <span class="meta">· ${placeOf(q)}</span></span></button>`) : ''}
+    ${[...ak.pend].filter(n => !BOX.includes(n) && !recentOut.includes(n) && !hits.includes(n)).length ? `<div class="lab">Ready to add</div>${[...ak.pend].filter(n => !BOX.includes(n) && !recentOut.includes(n) && !hits.includes(n)).map(t).join('')}` : ''}
+    ${!boxIn ? `<div class="lab">From this week's box</div>${BOX.map(t).join('')}` : ''}
+    <div class="lab">Recently used up</div><div class="chips">${recentOut.map(n => `<button class="chip ${ak.pend.has(n) ? 'on' : ''}" data-a="akt" data-v="${esc(n)}" aria-pressed="${ak.pend.has(n)}">+ ${esc(n)}</button>`).join('') || '<span class="meta">Nothing yet.</span>'}</div>
+    <div class="lab">Other ways</div>
+    ${ak.paste ? `<textarea id="akp" rows="4" placeholder="One per line, or separated by commas" style="width:100%;background:var(--raise);border:0;border-radius:12px;padding:12px;outline:none"></textarea><button class="chip" style="margin-top:8px" data-a="akpaste">Add these</button>` : `<div class="chips"><button class="chip" data-a="akpasteopen">Paste a list</button><span class="chip ghost">Receipt photo (later)</span><span class="chip ghost">Box email (later)</span></div>`}`;
+  if (first) $('layer').innerHTML = `<div class="scrim" data-a="akclose"></div><div class="sheet" role="dialog" aria-modal="true" aria-label="Add to the Kitchen"><div class="grab"></div><div id="akb">${body}</div><div class="foot"><button class="btn" id="akgo" data-a="akgo"></button></div></div>`;
+  else { const had = document.activeElement?.id === 'akq', pos = had ? $('akq').selectionStart : 0; $('akb').innerHTML = body; if (had) { $('akq').focus(); $('akq').setSelectionRange(pos, pos); } }
+  $('akgo').textContent = ak.pend.size ? `Add ${ak.pend.size} to the Kitchen` : 'Done';
+  $('akq').oninput = e => { ak.q = e.target.value; drawAddK(); };
+  $('akq').onkeydown = e => { if (e.key === 'Enter' && norm(ak.q)) { ak.pend.add(hits[0] || norm(ak.q)); ak.q = ''; drawAddK(); $('akq').focus(); } };
+}
+
+/* ---------- 13 · Add a recipe ---------- */
+function addRecipe() {
+  $('layer').innerHTML = `<div class="view" role="dialog" aria-modal="true" aria-label="Add a recipe"><div class="inner" style="padding-top:calc(14px + env(safe-area-inset-top, 0px))">
+    <div class="top"><button class="round" style="background:var(--raise)" data-a="close" aria-label="Close">×</button><span class="meta">Add a recipe</span><span style="width:44px"></span></div>
+    <input class="box" id="arq" style="width:100%;min-height:48px;border-radius:24px;background:var(--raise);border:0;padding:0 16px;outline:none;margin-top:18px" placeholder="Paste a Reel, website or YouTube link" aria-label="Link">
+    <p class="meta">Or share a Reel from Instagram straight to the app. It lands here.</p>
+    <button class="btn" data-a="arsubmit">Add</button>
+    <button class="tick" data-a="artoggle" aria-pressed="true" id="arl"><i>✓</i><span>Add to our list when it's ready</span></button>
+    <div id="arp"></div>
+    <p class="proto" style="margin-top:30px">Simulated in this prototype: nothing is fetched.</p></div></div>`;
+}
+function runAdd() {
+  const url = $('arq').value.trim() || 'instagram.com/reel/DXxMMMdJx5t';
+  const stepsTxt = ['Getting the video', 'Transcribing what they say', 'Writing it up our way', 'Ready · 2 things to check'];
+  let k = 0;
+  const draw = () => { $('arp').innerHTML = `<div class="lab" style="margin-top:24px">Being added</div><div class="row"><div class="ph" style="width:60px;height:60px;border-radius:6px"></div><div><div class="t">${esc(url.replace(/^https?:\/\//, ''))}</div><div class="m">${stepsTxt.slice(0, k + 1).map((s, n) => n < k ? s + ' ✓' : s + (n < 3 ? '…' : '')).join(' · ')}</div></div></div>${k === 3 ? '<p class="meta">"Things to check" lists only what the creator never gave. You confirm or fill each one.</p>' : ''}`; };
+  draw(); const iv = setInterval(() => { k++; draw(); if (k === 3) { clearInterval(iv); sfx.ready(); } }, 900);
+}
+
+/* ---------- 14 · Household ---------- */
+function settings() {
+  const opt = (a, v, cur, t) => `<button class="chip ${cur === v ? 'on' : ''}" data-a="${a}" data-v="${v}" aria-pressed="${cur === v}">${t}</button>`;
+  $('layer').innerHTML = `<div class="view" role="dialog" aria-modal="true" aria-label="Household"><div class="inner" style="padding-top:calc(14px + env(safe-area-inset-top, 0px))">
+    <div class="top"><button class="round" style="background:var(--raise)" data-a="close" aria-label="Back">‹</button><span class="meta">Household</span><span style="width:44px"></span></div>
+    <div class="lab">This phone belongs to</div><div class="chips">${opt('me', 'Craig', me, 'Craig')}${opt('me', 'Mary', me, 'Mary')}</div>
+    <div class="lab">People</div>
+    <div class="set"><span>Craig</span><span class="meta">pescatarian with Mary · meat when alone</span></div>
+    <div class="set"><span>Mary</span><span class="meta">fish and veg</span></div>
+    <div class="lab">What each of us likes</div>
+    ${['Craig','Mary'].map(p => `<div class="meta" style="margin:8px 0 4px">${p}</div><div class="chips">${PREFS.map(x => `<button class="chip ${prefs[p].includes(x) ? 'on' : ''}" data-a="pref" data-v="${x}" data-p="${p}" aria-pressed="${prefs[p].includes(x)}">${x}</button>`).join('')}</div>`).join('')}
+    <p class="meta">Recipes and cook mode show a tweak when the cook or the people eating like something done differently.</p>
+    <div class="lab">Usually eating</div><div class="chips">${opt('usual', 'both', usual, 'Both of us')}${opt('usual', 'mary', usual, 'Mary')}${opt('usual', 'craig', usual, 'Craig alone')}</div>
+    <p class="meta">Tonight shows a chip only when it's different from this. Change it for one evening in the filters.</p>
+    <div class="lab">Kitchen</div>
+    <div class="set"><span>Oven</span><span class="meta">fan, °C</span></div><div class="set"><span>Hob</span><span class="meta">induction, 1–9</span></div>
+    <div class="set"><span>Units</span><span class="meta">grams, ml</span></div><div class="set"><span>Box day</span><span class="meta">Tuesday</span></div>
+    <div class="set"><span>Always in</span><span class="meta">${STAPLES.length} staples</span></div>
+    <div class="lab">App</div>
+    <div class="set"><span>Sounds</span><button class="chip" data-a="snd" aria-pressed="${on}">${on ? 'On' : 'Off'}</button></div>
+    <div class="set"><span>Season nudge</span><span class="meta">gentle</span></div>
+    <div class="lab">Feel like (trying both)</div><div class="chips">${opt('moodmode', 'one', moodMode, 'One choice')}${opt('moodmode', 'many', moodMode, 'Several')}</div>
+    <div class="lab">Prototype</div><button class="chip" data-a="reset">Reset the example data</button>
+  </div></div>`;
+}
+
+/* ---------- events ---------- */
+function closeLayer() { $('layer').innerHTML = ''; clearInterval(tick); render(); }
+document.addEventListener('click', e => {
+  const sk = e.target.closest('[data-sk]'); if (sk && sto) { if (sto[sk.dataset.sk]) sfx.lift(); return openGap(sk.dataset.sk); }
+  if (sact && !e.target.closest('#wb') && $('wb')) { $('wb').classList.remove('open'); sact = null; $('story').innerHTML = storyHTML(); }
+  const sw = e.target.closest('[data-sw]'); if (sw) return placeWord(sw.dataset.sw);
+  const t = e.target.closest('[data-a]'); if (!t) return;
+  const a = t.dataset.a, v = t.dataset.v;
+  if (t.tagName === 'A') return;
+  e.preventDefault();
+  switch (a) {
+    case 'tab': $('layer').innerHTML = ''; return go(v);
+    case 'library': return go('tonight', 'library');
+    case 'browse': lib.show = v; return go('tonight', 'library');
+    case 'filters': e.stopPropagation(); return filters();
+    case 'filtersdone': $('layer').innerHTML = ''; return go('tonight', 'library');
+    case 'libf': lib[t.dataset.k] = v; if ($('layer').innerHTML) { filters(); } render(); return;
+    case 'eaterf': st.eater = v; filters(); return render();
+    case 'libclear': lib = { q:'', meal:'all', time:'any', hands:'any', show:'', sort:'best' }; st.eater = usual; filters(); return render();
+    case 'libq': lib.q = ''; return render();
+    case 'eater': st.eater = v; return render();
+    case 'mood': if (moodMode === 'one') st.moods = st.moods[0] === v ? [] : [v]; else st.moods = st.moods.includes(v) ? st.moods.filter(x => x !== v) : [...st.moods, v]; return render();
+    case 'moodmode': moodMode = v; if (v === 'one') st.moods = st.moods.slice(0, 1); save(); render(); if (document.querySelector('[aria-label="Household"]')) settings(); return;
+    case 'ours': oseg = v; return go('list');
+    case 'oseg': oseg = v; return render();
+    case 'who': who = v; return recipe(rid, true);
+    case 'job': { const r = byId(rid), j = jobsFor(r); jobsBy[r.id] = { ...(jobsBy[r.id] || {}), [v]: { Craig:'Mary', Mary:'both', both:'Craig' }[j[+v]] }; S.set('jobs', jobsBy); return recipe(rid, true); }
+    case 'station': { const r = byId(rid), o = { ...owners(r) }; o[v] = o[v] === 'Craig' ? 'Mary' : 'Craig'; stationsBy[r.id] = o; S.set('stations', stationsBy); if (jobsBy[r.id]) { delete jobsBy[r.id]; S.set('jobs', jobsBy); } return recipe(rid, true); }
+    case 'handover': case 'takeover': { const r = byId(cooking.id); jobsBy[r.id] = { ...(jobsBy[r.id] || {}), [v]: t.dataset.p }; S.set('jobs', jobsBy); sfx.lift(); toast(`Step ${+v + 1} is ${t.dataset.p}'s now`); return cookTogether(r.id); }
+    case 'lanedone': { cooking.done = [...new Set([...(cooking.done || []), +v])]; cooking.last = [...(cooking.last || []), +v]; save(); sfx.place(); return cookTogether(cooking.id); }
+    case 'undolane': { const l = (cooking.last || []).pop(); cooking.done = (cooking.done || []).filter(x => x !== l); save(); sfx.lift(); return cookTogether(cooking.id); }
+    case 'startt2': { const r = byId(cooking.id), k = +v, s = r.steps[k]; timers.push({ id:cooking.id, step:k, min:s.timer_min, label:/marina/i.test(s.text) ? 'Marinating' : /oven|bake|roast/i.test(s.text) ? 'In the oven' : `Step ${k + 1}`, end:Date.now() + s.timer_min * 60000 }); S.set('timers', timers); return cookTogether(cooking.id); }
+    case 'makefav': sto.makeFav = !sto.makeFav; return drawExtras();
+    case 'pref': { const p = t.dataset.p; prefs[p] = prefs[p].includes(v) ? prefs[p].filter(x => x !== v) : [...prefs[p], v]; save(); return settings(); }
+    case 'with': if (!st.withs.includes(v)) st.withs.push(v); return render();
+    case 'unwith': st.withs = st.withs.filter(x => x !== v); return render();
+    case 'clearchoice': st.moods = []; st.withs = []; return render();
+    case 'picker': return picker();
+    case 'pkt': st.withs.includes(v) ? st.withs = st.withs.filter(x => x !== v) : st.withs.push(v); pk.q = ''; return drawPicker();
+    case 'pkadd': pk.alsoAdd.has(v) ? pk.alsoAdd.delete(v) : pk.alsoAdd.add(v); return drawPicker();
+    case 'pkclear': st.withs = []; return drawPicker();
+    case 'pkdone': pk.alsoAdd.forEach(n => { if (st.withs.includes(n)) addToKitchen(n, true); }); if (pk.alsoAdd.size) toast('Added to the Kitchen too'); pk.alsoAdd.clear(); $('layer').innerHTML = ''; return go('tonight');
+    case 'cookwith': tab = 'tonight'; sub = null; render(); return picker();
+    case 'open': returnTo = tab; who = cooking && cooking.id === v ? cooking.who : me; return recipe(v);
+    case 'close': return closeLayer();
+    case 'list': { const L = list.find(x => x.id === v); if (L) list = list.filter(x => x.id !== v); else { list.push({ id:v, by:me, at:new Date().toISOString() }); toast(`Added to Want to try · ${other()} will see it`); } save(); return recipe(v, true); }
+    case 'fav': favs[me] = favs[me].includes(v) ? favs[me].filter(x => x !== v) : [...favs[me], v]; save(); if (document.getElementById('rv')) recipe(v, true); else render(); return;
+    case 'needmenu': return needMenu(v);
+    case 'havethis': addToKitchen(v); document.getElementById('needsheet')?.remove(); return recipe(rid, true);
+    case 'buythis': toBuy.push({ name:v, for:rid }); save(); toast(`${cap(v)} added to To buy`); document.getElementById('needsheet')?.remove(); return recipe(rid, true);
+    case 'closesheet': return document.getElementById(v)?.remove();
+    case 'cook': return cook(v);
+    case 'step': return cook(cooking.id, +v);
+    case 'startt': { const s = byId(cooking.id).steps[cooking.step]; timers.push({ id:cooking.id, step:cooking.step, min:+v, label:/marina/i.test(s.text) ? 'Marinating' : /oven|bake|roast/i.test(s.text) ? 'In the oven' : `Step ${cooking.step + 1}`, end:Date.now() + v * 60000 }); S.set('timers', timers); return cook(cooking.id, cooking.step); }
+    case 'dropt': { const tt = timers[+v]; if (tt && tt.end <= Date.now()) { timers.splice(+v, 1); S.set('timers', timers); drawTimers(); } else toast('The timer keeps running. Tap it again when it\'s done.'); return; }
+    case 'leavecook': clearInterval(tick); $('layer').innerHTML = ''; toast('Your place is kept'); return render();
+    case 'stopcook': cooking = null; timers = []; S.set('timers', timers); save(); return render();
+    case 'cookings': { const r = byId(cooking.id); return sheet(`<b style="font-weight:400;font-size:19px">Ingredients</b>${(r.ingredients || []).map(i => `<div class="il"><span>${esc(i.heading || i.text)}</span></div>`).join('')}`, 'ingsheet'); }
+    case 'done': return story(cooking.id);
+    case 'snd': on = !on; if (on) sfx.toggle(true); t.textContent = t.textContent.startsWith('Sound') ? `Sound ${on ? 'on' : 'off'}` : on ? 'On' : 'Off'; t.setAttribute('aria-pressed', on); return;
+    case 'usedup': sto.used.has(v) ? sto.used.delete(v) : sto.used.add(v); sfx.place(); return drawExtras();
+    case 'offlist': sto.offList = !sto.offList; return drawExtras();
+    case 'skipstory': sfx.lift(); cooking = null; save(); $('layer').innerHTML = ''; return go(returnTo || 'tonight');
+    case 'savestory': return saveStory();
+    case 'addrecipe': return addRecipe();
+    case 'arsubmit': return runAdd();
+    case 'artoggle': { const p = t.getAttribute('aria-pressed') !== 'true'; t.setAttribute('aria-pressed', p); t.querySelector('i').textContent = p ? '✓' : ''; return; }
+    case 'mv': { const k = +v; if (k > 0) { [list[k - 1], list[k]] = [list[k], list[k - 1]]; save(); sfx.place(); } return render(); }
+    case 'unlist': list = list.filter(x => x.id !== v); save(); return render();
+    case 'logseg': logSeg = v; return render();
+    case 'kseg': kseg = v; return render();
+    case 'cycle': { const k = kItem(v); k.state = { have:'low', low:'out', out:'have' }[k.state]; if (k.state === 'out') recentOut = [k.name, ...recentOut.filter(x => x !== k.name)].slice(0, 8); save(); return render(); }
+    case 'rmk': kitchen = kitchen.filter(k => k.name !== v); save(); toast(`${cap(v)} removed`); return render();
+    case 'box': BOX.forEach(n => addToKitchen(n, true)); boxWeek = weekKey(); save(); sfx.save(); toast(`The box is in · ${BOX.length} things added`); return render();
+    case 'unbox': boxWeek = null; save(); return render();
+    case 'bought': { toBuy = toBuy.filter(b => !same(b.name, v)); addToKitchen(v, true); toast(`${cap(v)} moved into We have`); return render(); }
+    case 'copylist': { const txt = buyList().map(b => '• ' + b.name).join('\n'); try { navigator.clipboard.writeText(txt).then(() => toast('List copied'), () => toast(txt)); } catch { toast(txt); } return; }
+    case 'addk': return addKitchen();
+    case 'akt': ak.pend.has(v) ? ak.pend.delete(v) : ak.pend.add(v); return drawAddK();
+    case 'akpasteopen': ak.paste = true; drawAddK(); return $('akp').focus();
+    case 'akpaste': $('akp').value.split(/[\n,]+/).map(norm).filter(Boolean).forEach(n => ak.pend.add(n)); ak.paste = false; return drawAddK();
+    case 'akgo': { const n = ak.pend.size; ak.pend.forEach(x => addToKitchen(x, true)); if ([...ak.pend].filter(x => BOX.includes(x)).length >= 5) boxWeek = weekKey(); save(); $('layer').innerHTML = ''; if (n) toast(`${n} added to the Kitchen`); return render(); }
+    case 'akclose': $('layer').innerHTML = ''; return render();
+    case 'settings': return settings();
+    case 'me': me = v; save(); render(); return settings();
+    case 'usual': usual = v; st.eater = v; save(); render(); return settings();
+    case 'reset': try { Object.keys(localStorage).filter(k => k.startsWith(K)).forEach(k => localStorage.removeItem(k)); } catch {} location.reload(); return;
+  }
+});
+document.addEventListener('keydown', e => {
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.dataset?.sk) { e.preventDefault(); e.target.click(); }
+  if (e.key === 'Escape') { const s = document.querySelector('#needsheet, #ingsheet'); if (s) return s.remove(); if ($('layer').innerHTML) closeLayer(); }
+});
+if (cooking && !byId(cooking.id)) cooking = null;
+render();
+</script>

@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kitchen Journal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300&display=swap" rel="stylesheet">
+<style>
+:root{
+  --page:#0e0a08;
+  --bg:#17100c; --surface:#231812; --raised:#2f2119;
+  --text:#ebdac6; --muted:#b39476;
+  --brass:#d4a463; --yolk:#f2c75c;
+  --people:#9fbf9a; --feel:#8fb3c4; --change:#f2c75c; --dish:#d4a463;
+  --sage:#2c3327; --clay:#3a2620; --plaster:#2e2a26;
+  --serif:"Newsreader", Georgia, serif;
+  --sans:"Jost", system-ui, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--page)}
+body{color:var(--text);font-family:var(--sans);font-weight:300;-webkit-font-smoothing:antialiased;padding:56px 16px 80px}
+img,video{display:block}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+/* ---------- page header ---------- */
+.intro{max-width:1680px;margin:0 auto 52px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:40px 72px;align-items:end}
+.intro .kicker{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.intro h1{font-family:var(--serif);font-weight:300;font-size:52px;line-height:1.05;letter-spacing:-.01em}
+.intro .idea{margin-top:16px;font-size:18px;line-height:1.5;color:var(--muted);max-width:34em}
+.choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
+.choices dt{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);margin-bottom:8px}
+.choices dd{font-size:15px;line-height:1.5;color:var(--text)}
+
+.frames{display:flex;flex-wrap:wrap;gap:40px;justify-content:center;max-width:1680px;margin:0 auto}
+.frame-wrap figcaption{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 14px 6px}
+
+/* ---------- phone ---------- */
+.phone{position:relative;width:390px;height:844px;border-radius:50px;overflow:hidden;background:var(--bg);box-shadow:0 0 0 1px #000, 0 30px 80px rgba(0,0,0,.5)}
+.status{position:absolute;top:0;left:0;right:0;height:50px;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:6px 30px 0 40px;font-family:var(--sans);font-weight:400;font-size:16px;color:var(--text)}
+.status::after{content:"";position:absolute;left:50%;top:11px;width:122px;height:35px;margin-left:-61px;background:#000;border-radius:20px}
+.status svg{display:block}
+.status .icons{display:flex;gap:6px;align-items:center}
+.home{position:absolute;bottom:8px;left:50%;width:134px;height:5px;margin-left:-67px;border-radius:3px;background:var(--text);opacity:.7;z-index:30}
+.scroll{position:absolute;inset:0;overflow:hidden}
+
+.serif{font-family:var(--serif);font-weight:300}
+.label{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:400}
+.meta{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);font-weight:400}
+.g{padding-left:24px;padding-right:24px}
+h2.sec{font-family:var(--serif);font-weight:300;font-size:21px;line-height:1.2;color:var(--text)}
+
+/* ---------- 1 landing ---------- */
+.l-top{padding-top:56px}
+.l-top .day{font-family:var(--serif);font-weight:300;font-size:30px;line-height:1.1;letter-spacing:-.005em}
+.l-top .sub{margin-top:6px;font-size:14px;color:var(--muted)}
+.feel{margin-top:22px}
+.moods{display:flex;flex-wrap:nowrap;gap:0 18px;white-space:nowrap}
+.moods a{display:flex;align-items:center;min-height:44px;font-size:16px;color:var(--muted);text-decoration:none}
+.moods a.on{color:var(--brass)}
+.with{background:var(--sage);margin-top:8px;padding-top:12px;padding-bottom:12px}
+.with .head{display:flex;justify-content:space-between;align-items:baseline}
+.with .head a{font-size:14px;color:var(--muted);text-decoration:none}
+.circles{display:flex;justify-content:space-between;margin-top:8px}
+.circle{width:48px;text-align:center;font-size:12.5px;color:var(--muted)}
+.circle .ph{position:relative;width:48px;height:48px;border-radius:50%;overflow:hidden;margin-bottom:6px}
+.circle img{width:100%;height:100%;object-fit:cover}
+.circle.on .ph{box-shadow:0 0 0 2px var(--sage),0 0 0 3.5px var(--brass)}
+.circle.on{color:var(--text)}
+
+.best{padding-top:18px}
+.best .head{display:flex;justify-content:space-between;align-items:baseline}
+.best .head span{font-size:13px;color:var(--muted)}
+.lead{margin-top:10px}
+.lead img{width:100%;height:98px;object-fit:cover;object-position:center 60%;border-radius:6px}
+.lead .meta{margin-top:10px}
+.lead h3{font-family:var(--serif);font-weight:300;font-size:23px;line-height:1.15;margin-top:3px}
+.lead .why,.row .why{font-size:14px;color:var(--muted);margin-top:3px;line-height:1.35}
+.row{display:flex;gap:14px;align-items:center;margin-top:10px}
+.row img{width:56px;height:56px;border-radius:6px;object-fit:cover;flex:none}
+.row h3{font-family:var(--serif);font-weight:300;font-size:17px;line-height:1.2}
+.row .meta{font-size:11px}
+.season{background:var(--clay);margin-top:16px;padding-top:12px;padding-bottom:40px}
+.season .pair{display:flex;gap:12px;margin-top:12px}
+.season .pair img{width:50%;height:150px;object-fit:cover;border-radius:6px}
+
+.bar{position:absolute;left:0;right:0;bottom:0;z-index:10;padding:8px 20px 24px;background:var(--surface);display:flex;gap:10px;align-items:center}
+.search{flex:1;min-width:0;height:46px;border-radius:23px;background:var(--raised);display:flex;align-items:center;gap:8px;padding:0 8px 0 16px;font-size:15px;color:var(--muted);overflow:hidden}
+.chip{flex:none;display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 6px 0 12px;border-radius:17px;background:rgba(212,164,99,.16);color:var(--text);font-size:14px}
+.chip b{font-weight:300;color:var(--brass);width:22px;height:22px;display:grid;place-items:center;font-size:15px}
+.search .ph-t{white-space:nowrap;margin-left:4px}
+.filter{width:46px;height:46px;border-radius:23px;background:var(--raised);display:grid;place-items:center;flex:none}
+
+/* ---------- 2 recipe ---------- */
+.plate{background:var(--plaster);padding:62px 28px 14px}
+.plate video{width:100%;height:214px;object-fit:cover;object-position:center 55%;border-radius:3px}
+.plate .cap{display:flex;justify-content:space-between;align-items:center;min-height:44px;margin-top:4px;font-size:14px;color:var(--muted)}
+.plate .cap a{color:var(--brass);text-decoration:none;display:flex;align-items:center;gap:8px}
+.r-head{padding-top:20px}
+.r-head h1{font-family:var(--serif);font-weight:300;font-size:30px;line-height:1.1;margin-top:6px;letter-spacing:-.005em}
+.r-head .by{margin-top:8px;font-size:15px;color:var(--text)}
+.r-head .by span{color:var(--muted)}
+.r-head .facts{margin-top:4px;font-size:14px;line-height:1.45;color:var(--muted)}
+.actions{display:flex;gap:10px;margin-top:16px;align-items:center}
+.primary{flex:1;height:50px;border-radius:25px;background:var(--yolk);color:#20160f;font-size:16px;font-weight:400;display:flex;align-items:center;justify-content:center}
+.heart{width:50px;height:50px;border-radius:25px;background:var(--surface);display:grid;place-items:center;flex:none}
+.cols{display:grid;grid-template-columns:118px 1fr;gap:22px;margin-top:26px}
+.cols h2{font-family:var(--serif);font-weight:300;font-size:19px;margin-bottom:8px}
+.ingr li{list-style:none;font-size:13.5px;line-height:1.35;margin-bottom:8px;color:var(--text)}
+.ingr li em{font-style:normal;color:var(--brass);display:block;font-size:12.5px}
+.method p{font-family:var(--serif);font-weight:300;font-size:16px;line-height:1.45;margin-bottom:12px}
+.method p span{font-family:var(--sans);font-size:12px;color:var(--brass);display:block;letter-spacing:.1em}
+.pin{position:absolute;left:0;right:0;bottom:0;z-index:10;padding:12px 20px 30px;background:var(--surface)}
+.pin::before{content:"";position:absolute;left:0;right:0;top:-48px;height:48px;background:linear-gradient(rgba(23,16,12,0),var(--bg))}
+.pin .start{height:54px;border-radius:27px;background:var(--raised);display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:16px;color:var(--brass);font-weight:400}
+.pin .start span{color:var(--muted);font-weight:300;font-size:14px}
+
+/* ---------- 3 cook ---------- */
+.c-head{padding-top:58px;display:flex;align-items:center;justify-content:space-between;padding-left:12px;padding-right:24px}
+.c-head .x{width:44px;height:44px;display:grid;place-items:center}
+.c-head .t{flex:1;font-size:14px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 6px}
+.c-head .n{font-size:14px;color:var(--text)}
+.timer{background:var(--sage);margin-top:8px;display:flex;align-items:center;justify-content:space-between;padding-top:14px;padding-bottom:14px}
+.timer .lab{font-size:13px;color:var(--muted)}
+.timer .time{font-family:var(--sans);font-weight:300;font-size:36px;line-height:1.05;color:var(--yolk);font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.timer .time small{font-size:15px;color:var(--muted);margin-left:8px;letter-spacing:0}
+.timer .ctl{display:flex;gap:8px}
+.timer .ctl button{width:46px;height:46px;border-radius:23px;background:rgba(235,218,198,.08);display:grid;place-items:center}
+.stepgrid{display:grid;grid-template-columns:76px 1fr;gap:18px;margin-top:30px}
+.margin .label{font-size:11px;line-height:1.35}
+.margin img{width:56px;height:56px;border-radius:50%;object-fit:cover;margin:10px 0 6px}
+.margin .ing{font-size:14px;color:var(--text)}
+.step{font-family:var(--serif);font-weight:300;font-size:27px;line-height:1.32;letter-spacing:-.003em}
+.wait{margin-top:20px;font-size:15px;line-height:1.45;color:var(--text)}
+.wait b{font-weight:400;color:var(--brass)}
+.next{margin-top:40px;opacity:.62}
+.next .label{font-size:11px}
+.next p{font-family:var(--serif);font-weight:300;font-size:19px;line-height:1.38;margin-top:6px}
+.nav{position:absolute;left:20px;right:20px;bottom:34px;display:flex;height:66px;border-radius:33px;overflow:hidden}
+.nav button{flex:1;display:flex;align-items:center;justify-content:center;gap:10px;font-size:17px;font-weight:400}
+.nav .back{background:var(--raised);color:var(--text)}
+.nav .fwd{background:var(--brass);color:#20160f}
+
+/* ---------- 4 story ---------- */
+.s-head{padding-top:62px;display:flex;align-items:center;gap:14px}
+.s-head img{width:48px;height:48px;border-radius:50%;object-fit:cover}
+.s-head .k{font-size:14px;color:var(--text)}
+.s-head .k span{display:block;color:var(--muted);font-size:13px;margin-top:1px}
+.s-head a{margin-left:auto;font-size:14px;color:var(--muted);text-decoration:none;min-height:44px;display:flex;align-items:center}
+.story{font-family:var(--serif);font-weight:300;font-size:32px;line-height:1.38;margin-top:40px;letter-spacing:-.005em}
+.story .p{color:var(--people)} .story .f{color:var(--feel)} .story .c{color:var(--change)} .story .d{color:var(--dish)}
+.slot{display:inline-block;width:2.6em;height:.9em;vertical-align:-.08em;border-radius:6px;background:rgba(242,199,92,.14)}
+.slot.on{background:rgba(242,199,92,.34)}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--clay);border-radius:28px 28px 0 0;padding:10px 24px 34px;z-index:10}
+.grab{width:38px;height:5px;border-radius:3px;background:rgba(235,218,198,.25);margin:0 auto 16px}
+.sheet .top{display:flex;justify-content:space-between;align-items:baseline}
+.sheet h2{font-family:var(--serif);font-weight:300;font-size:23px}
+.sheet .top a{font-size:14px;color:var(--muted);text-decoration:none}
+.opts{margin-top:8px}
+.opts li{list-style:none;min-height:46px;display:flex;align-items:center;justify-content:space-between;font-size:18px;color:var(--text)}
+.opts li small{font-size:13px;color:var(--yolk)}
+.opts li.own{color:var(--muted);font-size:16px}
+
+/* ---------- notes ---------- */
+.notes{max-width:1100px;margin:72px auto 0;display:grid;grid-template-columns:1fr 1fr;gap:56px}
+.notes h2{font-family:var(--serif);font-weight:300;font-size:28px;margin-bottom:16px}
+.notes li{list-style:none;font-size:16px;line-height:1.55;color:var(--text);margin-bottom:14px;padding-left:20px;position:relative}
+.notes li::before{content:"";position:absolute;left:0;top:.62em;width:6px;height:6px;border-radius:50%;background:var(--brass)}
+.notes .watch li::before{background:var(--muted)}
+
+@media (max-width:900px){
+  .intro{grid-template-columns:1fr}
+  .choices{grid-template-columns:1fr}
+  .notes{grid-template-columns:1fr;gap:24px}
+  .intro h1{font-size:40px}
+}
+@media (max-width:440px){
+  .frame-wrap{zoom:.86}
+}
+@media (max-width:370px){
+  .frame-wrap{zoom:.78}
+}
+</style>
+</head>
+<body>
+
+<header class="intro">
+  <div>
+    <p class="kicker">Round 2 · Option C</p>
+    <h1>Kitchen Journal</h1>
+    <p class="idea">Warm and editorial, like a well-kept cookbook: light serif titles, photos set like plates, and soft colour fields in place of lines.</p>
+  </div>
+  <dl class="choices">
+    <div><dt>Images</dt><dd>Larger thumbnails throughout; the recipe photo set with a margin, like a plate in a book.</dd></div>
+    <div><dt>Type</dt><dd>Newsreader Light for titles, the cook-mode step and the story. Jost for everything you act on.</dd></div>
+    <div><dt>Separation</dt><dd>Soft muted fields (sage, clay, plaster) mark sections. Full-width bands, never cards.</dd></div>
+  </dl>
+</header>
+
+<main class="frames">
+
+<!-- 1 · Landing -->
+<figure class="frame-wrap">
+  <figcaption>1 · Landing</figcaption>
+  <div class="phone">
+    <div class="status"><span>18:42</span><span class="icons"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#ebdac6"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="#ebdac6"/><rect x="10" y="3" width="3" height="9" rx="1" fill="#ebdac6"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#ebdac6"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3" fill="none" stroke="#ebdac6" opacity=".5"/><rect x="2" y="2" width="15" height="8" rx="1.6" fill="#ebdac6"/><rect x="24" y="4" width="1.6" height="4" rx=".8" fill="#ebdac6" opacity=".5"/></svg></span></div>
+    <div class="scroll">
+      <div class="l-top g">
+        <p class="day">Tuesday evening</p>
+        <p class="sub">Mid autumn · the box is in</p>
+      </div>
+
+      <section class="feel g">
+        <h2 class="sec">Feel like</h2>
+        <nav class="moods"><a class="on">something warming</a><a>quick</a><a>light</a><a>comforting</a></nav>
+      </section>
+
+      <section class="with g">
+        <div class="head"><h2 class="sec">With</h2><a>from the box</a></div>
+        <div class="circles">
+          <div class="circle on"><div class="ph"><img src="../../media/C6_FrdiyZjh/hero.jpg" alt="" style="object-position:50% 62%"></div>cod</div>
+          <div class="circle on"><div class="ph"><img src="../../media/C8kHapDNLG3/hero.jpg" alt=""></div>salmon</div>
+          <div class="circle"><div class="ph"><img src="../../media/DT5nuU5iPAH/hero.jpg" alt=""></div>tofu</div>
+          <div class="circle"><div class="ph"><img src="../../media/DIJpP8hKBoA/hero.jpg" alt=""></div>eggs</div>
+          <div class="circle"><div class="ph"><img src="../../media/Cyf04RxIO8c/hero.jpg" alt=""></div>spinach</div>
+          <div class="circle"><div class="ph"><img src="../../media/Cy2_tQfsh6_/hero.jpg" alt=""></div>cabbage</div>
+        </div>
+      </section>
+
+      <section class="best g">
+        <div class="head"><h2 class="sec">Best match</h2><span>3 of 12</span></div>
+        <article class="lead">
+          <img src="../../media/C6_FrdiyZjh/hero.jpg" alt="">
+          <p class="meta">Fish · Japanese · weeknight</p>
+          <h3>Japanese mirin baked cod</h3>
+          <p class="why">Uses the cod · on our list · 1 hr 22 min</p>
+        </article>
+        <article class="row">
+          <img src="../../media/DVbnwhjiExJ/hero.jpg" alt="">
+          <div><h3>Cod grenobloise</h3><p class="why">Uses the cod · 55 min</p></div>
+        </article>
+        <article class="row">
+          <img src="../../media/C8kHapDNLG3/hero.jpg" alt="">
+          <div><h3>Creamy pesto orzo with crispy salmon</h3><p class="why">Uses the salmon and spinach · 55 min</p></div>
+        </article>
+      </section>
+
+      <section class="season g">
+        <h2 class="sec">In season now</h2>
+        <div class="pair"><img src="../../media/CwiWc2KId6o/hero.jpg" alt=""><img src="../../media/DDAItEoo_vi/hero.jpg" alt=""></div>
+      </section>
+    </div>
+    <div class="bar">
+      <div class="search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#b39476" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+        <span class="chip">cod <b>×</b></span><span class="chip">salmon <b>×</b></span><span class="ph-t">Search</span>
+      </div>
+      <button class="filter" aria-label="Filter"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ebdac6" stroke-width="1.4" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button>
+    </div>
+    <div class="home"></div>
+  </div>
+</figure>
+
+<!-- 2 · Recipe -->
+<figure class="frame-wrap">
+  <figcaption>2 · Recipe</figcaption>
+  <div class="phone">
+    <div class="status"><span>18:44</span><span class="icons"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#ebdac6"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="#ebdac6"/><rect x="10" y="3" width="3" height="9" rx="1" fill="#ebdac6"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#ebdac6"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3" fill="none" stroke="#ebdac6" opacity=".5"/><rect x="2" y="2" width="15" height="8" rx="1.6" fill="#ebdac6"/><rect x="24" y="4" width="1.6" height="4" rx=".8" fill="#ebdac6" opacity=".5"/></svg></span></div>
+    <div class="scroll">
+      <div class="plate">
+        <video poster="../../media/C6_FrdiyZjh/hero.jpg" preload="none" muted playsinline><source src="../../media/C6_FrdiyZjh/video.mp4" type="video/mp4"></video>
+        <div class="cap"><span>From Lisa’s Reel, 44 sec</span><a><svg width="12" height="14" viewBox="0 0 12 14"><path d="M1 1l10 6-10 6z" fill="#d4a463"/></svg>Watch the Reel</a></div>
+      </div>
+      <div class="r-head g">
+        <p class="meta">Fish · Japanese · weeknight</p>
+        <h1>Japanese mirin baked cod</h1>
+        <p class="by">Lisa <span>@thelisafeed</span></p>
+        <p class="facts">Takes about 1 hr 22 min (incl. 1 hr marinating)<br>Serves: not given</p>
+        <div class="actions">
+          <button class="primary">+ Add to our list</button>
+          <button class="heart" aria-label="Favourite"><svg width="22" height="20" viewBox="0 0 24 22" fill="none" stroke="#ebdac6" stroke-width="1.4"><path d="M12 20s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 9c0 6-8 11-8 11z"/></svg></button>
+        </div>
+      </div>
+      <div class="cols g">
+        <div class="ingr">
+          <h2>Ingredients</h2>
+          <ul>
+            <li><em>amount not given</em>cod fillets, skin on</li>
+            <li><em>1 tbsp</em>mirin</li>
+            <li><em>1 tbsp</em>Japanese soy sauce</li>
+            <li><em>1 tsp</em>shiro dashi</li>
+            <li><em>1 tbsp</em>sugar</li>
+            <li><em>amount not given</em>bok choy, halved</li>
+          </ul>
+        </div>
+        <div class="method">
+          <h2>Method</h2>
+          <p><span>1</span>Stir together the mirin, soy, shiro dashi and sugar until the sugar dissolves.</p>
+          <p><span>2</span>Turn the cod in the marinade until every surface is glossy, then leave it for at least an hour.</p>
+        </div>
+      </div>
+    </div>
+    <div class="pin"><div class="start">Start cooking <span>7 steps · 1 timer of 60 min</span></div></div>
+    <div class="home"></div>
+  </div>
+</figure>
+
+<!-- 3 · Cook mode -->
+<figure class="frame-wrap">
+  <figcaption>3 · Cook mode</figcaption>
+  <div class="phone">
+    <div class="status"><span>18:50</span><span class="icons"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#ebdac6"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="#ebdac6"/><rect x="10" y="3" width="3" height="9" rx="1" fill="#ebdac6"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#ebdac6"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3" fill="none" stroke="#ebdac6" opacity=".5"/><rect x="2" y="2" width="15" height="8" rx="1.6" fill="#ebdac6"/><rect x="24" y="4" width="1.6" height="4" rx=".8" fill="#ebdac6" opacity=".5"/></svg></span></div>
+    <div class="c-head">
+      <button class="x" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" stroke="#ebdac6" stroke-width="1.4" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+      <span class="t">Japanese mirin baked cod</span>
+      <span class="n">Step 2 of 7</span>
+    </div>
+    <div class="timer g">
+      <div>
+        <p class="lab">Marinating · ready at 19:42</p>
+        <p class="time">52:14<small>of 60 min</small></p>
+      </div>
+      <div class="ctl">
+        <button aria-label="Pause"><svg width="14" height="16" viewBox="0 0 14 16"><rect x="1" y="1" width="4" height="14" rx="1" fill="#ebdac6"/><rect x="9" y="1" width="4" height="14" rx="1" fill="#ebdac6"/></svg></button>
+      </div>
+    </div>
+    <div class="stepgrid g">
+      <aside class="margin">
+        <p class="label">For this step</p>
+        <img src="../../media/C6_FrdiyZjh/hero.jpg" alt="" style="object-position:50% 62%">
+        <p class="ing">cod</p>
+      </aside>
+      <div>
+        <p class="step">Turn the cod in the marinade until every surface is glossy, then leave to marinate for at least 1 hour (the fridge is the safe place).</p>
+        <p class="wait"><b>While you wait:</b> heat the oven to 180°C fan near the end.</p>
+      </div>
+    </div>
+    <div class="next g">
+      <p class="label">Next · step 3</p>
+      <p>Heat the oven to 180°C fan and line a baking tray with parchment.</p>
+    </div>
+    <div class="nav">
+      <button class="back"><svg width="9" height="16" viewBox="0 0 9 16" fill="none" stroke="#ebdac6" stroke-width="1.5"><path d="M8 1L1 8l7 7"/></svg>Back</button>
+      <button class="fwd">Next<svg width="9" height="16" viewBox="0 0 9 16" fill="none" stroke="#20160f" stroke-width="1.5"><path d="M1 1l7 7-7 7"/></svg></button>
+    </div>
+    <div class="home"></div>
+  </div>
+</figure>
+
+<!-- 4 · Cook-log story -->
+<figure class="frame-wrap">
+  <figcaption>4 · Cook-log story</figcaption>
+  <div class="phone">
+    <div class="status"><span>20:31</span><span class="icons"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#ebdac6"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="#ebdac6"/><rect x="10" y="3" width="3" height="9" rx="1" fill="#ebdac6"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#ebdac6"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3" fill="none" stroke="#ebdac6" opacity=".5"/><rect x="2" y="2" width="15" height="8" rx="1.6" fill="#ebdac6"/><rect x="24" y="4" width="1.6" height="4" rx=".8" fill="#ebdac6" opacity=".5"/></svg></span></div>
+    <div class="s-head g">
+      <img src="../../media/C6_FrdiyZjh/hero.jpg" alt="" style="object-position:50% 62%">
+      <p class="k">Tonight’s cook<span>Logged from cook mode</span></p>
+      <a>Change</a>
+    </div>
+    <p class="story g">On <span class="c">Tuesday</span>, <span class="p">Craig</span> made the <span class="d">Japanese mirin baked cod</span>. It was <span class="f">lovely</span>, but it <span class="f">was a bit sweet</span>. Next time, <span class="slot on"></span>. We’ll <span class="slot"></span>.</p>
+    <div class="sheet">
+      <div class="grab"></div>
+      <div class="top"><h2>Next time…</h2><a>Done</a></div>
+      <ul class="opts">
+        <li>change nothing</li>
+        <li>use less sugar <small>it was a bit sweet</small></li>
+        <li>add more ginger</li>
+        <li>marinate overnight</li>
+        <li>make it ahead</li>
+        <li class="own">Write my own</li>
+      </ul>
+    </div>
+    <div class="home"></div>
+  </div>
+</figure>
+
+</main>
+
+<section class="notes">
+  <div>
+    <h2>What this option is good at</h2>
+    <ul>
+      <li>It feels like ours: the serif titles and the story read like a kitchen notebook, which suits a quiet, Nigel Slater-like voice.</li>
+      <li>Colour fields give each part of the landing a clear place without a single line, and they double as the timer row and the word sheet.</li>
+      <li>The two-column recipe puts ingredients beside the method, so both are visible before you scroll, as in a good cookbook.</li>
+    </ul>
+  </div>
+  <div class="watch">
+    <h2>Watch out for</h2>
+    <ul>
+      <li>Three fields plus walnut is the limit; any more and the bands start to read as cards, so they stay full-width and few.</li>
+      <li>Serif steps are lovely but larger; very long steps in cook mode will need the text to scroll above the fixed Back and Next.</li>
+      <li>The narrow ingredients column wraps long names; on small phones it may need to stack above the method.</li>
+    </ul>
+  </div>
+</section>
+
+</body>
+</html>

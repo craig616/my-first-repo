@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Route 4 · Editorial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;1,9..144,200;1,9..144,300&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --page:#0b0b0b;
+  --ink:#0f1114; --paper:#1a1c20; --paper2:#22252a;
+  --text:#ece7df; --muted:#9a958c; --quiet:#6f6b64;
+  --clay:#c9785a; --yolk:#f2c75c;
+  --serif:"Fraunces", Georgia, serif;
+  --sans:"Jost", system-ui, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--page)}
+body{color:var(--text);font-family:var(--sans);font-weight:300;-webkit-font-smoothing:antialiased;padding:72px 16px 96px;overflow-x:hidden}
+img,video{display:block}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.serif{font-family:var(--serif);font-optical-sizing:auto}
+.caps{font-family:var(--sans);font-size:10.5px;letter-spacing:.17em;text-transform:uppercase;font-weight:500}
+
+/* ================= page header ================= */
+.intro{max-width:1290px;margin:0 auto 64px}
+.intro .no{color:var(--clay)}
+.intro h1{font-family:var(--serif);font-weight:200;font-size:96px;line-height:.95;letter-spacing:-.025em;margin-top:18px;font-variation-settings:"opsz" 144}
+.intro h1 em{font-style:italic;color:var(--muted)}
+.intro .idea{font-family:var(--serif);font-weight:300;font-style:italic;font-size:24px;line-height:1.4;color:var(--text);max-width:30em;margin-top:22px;font-variation-settings:"opsz" 36}
+.intro .built{margin-top:20px;font-size:15px;line-height:1.6;color:var(--muted);max-width:56em}
+.intro .built b{font-weight:400;color:var(--text)}
+.choices{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:32px 40px;margin-top:48px}
+.choices dt{color:var(--clay);margin-bottom:10px}
+.choices dd{font-size:15px;line-height:1.55;color:var(--text)}
+.choices dd span{color:var(--muted)}
+
+/* ================= frames ================= */
+.frames{display:flex;flex-wrap:wrap;gap:56px 44px;justify-content:center;max-width:1290px;margin:0 auto}
+.frame figcaption{display:flex;gap:12px;align-items:baseline;margin:0 0 16px 4px}
+.frame figcaption .n{font-family:var(--serif);font-style:italic;font-weight:300;font-size:20px;color:var(--clay)}
+.frame figcaption .t{font-family:var(--serif);font-weight:300;font-size:20px}
+.frame figcaption .s{font-size:13px;color:var(--muted)}
+
+.phone{position:relative;width:390px;height:844px;border-radius:46px;overflow:hidden;background:var(--ink);box-shadow:0 0 0 1px #000,0 0 0 9px #16171a,0 40px 90px rgba(0,0,0,.6);isolation:isolate}
+.status{position:absolute;top:0;left:0;right:0;height:50px;z-index:40;display:flex;justify-content:space-between;align-items:center;padding:6px 30px 0 44px;font-family:var(--sans);font-weight:400;font-size:16px;color:var(--text)}
+.status::after{content:"";position:absolute;left:50%;top:11px;width:122px;height:35px;margin-left:-61px;background:#000;border-radius:20px}
+.status.solid{background:linear-gradient(180deg,var(--ink) 75%,rgba(15,17,20,0))}
+.status .icons{display:flex;gap:6px;align-items:center}
+.home{position:absolute;bottom:8px;left:50%;width:134px;height:5px;margin-left:-67px;border-radius:3px;background:var(--text);opacity:.55;z-index:50}
+.screen{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
+.screen::-webkit-scrollbar{display:none}
+.g{padding-left:26px;padding-right:26px}
+
+/* ================= 1 landing (the issue) ================= */
+.mast{padding-top:56px}
+.mast .row{display:flex;justify-content:space-between;align-items:flex-end}
+.mast h1{font-family:var(--serif);font-weight:200;font-size:42px;line-height:.9;letter-spacing:-.03em;font-variation-settings:"opsz" 144}
+.mast h1 em{font-style:italic;font-weight:200}
+.mast .date{color:var(--muted);padding-bottom:5px}
+.mast .ctx{margin-top:9px;font-size:13.5px;color:var(--muted);letter-spacing:.01em}
+
+.brief{margin-top:20px}
+.brief p.ask{font-family:var(--serif);font-weight:300;font-size:24px;line-height:1.34;letter-spacing:-.005em;font-variation-settings:"opsz" 60}
+.ask a{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:6px;text-decoration-color:rgba(236,231,223,.45)}
+.ask a.feel{color:var(--clay);text-decoration-color:rgba(201,120,90,.7);font-style:italic}
+.ask .x{text-decoration:none;display:inline-block;font-family:var(--sans);font-size:13px;color:var(--muted);vertical-align:.55em;margin:0 2px 0 3px;padding:0 2px}
+.ask .add{text-decoration:none;font-family:var(--sans);font-size:15px;color:var(--muted);white-space:nowrap;vertical-align:.12em}
+.brief .or{margin-top:4px;font-size:13px;color:var(--muted);line-height:1.6}
+.brief .or a{color:var(--muted);padding:12px 0}
+.brief .or a+a::before{content:"·";padding:0 7px;color:var(--quiet)}
+
+.sect{display:flex;justify-content:space-between;align-items:baseline;margin-top:20px}
+.sect h2{font-family:var(--serif);font-weight:300;font-style:italic;font-size:19px;letter-spacing:-.005em}
+.sect .c{font-size:12.5px;color:var(--muted)}
+
+.lead{position:relative;margin-top:10px;height:226px;overflow:hidden}
+.lead img{width:100%;height:100%;object-fit:cover;object-position:50% 40%}
+.lead::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,17,20,0) 22%,rgba(15,17,20,.5) 55%,rgba(15,17,20,.93) 86%,var(--ink))}
+.lead .over{position:absolute;left:26px;right:26px;bottom:4px;z-index:2}
+.lead .caps{color:#e9a487}
+.lead h3{font-family:var(--serif);font-weight:200;font-size:34px;line-height:1.02;letter-spacing:-.022em;margin-top:8px;font-variation-settings:"opsz" 144}
+.stand{font-family:var(--serif);font-weight:300;font-style:italic;font-size:15.5px;line-height:1.42;color:#d9d3c9;margin-top:8px;font-variation-settings:"opsz" 24}
+.when{margin-top:6px;font-size:13px;color:var(--muted);line-height:1.5}
+.when b{font-weight:400;color:var(--text)}
+
+.picks{margin-top:20px;list-style:none}
+.picks li{display:grid;grid-template-columns:22px 1fr 50px;gap:0 12px;align-items:start;margin-bottom:18px}
+.picks .i{font-family:var(--serif);font-style:italic;font-weight:300;font-size:15px;color:var(--clay);padding-top:2px}
+.picks h4{font-family:var(--serif);font-weight:300;font-size:17.5px;line-height:1.2;letter-spacing:-.005em;font-variation-settings:"opsz" 30}
+.picks p{font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+.picks img{width:50px;height:62px;object-fit:cover}
+
+.season{background:var(--paper);margin-top:14px;padding-top:30px;padding-bottom:36px}
+.season .sect{margin-top:0}
+.season .duo{display:grid;grid-template-columns:1.25fr 1fr;gap:14px;margin-top:16px;align-items:end}
+.season .duo img{width:100%;object-fit:cover}
+.season .duo .a img{height:200px}
+.season .duo .b img{height:112px}
+.season h4{font-family:var(--serif);font-weight:300;font-size:16px;line-height:1.25;margin-top:10px}
+.season p{font-size:12px;color:var(--muted);margin-top:3px}
+.ourlist{padding-top:34px;padding-bottom:10px}
+.ourlist ol{list-style:none;margin-top:12px}
+.ourlist li{padding:9px 0;display:flex;gap:14px;align-items:baseline}
+.ourlist li .i{font-family:var(--serif);font-style:italic;color:var(--clay);font-size:15px;width:16px;flex:none}
+.ourlist li .t{font-family:var(--serif);font-weight:300;font-size:17px;line-height:1.25}
+.ourlist li .w{display:block;font-family:var(--sans);font-size:12px;color:var(--muted);margin-top:3px}
+.weekend{padding-top:30px;padding-bottom:140px}
+.weekend .big{margin-top:14px;margin-left:-26px;margin-right:-26px}
+.weekend .big img{width:100%;height:230px;object-fit:cover;object-position:50% 45%}
+.weekend h4{font-family:var(--serif);font-weight:200;font-size:26px;line-height:1.12;letter-spacing:-.015em;margin-top:14px;font-variation-settings:"opsz" 96}
+
+.bar{position:absolute;left:0;right:0;bottom:0;z-index:30;padding:22px 16px 28px;background:linear-gradient(180deg,rgba(15,17,20,0),rgba(15,17,20,.94) 30%,var(--ink) 55%)}
+.bar .field{display:flex;align-items:center;height:50px;background:var(--paper2);border-radius:25px 25px 25px 25px;padding:0 4px 0 18px;gap:10px}
+.bar .field span{flex:1;font-family:var(--serif);font-style:italic;font-weight:300;font-size:16px;color:var(--muted)}
+.bar .field button{width:44px;height:44px;display:grid;place-items:center}
+
+/* ================= 2 recipe (the article) ================= */
+.open{position:relative;height:372px;overflow:hidden}
+.open video{width:100%;height:100%;object-fit:cover;object-position:50% 18%}
+.open::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,17,20,.6) 0,rgba(15,17,20,0) 20%,rgba(15,17,20,0) 36%,rgba(15,17,20,.72) 68%,var(--ink) 98%)}
+.open .nav{position:absolute;top:50px;left:10px;right:10px;z-index:3;display:flex;justify-content:space-between}
+.open .nav button{width:44px;height:44px;display:grid;place-items:center;filter:drop-shadow(0 1px 6px rgba(0,0,0,.5))}
+.open .words{position:absolute;left:26px;right:26px;bottom:2px;z-index:3}
+.reel{display:inline-flex;align-items:center;gap:10px;min-height:44px;font-size:13.5px;color:var(--text);margin-bottom:2px}
+.reel i{width:30px;height:30px;border-radius:50%;background:rgba(236,231,223,.92);display:grid;place-items:center}
+.reel span{color:var(--muted)}
+.open .caps{color:#e9a487}
+.open h1{font-family:var(--serif);font-weight:200;font-size:40px;line-height:1;letter-spacing:-.028em;margin-top:8px;font-variation-settings:"opsz" 144}
+.r-stand{font-family:var(--serif);font-style:italic;font-weight:300;font-size:16px;line-height:1.42;color:#d9d3c9;margin-top:12px;font-variation-settings:"opsz" 24}
+.by{margin-top:10px;font-size:13.5px;line-height:1.6;color:var(--muted)}
+.by b{font-weight:400;color:var(--text)}
+.act{display:flex;align-items:center;gap:6px;margin-top:16px}
+.primary{height:48px;padding:0 24px;background:var(--yolk);color:#17130a;font-size:15.5px;font-weight:400;display:flex;align-items:center;gap:8px;border-radius:2px}
+.heart{width:48px;height:48px;display:grid;place-items:center}
+.cols{display:grid;grid-template-columns:162px 1fr;margin-top:26px;padding-bottom:140px}
+.side{background:var(--paper);padding:22px 14px 26px 26px}
+.side .caps,.main .caps{color:var(--muted)}
+.ing{display:grid;grid-template-columns:42px 1fr;gap:9px 6px;margin-top:14px;font-size:13px;line-height:1.3}
+.ing dt{font-weight:400;color:var(--clay);font-size:12px;padding-top:1px;font-variant-numeric:tabular-nums}
+.ing dd{color:var(--text)}
+.side .serves{margin-top:18px;font-size:12px;color:var(--muted);line-height:1.4}
+.main{padding:22px 26px 0 18px}
+.step{display:grid;grid-template-columns:16px 1fr;gap:8px;margin-top:14px}
+.step .k{font-family:var(--serif);font-style:italic;font-weight:300;color:var(--clay);font-size:16px;line-height:1.4}
+.step p{font-family:var(--serif);font-weight:300;font-size:15.5px;line-height:1.45;font-variation-settings:"opsz" 18}
+.pull{margin:22px 0 4px;font-family:var(--serif);font-style:italic;font-weight:200;font-size:21px;line-height:1.25;color:var(--text);font-variation-settings:"opsz" 72}
+.pull::before{content:"\201C";display:block;font-size:46px;line-height:.6;color:var(--clay);font-style:normal;font-weight:200;margin-bottom:4px}
+.pull small{display:block;font-family:var(--sans);font-style:normal;font-size:12px;color:var(--muted);margin-top:8px;font-weight:300}
+.pin{position:absolute;left:0;right:0;bottom:0;z-index:30;padding:30px 0 0;background:linear-gradient(180deg,rgba(15,17,20,0),var(--ink) 40%)}
+.pin .go{display:flex;justify-content:space-between;align-items:center;height:88px;padding:0 26px 28px;background:var(--paper2);color:var(--text)}
+.pin .go .l{font-family:var(--serif);font-weight:300;font-size:21px;letter-spacing:-.01em;display:flex;gap:10px;align-items:center}
+.pin .go .r{font-size:13px;color:var(--muted)}
+
+/* ================= 3 cook (the page goes quiet) ================= */
+.cook{background:var(--ink)}
+.c-top{position:absolute;top:50px;left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:0 14px 0 10px;background:linear-gradient(180deg,var(--ink) 60%,rgba(15,17,20,0))}
+.c-top button{width:44px;height:44px;display:grid;place-items:center}
+.c-top .t{font-family:var(--serif);font-style:italic;font-weight:300;font-size:15px;color:var(--muted);flex:1;text-align:center;padding-bottom:2px}
+.c-top .ing-l{font-size:13px;color:var(--muted);width:auto;padding:0 8px}
+.flow{position:absolute;top:94px;left:0;right:0;bottom:150px;padding:0 28px;display:flex;flex-direction:column;overflow:hidden}
+.st .caps{color:var(--muted)}
+.st .txt{font-family:var(--serif);font-weight:300;font-size:28px;line-height:1.24;letter-spacing:-.012em;margin-top:10px;font-variation-settings:"opsz" 72}
+.st.prev{opacity:.6;margin-top:-26px;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 75%);mask-image:linear-gradient(180deg,transparent 0,#000 75%)}
+.st.prev .txt{font-size:20px;color:var(--muted)}
+.st.now{margin-top:30px}
+.st.now .caps{color:var(--clay)}
+.for{display:flex;align-items:center;gap:12px;margin-top:20px;font-size:14px;color:var(--muted)}
+.for img{width:40px;height:40px;object-fit:cover}
+.for b{font-weight:400;color:var(--text)}
+.wait{margin-top:12px;font-family:var(--serif);font-style:italic;font-weight:300;font-size:17px;line-height:1.38;color:#e3a68d;font-variation-settings:"opsz" 18}
+.wait span{font-family:var(--sans);font-style:normal;font-size:12.5px;color:var(--muted);display:block;margin-bottom:2px}
+.st.next{margin-top:auto;padding-top:22px;padding-bottom:26px;opacity:.6}
+.st.next .txt{font-size:21px}
+.foot{position:absolute;left:0;right:0;bottom:0;z-index:20}
+.timer{position:relative;display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 10px 0 28px;background:#14161a;overflow:hidden}
+.timer .fill{position:absolute;left:0;top:0;bottom:0;width:87%;background:rgba(201,120,90,.13)}
+.timer .lab{position:relative;font-size:13px;color:var(--muted)}
+.timer .lab b{font-weight:400;color:var(--text)}
+.timer .num{position:relative;margin-left:auto;font-family:var(--sans);font-weight:300;font-size:24px;letter-spacing:.02em;font-variant-numeric:tabular-nums;color:var(--text)}
+.timer button{position:relative;width:44px;height:44px;display:grid;place-items:center;margin-left:6px}
+.bn{display:grid;grid-template-columns:1fr 1.6fr}
+.bn button{height:94px;padding-bottom:28px;display:flex;align-items:center;justify-content:center;gap:12px;font-size:17px;font-weight:300}
+.bn .back{background:var(--paper);color:var(--text)}
+.bn .fwd{background:var(--yolk);color:#17130a;font-weight:400}
+.bn .fwd span{font-weight:300;color:#6b5a2a;font-size:13px}
+
+/* ================= notes ================= */
+.notes{max-width:1290px;margin:80px auto 0;display:grid;grid-template-columns:1fr 1fr;gap:40px 80px}
+.notes h2{font-family:var(--serif);font-weight:200;font-size:40px;letter-spacing:-.02em;font-variation-settings:"opsz" 144}
+.notes h2 em{color:var(--clay)}
+.notes ul{list-style:none;margin-top:18px}
+.notes li{font-size:16px;line-height:1.55;color:var(--text);margin-bottom:14px;padding-left:30px;position:relative}
+.notes li::before{content:attr(data-n);position:absolute;left:0;top:0;font-family:var(--serif);font-style:italic;color:var(--clay)}
+
+@media (max-width:1000px){
+  .choices{grid-template-columns:1fr 1fr}
+  .intro h1{font-size:68px}
+}
+@media (max-width:700px){
+  body{padding:40px 16px 64px}
+  .choices,.notes{grid-template-columns:1fr}
+  .intro h1{font-size:54px}
+  .intro .idea{font-size:20px}
+}
+@media (max-width:430px){
+  .frame .phone{zoom:.917}
+  .frames{gap:44px}
+}
+</style>
+</head>
+<body>
+
+<header class="intro">
+  <p class="caps no">Round 3 · Route 4</p>
+  <h1>Editorial, <em>this week’s issue</em></h1>
+  <p class="idea">A dark, matte magazine that changes with the week: the box arrives on Tuesday, so fresh things lead, and cupboard cooking takes over by Friday. Choosing reads like opening the new issue; cooking turns the page quiet.</p>
+  <p class="built"><b>Built from:</b> the fine type of Hers and the focused steps of Apple News; the highlighted meta line and meals by time of day (2 · Cookbook); the shortlist we build together (4 · Counter); full-bleed key images (5 · Reel); the bottom search and the atmosphere-to-focus transition (1 · Index); the sentence builder.</p>
+  <dl class="choices">
+    <div><dt class="caps">Colour</dt><dd>Ink-blue black and paper-dark, warm off-white type, clay for the meta line. <span>Yolk only for the one key action on each screen.</span></dd></div>
+    <div><dt class="caps">Type</dt><dd>Fraunces 200/300 at display optical size for headlines and standfirsts, Jost 300/400 for the working parts. <span>Italic does the emphasis that bold would.</span></dd></div>
+    <div><dt class="caps">Images</dt><dd>Square-cut and full-bleed, fading into the page under the headline. <span>Small portrait thumbnails in the lists, like a contents page.</span></dd></div>
+    <div><dt class="caps">Structure</dt><dd>An issue: masthead, a sentence that sets tonight’s brief, one lead spread, then sections by time of day and type of meal. <span>The recipe is an article; cooking is one step at a time.</span></dd></div>
+  </dl>
+</header>
+
+<main class="frames">
+
+<!-- ============ 1 · LANDING ============ -->
+<figure class="frame">
+  <figcaption><span class="n">i</span><span class="t">The issue</span><span class="s">Landing</span></figcaption>
+  <div class="phone">
+    <div class="status solid"><span>9:41</span><span class="icons"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#ece7df"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="#ece7df"/><rect x="10" y="3" width="3" height="9" rx="1" fill="#ece7df"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#ece7df"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3" fill="none" stroke="#ece7df" opacity=".5"/><rect x="2" y="2" width="15" height="8" rx="1.6" fill="#ece7df"/><rect x="24" y="4" width="1.6" height="4" rx=".8" fill="#ece7df" opacity=".5"/></svg></span></div>
+    <div class="screen">
+      <header class="mast g">
+        <div class="row">
+          <h1>Week <em>41</em></h1>
+          <span class="caps date">Tue 6 Oct</span>
+        </div>
+        <p class="ctx">Tuesday evening · mid autumn · the box is in</p>
+      </header>
+
+      <section class="brief g">
+        <p class="ask">Something <a class="feel" href="#">light</a>, with <a href="#">cod</a><a class="x" href="#" aria-label="Remove cod">×</a> and <a href="#">spinach</a><a class="x" href="#" aria-label="Remove spinach">×</a> <a class="add" href="#">+ add</a></p>
+        <p class="or">or <a href="#">comforting</a><a href="#">quick</a><a href="#">something new</a><a href="#">for a crowd</a></p>
+      </section>
+
+      <div class="sect g"><h2>Tonight’s supper</h2><span class="c">four for tonight</span></div>
+      <article class="lead">
+        <img src="../../media/C6_FrdiyZjh/hero.jpg" alt="">
+        <div class="over">
+          <p class="caps">Fish · Japanese · weeknight</p>
+          <h3>Japanese mirin baked cod</h3>
+        </div>
+      </article>
+      <div class="g">
+        <p class="stand">The cod wants an hour in the mirin, so start it now and the rice can wait.</p>
+        <p class="when"><b>1 hr 22 min</b> (mostly waiting) · on our list · uses the cod</p>
+        <ol class="picks">
+          <li><span class="i">ii</span><div><h4>Cod grenobloise</h4><p><b style="font-weight:400;color:#ece7df">25 min</b> · light · uses the cod</p></div><img src="../../media/DVbnwhjiExJ/hero.jpg" alt=""></li>
+          <li><span class="i">iii</span><div><h4>Roast sweet potatoes with spinach and cannellini cream</h4><p><b style="font-weight:400;color:#ece7df">50 min</b> · in season · uses the spinach</p></div><img src="../../media/Cyf04RxIO8c/hero.jpg" alt=""></li>
+          <li><span class="i">iv</span><div><h4>Creamy pesto orzo with crispy salmon</h4><p><b style="font-weight:400;color:#ece7df">30 min</b> · uses the spinach</p></div><img src="../../media/C8kHapDNLG3/hero.jpg" alt=""></li>
+        </ol>
+      </div>
+
+      <section class="season g">
+        <div class="sect"><h2>In season</h2><span class="c">12 this month</span></div>
+        <div class="duo">
+          <a class="a"><img src="../../media/CwiWc2KId6o/hero.jpg" alt="" style="object-position:50% 40%"><h4>Late summer minestrone with fennel</h4><p>45 min · soup</p></a>
+          <a class="b"><img src="../../media/DDAItEoo_vi/hero.jpg" alt=""><h4>Creamy kabocha pumpkin soup</h4><p>40 min · soup</p></a>
+        </div>
+      </section>
+
+      <section class="ourlist g">
+        <div class="sect" style="margin-top:0"><h2>Our list</h2><span class="c">4 waiting</span></div>
+        <ol>
+          <li><span class="i">i</span><span class="t">Japanese mirin baked cod<span class="w">Mary added this on Sunday</span></span></li>
+          <li><span class="i">ii</span><span class="t">Chilli peanut crispy rice salad with honey soy salmon<span class="w">Craig, last week</span></span></li>
+          <li><span class="i">iii</span><span class="t">Charred hispi cabbage with whipped miso tofu<span class="w">Mary, last week</span></span></li>
+        </ol>
+      </section>
+
+      <section class="weekend g">
+        <div class="sect"><h2>For the weekend</h2><span class="c">slower things</span></div>
+        <div class="big"><img src="../../media/DT5nuU5iPAH/hero.jpg" alt=""></div>
+        <p class="caps" style="color:var(--clay);margin-top:16px">Vegetarian · Sichuan · Saturday</p>
+        <h4>Tofu dan dan noodles</h4>
+      </section>
+    </div>
+    <div class="bar">
+      <div class="field">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9a958c" stroke-width="1.4"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+        <span>Search the archive</span>
+        <button aria-label="Filters"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ece7df" stroke-width="1.3" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button>
+      </div>
+    </div>
+    <div class="home"></div>
+  </div>
+</figure>
+
+<!-- ============ 2 · RECIPE ============ -->
+<figure class="frame">
+  <figcaption><span class="n">ii</span><span class="t">The article</span><span class="s">Recipe</span></figcaption>
+  <div class="phone">
+    <div class="status"><span>9:41</span><span class="icons"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#ece7df"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="#ece7df"/><rect x="10" y="3" width="3" height="9" rx="1" fill="#ece7df"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#ece7df"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3" fill="none" stroke="#ece7df" opacity=".5"/><rect x="2" y="2" width="15" height="8" rx="1.6" fill="#ece7df"/><rect x="24" y="4" width="1.6" height="4" rx=".8" fill="#ece7df" opacity=".5"/></svg></span></div>
+    <div class="screen">
+      <div class="open">
+        <video muted playsinline preload="none" poster="../../media/C6_FrdiyZjh/hero.jpg"><source src="../../media/C6_FrdiyZjh/video.mp4" type="video/mp4"></video>
+        <div class="nav">
+          <button aria-label="Back"><svg width="11" height="19" viewBox="0 0 11 19" fill="none" stroke="#ece7df" stroke-width="1.5" stroke-linecap="round"><path d="M9.5 1.5l-8 8 8 8"/></svg></button>
+          <button aria-label="Share"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ece7df" stroke-width="1.4" stroke-linecap="round"><path d="M12 3v12M7 8l5-5 5 5M5 13v7h14v-7"/></svg></button>
+        </div>
+        <div class="words">
+          <a class="reel" href="#"><i><svg width="10" height="12" viewBox="0 0 10 12"><path d="M1 1l8 5-8 5z" fill="#0f1114"/></svg></i>Watch the Reel <span>0:58</span></a>
+          <p class="caps">Fish · Japanese · weeknight</p>
+          <h1>Japanese mirin baked cod</h1>
+        </div>
+      </div>
+      <div class="g">
+        <p class="r-stand">Sweet, salty and glossy. An hour in the marinade does nearly all the work; the oven only finishes it.</p>
+        <p class="by"><b>From Lisa</b> @thelisafeed<br>Takes about 1 hr 22 min (incl. 1 hr marinating)</p>
+        <div class="act">
+          <a class="primary" href="#"><svg width="13" height="13" viewBox="0 0 14 14" stroke="#17130a" stroke-width="1.4" stroke-linecap="round"><path d="M7 1v12M1 7h12"/></svg>Add to our list</a>
+          <button class="heart" aria-label="Favourite"><svg width="22" height="20" viewBox="0 0 24 22" fill="none" stroke="#ece7df" stroke-width="1.3"><path d="M12 20s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 9c0 6-8 11-8 11z"/></svg></button>
+        </div>
+      </div>
+      <div class="cols">
+        <aside class="side">
+          <p class="caps">Ingredients</p>
+          <dl class="ing">
+            <dt>500 g</dt><dd>cod, 4 fillets</dd>
+            <dt>3 tbsp</dt><dd>mirin</dd>
+            <dt>2 tbsp</dt><dd>soy sauce</dd>
+            <dt>1 tbsp</dt><dd>sake</dd>
+            <dt>1 tbsp</dt><dd>sugar</dd>
+            <dt>1 tsp</dt><dd>grated ginger</dd>
+            <dt></dt><dd>spring onion, to finish</dd>
+            <dt></dt><dd>steamed rice, to serve</dd>
+          </dl>
+          <p class="serves">Serves: not given</p>
+        </aside>
+        <div class="main">
+          <p class="caps">Method · 7 steps</p>
+          <div class="step"><span class="k">1</span><p>Mix the mirin, soy, sake, sugar and ginger in a shallow dish until the sugar dissolves.</p></div>
+          <div class="step"><span class="k">2</span><p>Turn the cod in the marinade so every side is coated, then cover and leave&nbsp;…</p></div>
+          <p class="pull">Line the tray. Mirin catches, and the paper saves you a scrub.<small>A note from the Reel</small></p>
+        </div>
+      </div>
+    </div>
+    <div class="pin">
+      <a class="go" href="#"><span class="l">Start cooking <svg width="18" height="12" viewBox="0 0 18 12" fill="none" stroke="#ece7df" stroke-width="1.2" stroke-linecap="round"><path d="M1 6h16M12 1l5 5-5 5"/></svg></span><span class="r">7 steps · 1 hr 22</span></a>
+    </div>
+    <div class="home"></div>
+  </div>
+</figure>
+
+<!-- ============ 3 · COOK ============ -->
+<figure class="frame">
+  <figcaption><span class="n">iii</span><span class="t">The quiet page</span><span class="s">Cook mode</span></figcaption>
+  <div class="phone cook">
+    <div class="status"><span>9:41</span><span class="icons"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#ece7df"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="#ece7df"/><rect x="10" y="3" width="3" height="9" rx="1" fill="#ece7df"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#ece7df"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3" fill="none" stroke="#ece7df" opacity=".5"/><rect x="2" y="2" width="15" height="8" rx="1.6" fill="#ece7df"/><rect x="24" y="4" width="1.6" height="4" rx=".8" fill="#ece7df" opacity=".5"/></svg></span></div>
+    <div class="c-top">
+      <button aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" stroke="#ece7df" stroke-width="1.4" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+      <span class="t">Japanese mirin baked cod</span>
+      <button class="ing-l">Ingredients</button>
+    </div>
+    <div class="flow">
+      <div class="st prev">
+        <p class="caps">Step 1</p>
+        <p class="txt">Mix the mirin, soy, sake, sugar and ginger in a shallow dish until the sugar dissolves.</p>
+      </div>
+      <div class="st now">
+        <p class="caps">Step 2 of 7</p>
+        <p class="txt">Turn the cod in the marinade so every side is coated, then cover and leave to marinate for at least 1 hour (the fridge is the safe place).</p>
+        <div class="for"><img src="../../media/C6_FrdiyZjh/hero.jpg" alt="" style="object-position:30% 20%"><span>For this step: <b>cod</b></span></div>
+        <p class="wait"><span>While you wait</span>heat the oven to 180°C fan near the end.</p>
+      </div>
+      <div class="st next">
+        <p class="caps">Step 3 · next</p>
+        <p class="txt">Line a tray with baking paper and lay the cod skin-side down.</p>
+      </div>
+    </div>
+    <div class="foot">
+      <div class="timer">
+        <div class="fill"></div>
+        <span class="lab"><b>Marinating</b> · left of 60 min</span>
+        <span class="num">52:14</span>
+        <button aria-label="Pause"><svg width="12" height="14" viewBox="0 0 12 14"><rect x="1" y="1" width="3" height="12" rx=".5" fill="#ece7df"/><rect x="8" y="1" width="3" height="12" rx=".5" fill="#ece7df"/></svg></button>
+      </div>
+      <div class="bn">
+        <button class="back"><svg width="8" height="14" viewBox="0 0 9 16" fill="none" stroke="#ece7df" stroke-width="1.4"><path d="M8 1L1 8l7 7"/></svg>Back</button>
+        <button class="fwd">Next <span>step 3</span><svg width="8" height="14" viewBox="0 0 9 16" fill="none" stroke="#0f1114" stroke-width="1.4"><path d="M1 1l7 7-7 7"/></svg></button>
+      </div>
+    </div>
+    <div class="home" style="opacity:.4"></div>
+  </div>
+</figure>
+
+</main>
+
+<section class="notes">
+  <div>
+    <h2>Good <em>at</em></h2>
+    <ul>
+      <li data-n="i">The lead spread makes one clear suggestion with a reason in a human voice, so choosing feels like being told, not filtering.</li>
+      <li data-n="ii">The sentence builder holds mood and ingredients in a single line you can read aloud, with the filters out of sight.</li>
+      <li data-n="iii">The biggest change of room of the four routes: a rich, image-led issue becomes a plain page with one step on it.</li>
+    </ul>
+  </div>
+  <div>
+    <h2>Watch <em>out for</em></h2>
+    <ul>
+      <li data-n="i">Light serifs at weight 200 need size and contrast; below 16px the Fraunces must step up to 300.</li>
+      <li data-n="ii">The lead spread uses a lot of the first screen, so only three more picks show before scrolling.</li>
+      <li data-n="iii">The weekly issue needs real editorial copy (standfirsts, tips) for each recipe, or it reads as a template.</li>
+    </ul>
+  </div>
+</section>
+
+<script>
+(function(){
+  function fit(){
+    var w=window.innerWidth, s=Math.min(1,(w-32)/390);
+    document.querySelectorAll('.frame .phone').forEach(function(p){p.style.zoom=s<1?s:'';});
+  }
+  fit(); window.addEventListener('resize',fit);
+})();
+</script>
+</body>
+</html>

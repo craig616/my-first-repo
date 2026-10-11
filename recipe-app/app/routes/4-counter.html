@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Route 4 · Counter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#17100c; --card:#2b1d17; --raised:#39261c; --line:#4a3225;
+    --text:#ebdac6; --muted:#b39476; --brass:#d4a463; --steel:#ada396;
+    --yolk:#f2c75c; --walnut:#21140e;
+    --page:#e6e1d9; --page-ink:#2b1812; --page-muted:#6b5546;
+    --r:26px; --gap:4px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--page);color:var(--page-ink);font-family:"Jost",system-ui,sans-serif;font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased}
+  svg{display:block}
+
+  /* ---------- page header ---------- */
+  .route-head{max-width:1340px;margin:0 auto;padding:44px 24px 28px;display:grid;grid-template-columns:auto 1fr;gap:6px 28px;align-items:end}
+  .route-num{font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--page-muted);grid-column:1/-1}
+  .route-head h1{font-weight:400;font-size:44px;line-height:1;letter-spacing:-.01em}
+  .route-head .idea{font-size:19px;max-width:640px;color:var(--page-ink);padding-bottom:3px}
+  .route-head .video{grid-column:1/-1;font-size:16px;color:var(--page-muted);margin-top:8px;display:flex;gap:10px;align-items:center}
+  .route-head .video b{font-weight:500;color:var(--page-ink)}
+  .swatch{display:inline-block;flex:none;width:14px;height:14px;border-radius:50%;background:var(--yolk);box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)}
+
+  /* ---------- frames ---------- */
+  .frames{max-width:1340px;margin:0 auto;padding:8px 24px 40px;display:flex;flex-wrap:wrap;gap:36px;justify-content:center}
+  .frame-wrap{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .frame-label{font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--page-muted)}
+  .phone{width:390px;height:844px;border-radius:52px;background:var(--bg);color:var(--text);position:relative;overflow:hidden;
+    box-shadow:0 0 0 10px #1b1410,0 0 0 11px #3a2d25,0 30px 60px -20px rgba(40,24,14,.45);flex:none}
+  .status{height:50px;display:flex;align-items:center;justify-content:space-between;padding:6px 32px 0 36px;font-size:16px;font-weight:500;color:var(--text)}
+  .status .icons{display:flex;gap:6px;align-items:center}
+  .island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:120px;height:34px;border-radius:20px;background:#000}
+  .stack{padding:2px 8px 0;display:flex;flex-direction:column;gap:var(--gap)}
+  .card{background:var(--card);border-radius:var(--r);padding:20px 20px}
+  .card.raised{background:var(--raised)}
+  .yolk{background:var(--yolk);color:var(--walnut)}
+  .eyebrow{font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  .yolk .eyebrow{color:#5a3d12}
+  .row{display:flex;align-items:center}
+  .between{justify-content:space-between}
+
+  /* chips */
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chip{height:44px;padding:0 14px;border-radius:22px;display:inline-flex;align-items:center;gap:8px;font-size:16px;color:var(--text);border:1px solid var(--line);background:transparent;white-space:nowrap}
+  .chip.on{background:var(--raised);border-color:var(--brass);color:var(--text)}
+  .chip.on::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--brass)}
+  .chip .n{color:var(--muted);font-size:15px}
+  .chip.none{color:var(--muted);border-style:dashed}
+
+  /* ---------- DISCOVER ---------- */
+  .hello h2{font-weight:400;font-size:30px;line-height:1.08;letter-spacing:-.01em;margin:8px 0 0}
+  .hello p{color:var(--muted);font-size:16px}
+  .hello .who{margin-top:8px}
+  .hello .who .lbl{font-size:16px;color:var(--muted);margin-bottom:8px}
+  .avatar{width:44px;height:44px;border-radius:50%;background:var(--raised);display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--text);border:1px solid var(--line)}
+
+  .tonight{position:relative;padding:18px 20px 16px}
+  .tonight h3{font-weight:500;font-size:24px;line-height:1.1;margin:6px 0 6px;letter-spacing:-.005em}
+  .tonight .top{display:flex;justify-content:space-between;align-items:center;height:30px}
+  .tonight p{font-size:16px;line-height:1.35}
+  .tonight .thumb{width:58px;height:58px;border-radius:50%;object-fit:cover;object-position:50% 30%;position:absolute;top:14px;right:16px;box-shadow:0 0 0 3px rgba(33,20,14,.12)}
+  .tonight .foot{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+  .have{display:flex;gap:10px;align-items:center;font-size:16px;font-weight:500}
+  .dots{display:flex;gap:3px}
+  .dots i{width:8px;height:8px;border-radius:50%;background:var(--walnut)}
+  .dots i.o{background:transparent;box-shadow:inset 0 0 0 1.5px var(--walnut)}
+  .round{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none}
+  .yolk .round{background:var(--walnut);color:var(--yolk)}
+
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
+  .tile{background:var(--card);border-radius:var(--r);padding:14px 18px;min-height:84px;gap:6px;display:flex;flex-direction:column;justify-content:space-between}
+  .tile .t{font-size:16px;color:var(--text);display:flex;align-items:center;gap:8px}
+  .tile .big{font-size:26px;font-weight:400;line-height:1}
+  .tile .big small{font-size:16px;color:var(--muted);margin-left:4px}
+
+  .browse h4,.rail-card h4{font-weight:500;font-size:18px}
+  .browse .chips{margin-top:10px}
+  .browse{padding-top:16px}
+  .browse .head{display:flex;justify-content:space-between;align-items:baseline}
+  .link{color:var(--brass);font-size:16px}
+
+  .rail{display:flex;gap:10px;margin-top:12px;overflow:hidden}
+  .mini{width:128px;flex:none}
+  .mini img{width:128px;height:128px;border-radius:18px;object-fit:cover;display:block}
+  .mini .nm{font-size:16px;line-height:1.2;margin-top:8px}
+  .mini .meta{font-size:14px;color:var(--muted);margin-top:2px}
+
+  .dock{position:absolute;left:0;right:0;bottom:0;padding:22px 8px 26px;background:linear-gradient(to bottom,rgba(23,16,12,0),var(--bg) 26%)}
+  .search{height:60px;border-radius:30px;background:var(--raised);display:flex;align-items:center;gap:12px;padding:0 8px 0 20px;color:var(--muted);font-size:16px;border:1px solid var(--line)}
+  .search .ph{flex:1;white-space:nowrap}
+  .search .round{width:46px;height:46px;background:var(--card);color:var(--text)}
+  .home-ind{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:3px;background:rgba(235,218,198,.55)}
+
+  /* ---------- RECIPE ---------- */
+  .media{position:relative;height:236px;border-radius:var(--r);overflow:hidden;background:#000}
+  .media video{width:100%;height:100%;object-fit:cover;object-position:50% 32%;display:block}
+  .media .scrim{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(23,16,12,.45),rgba(23,16,12,0) 30%,rgba(23,16,12,0) 60%,rgba(23,16,12,.6))}
+  .media .tl{position:absolute;top:12px;left:12px;right:12px;display:flex;justify-content:space-between}
+  .ghost{width:44px;height:44px;border-radius:50%;background:rgba(23,16,12,.6);display:flex;align-items:center;justify-content:center;color:var(--text);backdrop-filter:blur(6px)}
+  .media .play{position:absolute;left:12px;bottom:12px;height:44px;border-radius:22px;background:rgba(23,16,12,.68);backdrop-filter:blur(6px);display:flex;align-items:center;gap:10px;padding:0 16px 0 6px;font-size:16px;color:var(--text)}
+  .media .play .pc{width:32px;height:32px;border-radius:50%;background:var(--text);color:var(--bg);display:flex;align-items:center;justify-content:center}
+
+  .title-card h2{font-weight:400;font-size:28px;line-height:1.08;letter-spacing:-.01em}
+  .by{font-size:16px;color:var(--muted);margin-top:6px}
+  .by b{font-weight:400;color:var(--text)}
+  .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:16px}
+  .fact{background:var(--raised);border-radius:16px;padding:10px 12px}
+  .fact .v{font-size:20px;line-height:1.1}
+  .fact .k{font-size:14px;color:var(--muted);margin-top:3px;line-height:1.2}
+  .fact.check .v{color:var(--muted)}
+
+  .keyfact{display:flex;gap:14px;align-items:flex-start;padding:18px 20px}
+  .keyfact .ic{width:44px;height:44px;border-radius:50%;background:var(--walnut);color:var(--yolk);display:flex;align-items:center;justify-content:center;flex:none}
+  .keyfact p{font-size:18px;line-height:1.3}
+  .keyfact p b{font-weight:600}
+
+  .ing .head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+  .ing h4{font-weight:500;font-size:18px}
+  .ing .count{font-size:16px;color:var(--muted)}
+  .ing ul{list-style:none}
+  .ing li{display:grid;grid-template-columns:22px 1fr auto;gap:12px;align-items:center;min-height:44px;border-top:1px solid var(--line);padding:8px 0;font-size:16px;line-height:1.25}
+  .ing li:first-child{border-top:0}
+  .ing .amt{color:var(--muted);text-align:right;white-space:nowrap}
+  .st{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+  .st.have{background:var(--steel);color:var(--card)}
+  .st.miss{box-shadow:inset 0 0 0 1.5px var(--muted)}
+  .ing .need{color:var(--brass);font-size:14px}
+  .note-check{grid-column:2/-1;font-size:14px;color:var(--muted);line-height:1.3;margin-top:-2px}
+  .note-check em{font-style:normal;color:var(--brass)}
+
+  .method .head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+  .method h4,.log h4{font-weight:500;font-size:18px}
+  .method ol{list-style:none}
+  .method li{display:grid;grid-template-columns:28px 1fr;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+  .method li:first-child{border-top:0}
+  .method .n{color:var(--muted);font-size:16px}
+  .method p{font-size:16px;line-height:1.35}
+  .tags{display:flex;gap:6px;margin-top:8px}
+  .tg{height:36px;padding:0 12px;border-radius:18px;background:var(--raised);display:inline-flex;align-items:center;gap:6px;font-size:15px;color:var(--text)}
+  .method .count{font-size:16px;color:var(--muted)}
+  .log{padding-bottom:120px}
+  .cta{position:absolute;left:0;right:0;bottom:0;padding:22px 8px 24px;background:linear-gradient(to bottom,rgba(23,16,12,0),var(--bg) 24%)}
+  .cta .bar{height:76px;border-radius:38px;background:var(--raised);border:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 10px 0 28px}
+  .cta .bar .lbl{font-size:20px}
+  .cta .bar .lbl small{display:block;font-size:14px;color:var(--muted);line-height:1.2}
+  .cta .round{width:58px;height:58px;background:var(--text);color:var(--bg)}
+
+  /* ---------- COOK ---------- */
+  .cook .top{display:flex;align-items:center;justify-content:space-between;padding:4px 12px 10px 20px}
+  .cook .top .s{font-size:18px}
+  .cook .top .s b{font-weight:500}
+  .progress{display:flex;gap:4px;padding:0 20px 12px}
+  .progress i{flex:1;height:5px;border-radius:3px;background:var(--line)}
+  .progress i.done{background:var(--steel)}
+  .progress i.now{background:var(--text)}
+  .step{padding:22px 22px 20px}
+  .step .eyebrow{margin-bottom:10px}
+  .step p{font-size:30px;line-height:1.22;letter-spacing:-.005em}
+  .step p b{font-weight:500}
+  .timers{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
+  .timer{border-radius:var(--r);padding:18px 18px;background:var(--card)}
+  .timer.yolk{background:var(--yolk);color:var(--walnut)}
+  .timer .what{font-size:16px;display:flex;gap:8px;align-items:center;line-height:1.2}
+  .timer .left{font-size:46px;font-weight:400;line-height:1;margin-top:10px;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .timer .sub{font-size:15px;margin-top:6px;color:var(--muted)}
+  .timer.yolk .sub{color:#5a3d12}
+  .uses{display:flex;align-items:center;gap:14px;padding:16px 20px}
+  .uses .lbl{width:78px;flex:none;font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  .uses .v{font-size:20px;line-height:1.2}
+  .then .v{color:var(--muted);font-size:18px}
+  .uses .v small{display:block;font-size:15px;color:var(--brass);margin-top:2px}
+  .nav{position:absolute;left:8px;right:8px;bottom:24px;display:grid;grid-template-columns:1fr 1.6fr;gap:var(--gap)}
+  .nav div{height:96px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;gap:12px;font-size:24px}
+  .nav .back{background:var(--card);color:var(--text)}
+  .nav .next{background:var(--text);color:var(--bg);font-weight:500}
+
+  /* ---------- rationale ---------- */
+  .why{max-width:1340px;margin:0 auto;padding:10px 24px 70px}
+  .why h2{font-weight:400;font-size:28px;margin-bottom:18px;border-top:1px solid #cfc6ba;padding-top:28px}
+  .why .cols{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
+  .why h3{font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--page-muted);font-weight:500;margin-bottom:8px}
+  .why p{font-size:16px;line-height:1.5;margin-bottom:10px}
+  @media (max-width:1000px){.why .cols{grid-template-columns:1fr 1fr}.route-head{grid-template-columns:1fr}}
+  @media (max-width:600px){.why .cols{grid-template-columns:1fr}.route-head h1{font-size:36px}.frames{padding:8px 0 40px}}
+</style>
+</head>
+<body>
+
+<header class="route-head">
+  <div class="route-num">Route 4 of 6</div>
+  <h1>Counter</h1>
+  <p class="idea">A practical, glanceable kitchen dashboard: calm stacked cards, and one yolk card per screen for the thing that matters now.</p>
+  <p class="video"><span class="swatch"></span><span><b>Video:</b> a still photo of the dish first. The reel plays only when you tap the photo card, sound off until you ask; ▶ links in the method jump to that moment.</span></p>
+</header>
+
+<main class="frames">
+
+  <!-- ============ 1 · DISCOVER ============ -->
+  <section class="frame-wrap">
+    <div class="frame-label">1 · Discover</div>
+    <div class="phone">
+      <div class="island"></div>
+      <div class="status"><span>18:12</span><span class="icons">
+        <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="15" height="8" rx="1.6" fill="currentColor"/><rect x="23" y="4" width="1.6" height="4" rx=".8" fill="currentColor" opacity=".5"/></svg>
+      </span></div>
+
+      <div class="stack">
+        <div class="card hello">
+          <span class="eyebrow">Sunday 4 October</span>
+          <h2>Evening, Craig and Mary.</h2>
+          <div class="who">
+            <div class="lbl">Something for tonight. Who’s eating?</div>
+            <div class="chips">
+              <span class="chip on">Both of us</span>
+              <span class="chip">Mary</span>
+              <span class="chip">Craig alone</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card yolk tonight">
+          <div class="top"><div class="eyebrow">Tonight?</div></div>
+          <h3>Japanese mirin baked cod</h3>
+          <p>An hour in the marinade first, so start by 6.30.</p>
+          <img class="thumb" src="../../media/C6_FrdiyZjh/hero.jpg" alt="">
+          <div class="foot">
+            <div class="have">
+              <span class="dots"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="o"></i><i class="o"></i></span>
+              <span>Have 9 of 11</span>
+            </div>
+            <span class="round" aria-label="Open recipe"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </div>
+        </div>
+
+        <div class="pair">
+          <div class="tile">
+            <span class="t"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9.5 2.5h5"/></svg>Quick, 30 min</span>
+            <span class="big">1<small>recipe</small></span>
+          </div>
+          <div class="tile">
+            <span class="t"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="8.5" stroke-dasharray="3 3"/></svg>Not cooked yet</span>
+            <span class="big">9<small>recipes</small></span>
+          </div>
+        </div>
+
+        <div class="card browse">
+          <div class="head"><h4>By main ingredient</h4></div>
+          <div class="chips">
+            <span class="chip">Fish <span class="n">3</span></span>
+            <span class="chip">Veg <span class="n">5</span></span>
+            <span class="chip">Beans &amp; pulses <span class="n">4</span></span>
+            <span class="chip">Eggs <span class="n">1</span></span>
+            <span class="chip">Rice &amp; grains <span class="n">1</span></span>
+            <span class="chip">Baking &amp; sweet <span class="n">3</span></span>
+            <span class="chip none" title="None yet">Pasta &amp; noodles</span>
+          </div>
+        </div>
+
+        <div class="card rail-card">
+          <div class="head row between"><h4>Not cooked yet</h4><span class="link">All 9</span></div>
+          <div class="rail">
+            <div class="mini"><img src="../../media/C8j51_HKkxG/hero.jpg" alt=""><div class="nm">Creamy tomato and basil beans</div><div class="meta">30 min · have 11 of 13</div></div>
+            <div class="mini"><img src="../../media/DPB6Q6SjBh5/hero.jpg" alt=""><div class="nm">Cod with mustard sauce</div><div class="meta">Have 6 of 8</div></div>
+            <div class="mini"><img src="../../media/Cyf04RxIO8c/hero.jpg" alt=""><div class="nm">Roast sweet potatoes</div><div class="meta">40 min</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dock">
+        <div class="search">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+          <span class="ph">Search, or what’s in the fridge</span>
+          <span class="round" aria-label="Filters"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></span>
+        </div>
+      </div>
+      <div class="home-ind"></div>
+    </div>
+  </section>
+
+  <!-- ============ 2 · RECIPE ============ -->
+  <section class="frame-wrap">
+    <div class="frame-label">2 · Recipe</div>
+    <div class="phone">
+      <div class="island"></div>
+      <div class="status"><span>18:14</span><span class="icons">
+        <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="15" height="8" rx="1.6" fill="currentColor"/><rect x="23" y="4" width="1.6" height="4" rx=".8" fill="currentColor" opacity=".5"/></svg>
+      </span></div>
+
+      <div class="stack">
+        <div class="media">
+          <video poster="../../media/C6_FrdiyZjh/hero.jpg" preload="none" muted playsinline>
+            <source src="../../media/C6_FrdiyZjh/video.mp4" type="video/mp4">
+          </video>
+          <div class="scrim"></div>
+          <div class="tl">
+            <span class="ghost" aria-label="Back"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></span>
+            <span class="ghost" aria-label="Save"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M6 3.5h12v17l-6-4.5-6 4.5z"/></svg></span>
+          </div>
+          <div class="play"><span class="pc"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg></span>Watch Lisa make it · 0:44</div>
+        </div>
+
+        <div class="card title-card">
+          <h2>Japanese mirin baked cod</h2>
+          <div class="by">By <b>Lisa</b>, @thelisafeed</div>
+          <div class="facts">
+            <div class="fact"><div class="v">22 min</div><div class="k">in the oven</div></div>
+            <div class="fact"><div class="v">1 hr+</div><div class="k">marinating</div></div>
+            <div class="fact check"><div class="v">Serves ?</div><div class="k">not stated</div></div>
+          </div>
+        </div>
+
+        <div class="card yolk keyfact">
+          <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></span>
+          <p><b>Marinate for at least an hour.</b> Start by 6.30 for dinner at 7.30.</p>
+        </div>
+
+        <div class="card ing">
+          <div class="head"><h4>Ingredients</h4><span class="count">Have 9 of 11</span></div>
+          <ul>
+            <li><span class="st have"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Cod fillets, skin on</span><span class="amt">2 pieces?</span>
+              <span class="note-check"><em>Needs checking.</em> No amount given; two pieces in the video.</span></li>
+            <li><span class="st have"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Mirin</span><span class="amt">1 tbsp</span></li>
+            <li><span class="st have"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Japanese soy sauce</span><span class="amt">1 tbsp</span></li>
+            <li><span class="st have"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Shiro dashi</span><span class="amt">1 tsp</span></li>
+            <li><span class="st have"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Sugar</span><span class="amt">1 tbsp · 12 g</span></li>
+            <li><span class="st miss"></span><span>Bok choy, halved <span class="need">· need</span></span><span class="amt">not stated</span></li>
+            <li><span class="st have"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Oil and a pinch of salt</span><span class="amt">a little</span></li>
+            <li><span class="st have"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Sesame seeds, to finish</span><span class="amt">a scattering</span></li>
+            <li><span class="st miss"></span><span>Yuzu kosho, optional</span><span class="amt">to serve</span></li>
+            <li><span class="st have"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Cooked rice, to serve</span><span class="amt">from the video</span></li>
+          </ul>
+        </div>
+
+        <div class="card method">
+          <div class="head"><h4>Method</h4><span class="count">7 steps</span></div>
+          <ol>
+            <li><span class="n">1</span><p>Stir together the mirin, soy sauce, shiro dashi and sugar.</p></li>
+            <li><span class="n">2</span><p>Turn the cod in the marinade until glossy, then leave it in the fridge for at least an hour.<span class="tags"><span class="tg"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9.5 2.5h5"/></svg>1 hr</span><span class="tg"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg>Watch 0:17</span></span></p></li>
+            <li><span class="n">3</span><p>Heat the oven to 180°C fan.</p></li>
+            <li><span class="n">4</span><p>Halve the bok choy, lay it on a tray, and add a little oil and salt.<span class="tags"><span class="tg"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg>Watch 0:22</span></span></p></li>
+            <li><span class="n">5</span><p>Set the cod on the tray, skin side up, and bake for 15 minutes.<span class="tags"><span class="tg"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9.5 2.5h5"/></svg>15 min</span></span></p></li>
+            <li><span class="n">6</span><p>Lift off the bok choy. Grill the cod at 200°C for 5–7 minutes, until dark and sticky.<span class="tags"><span class="tg"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9.5 2.5h5"/></svg>7 min</span><span class="tg"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg>Watch 0:27</span></span></p></li>
+            <li><span class="n">7</span><p>Scatter with sesame seeds; eat with rice and a little yuzu kosho.<span class="tags"><span class="tg"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg>Watch 0:34</span></span></p></li>
+          </ol>
+        </div>
+
+        <div class="card log">
+          <h4>Log</h4>
+          <p class="by">Not cooked yet. Add a note after, if you like.</p>
+          <p class="by" style="margin-top:12px">From Lisa, @thelisafeed, on Instagram · 15 May 2024. Salmon works as well, she says.</p>
+        </div>
+      </div>
+
+      <div class="cta">
+        <div class="bar">
+          <span class="lbl">Start cooking<small>7 steps · two timers</small></span>
+          <span class="round" aria-label="Start cooking"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </div>
+      <div class="home-ind"></div>
+    </div>
+  </section>
+
+  <!-- ============ 3 · COOK MODE ============ -->
+  <section class="frame-wrap">
+    <div class="frame-label">3 · Cook mode</div>
+    <div class="phone cook">
+      <div class="island"></div>
+      <div class="status"><span>19:14</span><span class="icons">
+        <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="15" height="8" rx="1.6" fill="currentColor"/><rect x="23" y="4" width="1.6" height="4" rx=".8" fill="currentColor" opacity=".5"/></svg>
+      </span></div>
+
+      <div class="top">
+        <span class="s"><b>Step 5</b> of 7 · Mirin baked cod</span>
+        <span class="ghost" style="width:52px;height:52px;background:var(--card)" aria-label="Close cook mode"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>
+      </div>
+      <div class="progress"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="now"></i><i></i><i></i></div>
+
+      <div class="stack">
+        <div class="card step">
+          <p>Set the cod on the same tray, skin side up, and <b>bake for 15 minutes</b>, until the marinade is bubbling and the fish has begun to colour.</p>
+        </div>
+
+        <div class="timers">
+          <div class="timer yolk">
+            <div class="what"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9.5 2.5h5"/></svg>Rice</div>
+            <div class="left">3:05</div>
+            <div class="sub">Next to finish</div>
+          </div>
+          <div class="timer">
+            <div class="what"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9.5 2.5h5"/></svg>Bake the cod</div>
+            <div class="left">11:42</div>
+            <div class="sub">of 15:00 · 180°C fan</div>
+          </div>
+        </div>
+
+        <div class="card uses">
+          <span class="lbl">This step</span>
+          <span class="v">Cod fillets, skin on<small>Amount needs checking</small></span>
+        </div>
+        <div class="card uses then">
+          <span class="lbl">Then</span>
+          <span class="v">Lift off the bok choy, grill at 200°C for 5–7 min</span>
+        </div>
+      </div>
+
+      <div class="nav">
+        <div class="back"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Back</div>
+        <div class="next">Next<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      </div>
+      <div class="home-ind"></div>
+    </div>
+  </section>
+</main>
+
+<section class="why">
+  <h2>Why it works this way</h2>
+  <div class="cols">
+    <div>
+      <h3>UX</h3>
+      <p><b>Fridge:</b> every screen leads with “have 9 of 11”, and each ingredient row shows a filled tick or an empty ring, so the two missing things stand out at a glance. Search, Start cooking and Back/Next all live in the bottom third, under the thumb.</p>
+      <p><b>Propped up:</b> cook mode is a few big tiles you can read from across the kitchen: the step in 30 px, timers in 46 px, and Back/Next 96 px tall. <b>Sofa:</b> joined cards scroll like a pile of index cards, with rails underneath for browsing.</p>
+    </div>
+    <div>
+      <h3>UI</h3>
+      <p>One column of joined cards, 4 px apart, with large soft corners, on dark walnut. Everything is the calm brown card colour except one yolk card per screen: tonight’s suggestion, the key timing fact, the timer that ends first.</p>
+      <p>Jost only, mostly in its regular weight. Photos are kept to the hero and small round thumbnails, so they read as food rather than adverts. The primary actions use pale cream, not yolk, so the yolk keeps its meaning.</p>
+    </div>
+    <div>
+      <h3>Content</h3>
+      <p>The header talks like a person (“Evening, Craig and Mary.”), and the yolk card answers the real question: what to cook, and when to start. Time facts become clock times (“Start by 6.30”), because that is what you plan around.</p>
+      <p><b>Needs checking</b> is a small brass line under the cod (“No amount given; two pieces in the video”) and “Serves ?” in the facts, so it is honest but not alarming. Oven heat is “180°C fan” throughout.</p>
+    </div>
+    <div>
+      <h3>Risks</h3>
+      <p>The yolk card only works if the app picks well. A poor “Tonight?” suggestion makes the whole screen feel wrong, and it needs pantry data people keep up to date.</p>
+      <p>The recipe screen is long: the method and log sit below the fold, under the ingredients. One yolk card per screen is a rule people will want to break once there are three things that matter at once.</p>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
